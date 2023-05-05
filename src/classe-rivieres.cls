@@ -132,7 +132,6 @@
 \RequirePackage{tabularx}
 \RequirePackage{listings}
 \RequirePackage{calc}
-% \RequirePackage{scratch3}
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
 \RequirePackage{amsmath,amsfonts,mathrsfs}
