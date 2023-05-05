@@ -113,6 +113,8 @@
 %%%% CHARGEMENT DES PRINCIPAUX PACKAGES, POUR CHACUNE DES COMPILATIONS %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%Test
+
 \RequirePackage[no-math]{fontspec}%
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
