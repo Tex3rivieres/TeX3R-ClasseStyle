@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R}[21/03/2023|Classe rivieres|Voir la documentation pour plus d'informations]
+\ProvidesClass{classe-tex3R}[21/03/2023|Classe tex3R|Voir la documentation pour plus d'informations]
 
 \RequirePackage{silence}
   \WarningFilter{latex}{Label}%Désactive les Warning dûs à subfiles
@@ -17,7 +17,7 @@
 \ifluatex
 \RequirePackage{luacode}
 \else
-\ClassError{Lualatex only}{This document can only be compiled with LuaLaTeX}{}\stop
+\ClassError{Lualatex only}{Ce document doit êtres compilé en LuaLaTeX}{}\stop
 \fi
 
 \RequirePackage{shellesc}
@@ -123,10 +123,13 @@
 \RequirePackage{ProfCollege}
 \RequirePackage[export]{adjustbox}
 \RequirePackage{pgf}
+\RequirePackage{pgfplots}
+  \pgfplotsset{compat=1.18}
 \tcbuselibrary{skins,breakable}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
 \RequirePackage{pstricks}
 \RequirePackage{pst-plot}
+\RequirePackage{pst-eucl}
 \RequirePackage{bookmark}
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
@@ -135,11 +138,14 @@
 % \RequirePackage{scratch3}
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
-\RequirePackage{amsmath,amsfonts,mathrsfs}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{mathrsfs}	
 \RequirePackage{bbding}						
 \RequirePackage[misc]{ifsym}
 \RequirePackage{soul}	
-\RequirePackage{cancel}		
+\RequirePackage{ulem}	
+\RequirePackage{cancel}
 \RequirePackage{url} 	
   \urlstyle{sf}         
 \RequirePackage{fancybox}			
@@ -154,7 +160,7 @@
 \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
-
+\RequirePackage{ccicons}%pour les copyrights
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% COMMANDES ET BOOLÉENS UTILISÉS DANS style-tex3R %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -333,6 +339,8 @@
 }
 
 \newcommand{\sautdeligne}{\vspace{\baselineskip}}
+\newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
+\newcommand{\sautfiche}{\iffiche \newpage \fi}
 
 %Définition des booléens gérant l'affichage
 \newif\ifenonce
@@ -381,6 +389,8 @@
   \setcounter{compteurDM}{0}
 \newcounter{compteurDS}
   \setcounter{compteurDS}{0}
+\newcounter{compteurFlash}
+  \setcounter{compteurFlash}{0}
 \newcounter{compteurinterro}
   \setcounter{compteurinterro}{0}
 \newcounter{compteurexercice}

@@ -20,6 +20,7 @@
 }{% Sinon, utiliser la police calligraphique par défaut de LaTeX
 }
 
+
 \newfontfamily\myfontScratch{FreeSans}%Nécessaire de la définir pour les blocs Scratch de ProfCollege
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +51,7 @@
 %%%% TAILLE DE POLICE DU DOCUMENT %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\hyphenpenalty 10000 %mots insécables
+%\hyphenpenalty 10000 %mots insécables
 
 \iffiche
 \KOMAoption{fontsize}{12pt}%Taille de police de la feuille A4
@@ -69,6 +70,16 @@
 \setlist[enumerate,1]{label=\textbf{\arabic*. }}
 \setlist[enumerate,2]{label=\textbf{\alph*. }}
 
+%Apparence de l'enumerate de tasks
+\DeclareInstance{tasks}{enumerate}{default}
+  {
+    label=\bfseries\arabic*.,
+    label-width=16pt
+  }
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Nouvelle colonne de tableau
+\renewcommand{\arraystretch}{1.2}%Espacement des cellules de tableau.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% ENVIRONNEMENTS POUR LES DIFFÉRENTS BALISAGES %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,13 +93,20 @@
 \colorlet{couleurapplication}{Black}
 \colorlet{couleurexercice}{Black}
 \colorlet{couleurexemple}{Blue}
-\colorlet{couleurpreuve}{Green}
+\colorlet{couleurpreuve}{Black}
 \colorlet{couleurremarque}{Black}
 \colorlet{couleurtitreTD}{Black}
 \colorlet{couleurtitreflash}{Black}
 \colorlet{couleursurligne}{lightgray}
+\colorlet{couleurcorrection}{Green}
+\colorlet{couleurconvention}{Black}
+
+\newcommand{\rivimportant}[1]{\hl{#1}}
 
 %Définition des environnements
+% Ajout 12/10/23
+
+
 \NewEnviron{enonce}{%
 \ifenonce
     \stepcounter{compteurexercice}
@@ -98,7 +116,7 @@
         \addcontentsline{toc}{subsection}{Exercice \thecompteurexercice}
     \fi
     \iftheme 
-        \hfill\textsc{\rivtheme}
+        \hfill\textsc{\rivtheme} 
 
         \vspace{0.3cm}
 
@@ -132,22 +150,34 @@
 
             \BODY
         \else%Pour les diapos et les fiches hors flash et hors brevet
-            \begin{tcolorbox}[
-                colback=white,
-                colframe=black,
-                fonttitle=\large\bfseries,
-                colbacktitle=black!40!white,
-                top=1em,
-                left=0.5em,
-                right=0.5em,
-                bottom=0.5em,
-                enhanced,
-                shield externalize=true,
-                attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-                title=Exercice \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
-                ]
-                {\BODY}
-            \end{tcolorbox}
+
+        % \vfill
+
+        \colorbox{black!100!white}{%
+    \textcolor{white}{{\normalfont\Large\textbf{\thecompteurexercice}}\ifdifficulte{\raisebox{0.2em}{\scriptsize\rivdifficulte}}\fi}}\ifcompetence\hspace{0.3em}\uline{\rivcompetence}\fi\par%
+
+    \medskip
+
+    \BODY
+    % \hrule
+
+    \medskip
+            % \begin{tcolorbox}[
+            %     colback=white,
+            %     colframe=black,
+            %     fonttitle=\large\bfseries,
+            %     colbacktitle=black!40!white,
+            %     top=1em,
+            %     left=0.5em,
+            %     right=0.5em,
+            %     bottom=0.5em,
+            %     enhanced,
+            %     shield externalize=true,
+            %     attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
+            %     title=Exercice \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
+            %     ]
+            %     {\BODY}
+            % \end{tcolorbox}
            
         \fi
     \fi
@@ -160,6 +190,8 @@
     \fi
 \fi
 }%
+
+\newcommand{\rivcorrection}[2]{\ifcorrection{\color{Green} #2}\else #1\fi}
 
 \NewEnviron{correction}{%
 \ifenonce
@@ -187,22 +219,28 @@
             {\BODY}
         \end{tcolorbox}
         \else
-        \begin{tcolorbox}[
-            colback=white,
-            colframe=black,
-            fonttitle=\large\bfseries,
-            colbacktitle=black!75!white,
-            top=1em,
-            left=0.5em,
-            right=0.5em,
-            bottom=0.5em,
-            enhanced,
-            shield externalize=true,
-            attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-            title=Exercice \thecompteurexercice~- Correction,
-            ]
-            {\BODY}
-        \end{tcolorbox}
+        % \begin{tcolorbox}[
+        %     colback=white,
+        %     colframe=black,
+        %     fonttitle=\large\bfseries,
+        %     colbacktitle=black!75!white,
+        %     top=1em,
+        %     left=0.5em,
+        %     right=0.5em,
+        %     bottom=0.5em,
+        %     enhanced,
+        %     shield externalize=true,
+        %     attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
+        %     title=Exercice \thecompteurexercice~- Correction,
+        %     ]
+        %     {\BODY}
+        % \end{tcolorbox}
+
+        % chgt 08/10/23
+
+        {\textbf{Exercice \thecompteurexercice~- Correction} }  
+
+        \BODY
     \fi
 \fi
 }
@@ -213,9 +251,9 @@
 
 \newcommand{\formatEnvCours}[2]{% tcolorbox : #1=couleur de la ligne à gauche, #2=Nom affiché
 \begin{tcolorbox}[
-    colback=#1!1,      
-    colframe=#1,    
-    boxrule=0pt,        
+    colback=white!95!black,      
+    colframe=white,    
+    boxrule=0pt,      
     left=0.5em,
     top=0pt,
     bottom=0pt,
@@ -223,8 +261,8 @@
     title=,          
     enhanced,
     shield externalize=true, 
-    leftrule=2mm,        
-    %borderline west={2pt}{0pt}{#1}
+    %leftrule=2mm,        
+    borderline west={4pt}{0pt}{#1}
     ]
     #2
 \end{tcolorbox}
@@ -287,6 +325,13 @@
     \BODY\hfill$\blacksquare$}
 }
 
+\NewEnviron{convention}[1][Convention]{
+    \formatEnvCours{couleurconvention}{\textcolor{couleurconvention}{\large\underline{#1} :}  
+
+    \medskip 
+    \BODY}
+}
+
 \NewEnviron{basique}{
     \BODY
 }
@@ -295,22 +340,16 @@
 %%%% FORMATAGE DES DIFFÉRENTS TITRES %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\setul{0.5em}{1pt}
+
 %Définition du style de titre générique définissant les autres titres
 \newcommand{\titre}[2]{%#1= logo (fontawesome5 par exemple), #2=Titre
-    \begin{minipage}[t]{0.05\linewidth}
-        \hfill\Large#1\hfill
-    \end{minipage}\hfill
-    \begin{minipage}[t]{0.93\linewidth}
-        {
-        \bfseries\LARGE  #2
-        }
-        \large
-    \vspace{0.5em}
-    \hrule
-    \end{minipage}%
+    {
+    \bfseries\LARGE #1  \uline{#2}
+    }
 }
 %Définition des logos de chaque type de titre
-\def\logoactivite{\faEdit[regular]}
+\def\logoactivite{\reflectbox{\faPencil*}}
 \def\logocorrige{\faEdit[regular]}
 \def\logocours{\faBook}
 \def\logoTD{\faEdit[regular]}
@@ -329,28 +368,32 @@
 }
 
 \newcommand{\titrecours}{
-    \titre{\logocours}{Chapitre \thepart~| \mdseries\rivchapitre\hfill\large\rivniveau}
+    \titre{\logocours}{Chapitre \thepart~{\mdseries|} \mdseries\rivchapitre\hfill\large\rivniveau}
 }
 
 \newcommand{\titreTD}{
     \titre{\logoTD}{TD | \mdseries\rivchapitre \hfill \large \rivniveau}
 }
 
-\newcommand{\titreflash}{
-    \titre{\logoflash}{\stepcounter{compteurexercice}Question \no\thecompteurexercice}
-}
-
-\newcommand{\titreDM}{
-    \titre{\logoDM}{DM n$^\circ$\stepcounter{compteurDM}\thecompteurDM\hspace{1.5cm}\large\mdseries NOM : \dotfill~ Prénom : \dotfill\hspace{0.3cm}\mdseries\large \rivniveau}
-
-}
+\ifdiapo
+    \newcommand{\titreflash}{
+        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hfill}
+    }
+\else
+    \newcommand{\titreflash}{
+        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hspace{1.5cm}{\large\mdseries NOM :}\hfill{\large\mdseries PRENOM :}\hfill}
+    }
+\fi
+\newcommand{\titreDM}{%
+    \titre{\logoDM}{DM n$^\circ$\stepcounter{compteurDM}\thecompteurDM\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}%
+}%
 
 \newcommand{\titreDS}{
-    \titre{\logoDS}{DS n$^\circ$\stepcounter{compteurDS}\thecompteurDS\hspace{1.5cm}\large\mdseries NOM : \dotfill~ Prénom : \dotfill\hspace{0.3cm}\mdseries\large \rivniveau}
+    \titre{\logoDS}{DS n$^\circ$\stepcounter{compteurDS}\thecompteurDS\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
 }
 
 \newcommand{\titreinterro}{
-    \titre{\logointerro}{Interrogation n$^\circ$\stepcounter{compteurinterro}\thecompteurinterro\hspace{1.5cm}\large\mdseries NOM : \dotfill~ Prénom : \dotfill\hspace{0.3cm}\mdseries\large \rivniveau}
+    \titre{\logointerro}{Interrogation n$^\circ$\stepcounter{compteurinterro}\thecompteurinterro\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -359,13 +402,39 @@
 
 %Dans le document, une section est un titre de page, déjà appelé automatiquement en début de page, selon les réglages.
 
-%Sous-section (pour les titres de sous-section du cours)
-\renewcommand{\subsectionformat}{\large\textbf{\textcolor{red}{\arabic{subsection}.~}}}
-\setkomafont{subsection}{\normalfont\large\color{red}\bfseries}
 
-%Sous-sous-section (pour les titres de sous-sous-section du cours)
-\renewcommand{\subsubsectionformat}{\hspace{1cm}\normalsize\textbf{\textcolor{Green}{\alph{subsubsection}.~}}}
-\setkomafont{subsubsection}{\normalfont\normalsize\color{Green}\bfseries}
+%Sections
+
+ \renewcommand*{\sectionformat}{%
+        \colorbox{black!100!white}{%
+        \textcolor{white}{\normalfont\LARGE\textbf{{\Roman{section}}}}%
+        }%
+}
+\setkomafont{section}{\LARGE\bfseries\textcolor{black}}
+
+%Subsections
+
+ \renewcommand*{\subsectionformat}{%
+    \colorbox{red!100!white}{%
+    \textcolor{white}{\normalfont\Large\textbf{{\arabic{subsection}}}}%
+    }%
+ }
+\setkomafont{subsection}{\Large\bfseries\textcolor{Red}}
+
+%Subsubssections
+
+ \renewcommand*{\subsubsectionformat}{%
+        \colorbox{Green!100!white}{%
+        \textcolor{white}{\normalfont\large\textbf{{\Alph{subsubsection}}}}%
+        }%
+}
+\setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{Green}}
+
+%Formatage global
+
+\renewcommand*{\sectionlinesformat}[4]{%
+    #3 \uline{#4}\par\vspace{0.5em}%
+}
 
 %Partie (collection regroupant tout un chapitre, dans un megadocument)
 \renewcommand*\partlineswithprefixformat[3]{%
