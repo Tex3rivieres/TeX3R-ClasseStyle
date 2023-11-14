@@ -5,4 +5,4 @@ Tex3R est un travail collaboratif initié par @vcrombez et @fleothaud, visant à
 - Un style LaTeX associé (style-tex3R.sty)
 - Une extension VS Code associée (basée sur latex-workshop)
 
-test
+Ceci est la modif de Vincent.
