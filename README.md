@@ -7,8 +7,12 @@ Tex3R est un travail collaboratif initié par @vcrombez et @fleothaud, visant à
 
 Ceci est la modif de Vincent.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 test
+=======
+fredo
+>>>>>>> 1c7077e95f29a77d2117bd74a68e3480ab9a6e2d
 =======
 fredo
 >>>>>>> 1c7077e95f29a77d2117bd74a68e3480ab9a6e2d
