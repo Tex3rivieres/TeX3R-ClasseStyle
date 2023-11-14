@@ -6,5 +6,9 @@ Tex3R est un travail collaboratif initié par @vcrombez et @fleothaud, visant à
 - Une extension VS Code associée (basée sur latex-workshop)
 
 Ceci est la modif de Vincent.
+<<<<<<< HEAD
 
 test
+=======
+fredo
+>>>>>>> 1c7077e95f29a77d2117bd74a68e3480ab9a6e2d
