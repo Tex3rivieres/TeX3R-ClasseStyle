@@ -1,0 +1,107 @@
+\NeedsTeXFormat{LaTeX2e}[2022-11-01]
+\ProvidesPackage{style-tex3R-2-1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORMAT DE LA PAGE %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{luacode*}
+  function FormatPage (TYPE,HEADER) --TYPE='fiche' ou 'diapo' ; HEADER = 'true' ou 'false'
+
+    local PAGE = {}
+    local DOC = {}
+    local DOC_HEADER = {}
+
+    if TYPE == 'fiche' then
+      PAGE.width = '21cm'
+      PAGE.height = '29.7cm'
+      --Paramètres de la page 'fiche' sans header
+      DOC.top = '1cm'
+      DOC.bottom = '1cm'
+      DOC.right = '1cm'
+      DOC.left = '1cm'
+      DOC.marginparsep = '0cm'
+      DOC.marginparwidth = '0cm'
+      DOC.headheight = '0cm'
+      DOC.headsep = '0cm'
+      DOC.footskip = '0cm'
+      --Paramètres de la page 'fiche' avec header
+      DOC_HEADER.top = '1cm'
+      DOC_HEADER.bottom = '1cm'
+      DOC_HEADER.right = '1cm'
+      DOC_HEADER.left = '1cm'
+      DOC_HEADER.marginparsep = '0cm'
+      DOC_HEADER.marginparwidth = '0cm'
+      DOC_HEADER.headheight = '1cm'
+      DOC_HEADER.headsep = '0.5cm'
+      DOC_HEADER.footskip = '0cm'
+    elseif TYPE == 'diapo' then
+      PAGE.width = '28.8cm'
+      PAGE.height = '18cm'
+      --Paramètres de la page 'diapo' sans header
+      DOC.top = '0.5cm'
+      DOC.bottom = '3cm'
+      DOC.right = '1cm'
+      DOC.left = '1cm'
+      DOC.marginparsep = '0cm'
+      DOC.marginparwidth = '0cm'
+      DOC.headheight = '0cm'
+      DOC.headsep = '0cm'
+      DOC.footskip = '0cm'
+      --Paramètres de la page 'diapo' avec header
+      DOC_HEADER.top = '0.5cm'
+      DOC_HEADER.bottom = '3cm'
+      DOC_HEADER.right = '1cm'
+      DOC_HEADER.left = '1cm'
+      DOC_HEADER.marginparsep = '0cm'
+      DOC_HEADER.marginparwidth = '0cm'
+      DOC_HEADER.headheight = '2.5cm'
+      DOC_HEADER.headsep = '0.5cm'
+      DOC_HEADER.footskip = '0cm'
+    end
+
+    -- Format de la page
+    tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
+
+    tex.sprint(
+      '\\gdef\\FormatDoc{' ..
+        '\\newgeometry{' ..
+          'top=' .. DOC.top ..
+          ',bottom=' .. DOC.bottom ..
+          ',right=' .. DOC.right ..
+          ',left=' .. DOC.left ..
+          ',includehead' ..
+          ',includefoot' ..
+          ',marginparsep=' .. DOC.marginparsep ..
+          ',marginparwidth=' .. DOC.marginparwidth ..
+          ',headheight=' .. DOC.headheight ..
+          ',headsep=' .. DOC.headsep ..
+          ',footskip=' .. DOC.footskip ..
+        '}' ..
+      '}' ..
+      -- Définition de \FormatDocHeader
+      '\\gdef\\FormatDocHeader{' ..
+        '\\newgeometry{' ..
+          'top=' .. DOC_HEADER.top ..
+          ',bottom=' .. DOC_HEADER.bottom ..
+          ',right=' .. DOC_HEADER.right ..
+          ',left=' .. DOC_HEADER.left ..
+          ',includehead' ..
+          ',includefoot' ..
+          ',marginparsep=' .. DOC_HEADER.marginparsep ..
+          ',marginparwidth=' .. DOC_HEADER.marginparwidth ..
+          ',headheight=' .. DOC_HEADER.headheight ..
+          ',headsep=' .. DOC_HEADER.headsep ..
+          ',footskip=' .. DOC_HEADER.footskip ..
+        '}' ..
+      '}'
+    )
+
+    if HEADER then
+      tex.sprint('\\AtBeginDocument{\\FormatDocHeader}')
+    else
+      tex.sprint('\\AtBeginDocument{\\FormatDoc}')
+    end
+  end
+\end{luacode*}
