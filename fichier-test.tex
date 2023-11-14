@@ -5,16 +5,23 @@
 
 \usepackage{style-tex3R-2-1}
 
-\geometry{paperwidth=10cm,paperheight=10cm}
+% \geometry{paperwidth=10cm,paperheight=10cm}
 
 \begin{luacode*}
-FormatPage('diapo',false)
+PAGE = FormatPage('diapo',false)
+
+-- tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
+\end{luacode*}
+
+\directlua{tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')}
+
+\begin{document}
+
+\begin{luacode*}
+  tex.sprint(PAGE.width)
 \end{luacode*}
 
 
 
-\begin{document}
-
-test
 
 \end{document}

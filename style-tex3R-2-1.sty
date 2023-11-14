@@ -62,7 +62,7 @@
     end
 
     -- Format de la page
-    tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
+    -- tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
 
     tex.sprint(
       '\\gdef\\FormatDoc{' ..
@@ -103,5 +103,6 @@
     else
       tex.sprint('\\AtBeginDocument{\\FormatDoc}')
     end
+    return PAGE
   end
 \end{luacode*}
