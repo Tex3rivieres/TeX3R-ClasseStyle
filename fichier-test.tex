@@ -1,6 +1,31 @@
 \documentclass{classe-tex3R-2-1}
 
 
+\parametres{
+   type=basique%activite%corrige%cours%TD%DM%DS%interro%flash%brevet
+   ,enonce=false%true
+   ,correction=false%true
+   ,theme=false%true
+   ,difficulte=false%true
+   ,competence=false%true
+   ,source=false%true
+   ,bareme=false%true
+   ,lignes=false%carreaux%seyes%surligne
+   ,lignes*=false%carreaux%seyes%surligne
+   ,titre=false%true
+} 
+
+%> CECI EST LE PARAMÉTRAGE DU DOCUMENT <%
+\begin{luacode*}
+  competence =true
+  ligne = false
+  enonce=true
+  FormatPage()
+\end{luacode*}
+
+
+
+
 
 
 \usepackage{style-tex3R-2-1}
