@@ -6,3 +6,5 @@ Tex3R est un travail collaboratif initié par @vcrombez et @fleothaud, visant à
 - Une extension VS Code associée (basée sur latex-workshop)
 
 test j'écris chez toi
+
+test
