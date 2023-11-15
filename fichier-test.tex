@@ -1,33 +1,174 @@
 \documentclass{classe-tex3R-2-1}
 
+
 \usepackage{style-tex3R-2-1}
 
-%> CECI EST LE PARAMÉTRAGE DU DOCUMENT <%
-\begin{luacode*}
-  competence =true
-  ligne = false
-  enonce=true
-  FormatPage()
-
-\end{luacode*}
 
 
-% \geometry{paperwidth=10cm,paperheight=10cm}
+\begin{luacode}
+PARAMETRES = {}
 
-\begin{luacode*}
-PAGE = FormatPage('diapo',false)
+PARAMETRES.format = 'fiche'
+PARAMETRES.type = 'interro'
+PARAMETRES.enonce = false
+PARAMETRES.correction = true
+PARAMETRES.theme = true
+PARAMETRES.cache = true
+PARAMETRES.header = true
+PARAMETRES.print = false
+-- PARAMETRES.taille = '50pt'
+-- PARAMETRES
+\end{luacode}
 
--- tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
-\end{luacode*}
+\rivparametrage
 
-\directlua{tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')}
+
+
+
+
+
+
+
+% \settasks{
+%   % label-width = 1.5em,
+%   label = \labelitemi,
+%   % item-indent = 1.5em,
+% }
+
+%Apparence de l'enumerate de tasks
+% \DeclareInstance{tasks}{itemize}{default}
+%   {
+%     label=\bfseries\arabic*.,
+%     label-width=1.125em
+%   }
+
+% Récupérer les valeurs de leftmargin pour itemize et enumerate
+% Récupérer les valeurs de leftmargin pour itemize et enumerate
+
+
+
+\usepackage{scratch3}
+
+% Nouveau underline soulignant de 2pts (en noir)
+\newunderlinetype\beginUnderlineTwoPts{\leaders\hbox{\rule[-0.5pt]{0pt}{2pt}}}
+
+% Commande pour utiliser le nouveau soulignement
+\NewDocumentCommand\underlineTwoPts{+m}{{\beginUnderlineTwoPts#1}}
 
 \begin{document}
 
-\begin{luacode*}
-  tex.sprint(PAGE.width)
-\end{luacode*}
+\tracelignes{5}
 
+
+\titre{\faCloud}{TEst\hfill \mdseries test}
+
+
+% \underWavy{Texte avec un soulignement ondulé.}
+% \underlineTwoPts{Texte souligné avec une épaisseur de 2pts.}
+
+
+
+\ul{test \hfill test}
+
+% \titre{}{}
+
+\begin{enumerate}
+  \item test
+  \item test
+  \begin{enumerate}
+    \item test
+    \item test
+  \end{enumerate}
+\end{enumerate}
+
+% \begin{itemize}
+%   \item test
+%   \item test
+%   \begin{itemize}
+%     \item test
+%     \item test
+%   \end{itemize}
+% \end{itemize}
+
+
+\begin{tasks}[style=enumerate]
+  \task test
+  \task test
+\end{tasks}
+
+
+$5x+8 $
+
+$\mathcal{ABCDEFGHIJK}$
+
+\difficulte{5}
+
+\rivdifficulte
+
+
+\begin{scratch}
+  \blockmove{Salut les petits potes}
+\end{scratch}
+
+% \multido{\i=0+1}{\thedifficulte}{\faStar}
+
+% \begin{luacode*}
+%   tex.sprint(PAGE.width)
+% \end{luacode*}
+
+
+\ifdiapo \textcolor{green}{diapo}\par \else \hfill \textcolor{red}{no} \textcolor{red}{diapo}\par \fi
+\iffiche \textcolor{green}{fiche}\par \else \hfill \textcolor{red}{no} \textcolor{red}{fiche}\par \fi
+\ifheader \textcolor{green}{header}\par \else \hfill \textcolor{red}{no} \textcolor{red}{header}\par \fi
+
+% \bigskip
+
+\ifenonce \textcolor{green}{enonce}\par \else \hfill \textcolor{red}{no} \textcolor{red}{enonce}\par \fi
+\ifcorrection \textcolor{green}{correction}\par \else \hfill \textcolor{red}{no} \textcolor{red}{correction}\par \fi
+
+% \bigskip
+
+
+\iftheme \textcolor{green}{theme}\par \else \hfill \textcolor{red}{no} \textcolor{red}{theme}\par \fi
+\ifcache \textcolor{green}{cache}\par \else \hfill \textcolor{red}{no} \textcolor{red}{cache}\par \fi
+\ifdifficulte \textcolor{green}{difficulte}\par \else \hfill \textcolor{red}{no} \textcolor{red}{difficulte}\par \fi
+\ifcompetence \textcolor{green}{competence}\par \else \hfill \textcolor{red}{no} \textcolor{red}{competence}\par \fi
+\ifsource \textcolor{green}{source}\par \else \hfill \textcolor{red}{no} \textcolor{red}{source}\par \fi
+
+
+\bigskip
+
+\ifactivite \textcolor{green}{activite}\par \else \hfill \textcolor{red}{no} \textcolor{red}{activite}\par \fi
+\ifbasique \textcolor{green}{basique}\par \else \hfill \textcolor{red}{no} \textcolor{red}{basique}\par \fi
+\ifcorrige \textcolor{green}{corrige}\par \else \hfill \textcolor{red}{no} \textcolor{red}{corrige}\par \fi
+\ifcours \textcolor{green}{cours}\par \else \hfill \textcolor{red}{no} \textcolor{red}{cours}\par \fi
+\ifTD \textcolor{green}{TD}\par \else \hfill \textcolor{red}{no} \textcolor{red}{TD}\par \fi
+\ifflash \textcolor{green}{flash}\par \else \hfill \textcolor{red}{no} \textcolor{red}{flash}\par \fi
+\ifDM \textcolor{green}{DM}\par \else \hfill \textcolor{red}{no} \textcolor{red}{DM}\par \fi
+\ifDS \textcolor{green}{DS}\par \else \hfill \textcolor{red}{no} \textcolor{red}{DS}\par \fi
+\ifinterro \textcolor{green}{interro}\par \else \hfill \textcolor{red}{no} \textcolor{red}{interro}\par \fi
+
+\bigskip
+
+\ifprint \textcolor{green}{print}\par \else \hfill \textcolor{red}{no} \textcolor{red}{print}\par \fi
+
+%\ifFirstCompile \textcolor{green}{FirstCompile}\par \else \hfill \textcolor{red}{no} \textcolor{red}{FirstCompile}\par \fi
+
+% \bigskip
+
+% 23 \iflignes \textcolor{green}{lignes}\par \else \hfill \textcolor{red}{no} \textcolor{red}{lignes}\par \fi
+% / \ifseyes \textcolor{green}{seyes}\par \else \hfill \textcolor{red}{no} \textcolor{red}{seyes}\par \fi
+% 101 \ifsurligne \textcolor{green}{surligne}\par \else \hfill \textcolor{red}{no} \textcolor{red}{surligne}\par \fi
+% 83 \ifcarreaux \textcolor{green}{carreaux}\par \else \hfill \textcolor{red}{no} \textcolor{red}{carreaux}\par \fi
+% 73 \iflignesetoile \textcolor{green}{lignesetoile}\par \else \hfill \textcolor{red}{no} \textcolor{red}{lignesetoile}\par \fi
+% / \ifseyesetoile \textcolor{green}{seyesetoile}\par \else \hfill \textcolor{red}{no} \textcolor{red}{seyesetoile}\par \fi
+% 89 \ifcarreauxetoile \textcolor{green}{carreauxetoile}\par \else \hfill \textcolor{red}{no} \textcolor{red}{carreauxetoile}\par \fi
+
+% \bigskip
+
+% ? \ifaffichagetitre \textcolor{green}{affichagetitre}\par \else \hfill \textcolor{red}{no} \textcolor{red}{affichagetitre}\par \fi
+% / \ifmegadoctoc \textcolor{green}{megadoctoc}\par \else \hfill \textcolor{red}{no} \textcolor{red}{megadoctoc}\par \fi
+% / \ifmegadoc \textcolor{green}{megadoc}\par \else \hfill \textcolor{red}{no} \textcolor{red}{megadoc}\par \fi
 
 
 

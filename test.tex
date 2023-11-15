@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage{showframe}
+\usepackage{luacode}
+\usepackage{geometry}
+
+\begin{luacode}
+  function setMargin()
+    -- tex.sprint('\\global\\geometry{paperwidth=10cm,paperheight=10cm}')
+    tex.sprint([[
+      Hello
+      Darkness
+    \string\textbf{aaa} My Old Friend
+    ]])
+  end
+\end{luacode}
+
+
+
+% \begin{luacode}
+% setMargin()
+% \end{luacode}
+
+\begin{document}
+
+\directlua{setMargin()}
+
+test
+
+\end{document}

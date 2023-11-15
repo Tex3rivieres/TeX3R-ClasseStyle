@@ -5,47 +5,47 @@
 %%%% PERSONNALISATION DES POLICES DU DOCUMENT %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\IfFontExistsTF{Calibri}{%Police générale du document
-    \setmainfont{Calibri}
-}{% Sinon, utiliser la police par défaut LaTeX
-}
+% \IfFontExistsTF{Calibri}{%Police générale du document
+%     \setmainfont{Calibri}
+% }{% Sinon, utiliser la police par défaut LaTeX
+% }
 
-\IfFontExistsTF{STIX Two Math}{% Police pour les maths
-    \setmathfont{STIX Two Math}
-}{% Sinon, utiliser la police mathématique par défaut de LaTeX
-}
+% \IfFontExistsTF{STIX Two Math}{% Police pour les maths
+%     \setmathfont{STIX Two Math}
+% }{% Sinon, utiliser la police mathématique par défaut de LaTeX
+% }
 
-\IfFontExistsTF{Libertinus Math Regular}{% Police pour les lettres de mathcal
-    \setmathfont{Libertinus Math Regular}[range=cal]
-}{% Sinon, utiliser la police calligraphique par défaut de LaTeX
-}
+% \IfFontExistsTF{Libertinus Math Regular}{% Police pour les lettres de mathcal
+%     \setmathfont{Libertinus Math Regular}[range=cal]
+% }{% Sinon, utiliser la police calligraphique par défaut de LaTeX
+% }
 
 
-\newfontfamily\myfontScratch{FreeSans}%Nécessaire de la définir pour les blocs Scratch de ProfCollege
+% \newfontfamily\myfontScratch{FreeSans}%Nécessaire de la définir pour les blocs Scratch de ProfCollege
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% FORMAT DE LA PAGE A4 STANDARD ET DU DIAPORAMA %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Marges de la fiche
-\setlength{\fichehaut}{1cm}
-\setlength{\fichebas}{1cm}
-\setlength{\fichedroite}{1cm}
-\setlength{\fichegauche}{1cm}
-\setlength{\fichetitre}{1cm}
-\setlength{\ficheseparationtitre}{0.5cm}
-\setlength{\fichepied}{0cm}
+% \setlength{\fichehaut}{1cm}
+% \setlength{\fichebas}{1cm}
+% \setlength{\fichedroite}{1cm}
+% \setlength{\fichegauche}{1cm}
+% \setlength{\fichetitre}{1cm}
+% \setlength{\ficheseparationtitre}{0.5cm}
+% \setlength{\fichepied}{0cm}
 
 %Marges du diapo
-\setlength{\diapohaut}{0.5cm}
-\setlength{\diapobas}{3cm}
-\setlength{\diapodroite}{1cm}
-\setlength{\diapogauche}{1cm}
-\setlength{\diapotitre}{2.5cm}
-\setlength{\diaposeparationtitre}{0.5cm}
+% \setlength{\diapohaut}{0.5cm}
+% \setlength{\diapobas}{3cm}
+% \setlength{\diapodroite}{1cm}
+% \setlength{\diapogauche}{1cm}
+% \setlength{\diapotitre}{2.5cm}
+% \setlength{\diaposeparationtitre}{0.5cm}
 
-\setlength{\parindent}{0pt}  %Non-indentation au début d'un paragraphe
-\setlength{\parskip}{0pt}    %Espace entre deux paragraphes
+% \setlength{\parindent}{0pt}  %Non-indentation au début d'un paragraphe
+% \setlength{\parskip}{0pt}    %Espace entre deux paragraphes
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% TAILLE DE POLICE DU DOCUMENT %%%%
@@ -53,29 +53,29 @@
 
 %\hyphenpenalty 10000 %mots insécables
 
-\iffiche
-\KOMAoption{fontsize}{12pt}%Taille de police de la feuille A4
-\fi
-\ifdiapo
-\KOMAoption{fontsize}{20pt}%Taille de police de la feuille A4
-\fi
+% \iffiche
+% \KOMAoption{fontsize}{12pt}%Taille de police de la feuille A4
+% \fi
+% \ifdiapo
+% \KOMAoption{fontsize}{20pt}%Taille de police de la feuille A4
+% \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% PUCES ET ÉNUMÉRATIONS %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\frenchbsetup{ItemLabeli=\textbullet} %Changement des puces de 1er niveau
-\frenchbsetup{ItemLabelii=$\diamond$} %Changement des puces de 2e niveau
+% \frenchbsetup{ItemLabeli=\textbullet} %Changement des puces de 1er niveau
+% \frenchbsetup{ItemLabelii=$\diamond$} %Changement des puces de 2e niveau
 
-\setlist[enumerate,1]{label=\textbf{\arabic*. }}
-\setlist[enumerate,2]{label=\textbf{\alph*. }}
+% \setlist[enumerate,1]{label=\textbf{\arabic*. }}
+% \setlist[enumerate,2]{label=\textbf{\alph*. }}
 
-%Apparence de l'enumerate de tasks
-\DeclareInstance{tasks}{enumerate}{default}
-  {
-    label=\bfseries\arabic*.,
-    label-width=16pt
-  }
+% %Apparence de l'enumerate de tasks
+% \DeclareInstance{tasks}{enumerate}{default}
+%   {
+%     label=\bfseries\arabic*.,
+%     label-width=16pt
+%   }
 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Nouvelle colonne de tableau
 \renewcommand{\arraystretch}{1.2}%Espacement des cellules de tableau.

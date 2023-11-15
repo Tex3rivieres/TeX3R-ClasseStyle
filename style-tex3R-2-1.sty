@@ -5,18 +5,27 @@
 %%% FORMAT DE LA PAGE %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{luacode}
+  function FormatUtilisateur (PARAMETRES)
 
-\begin{luacode*}
-  function FormatPage (TYPE,HEADER) --TYPE='fiche' ou 'diapo' ; HEADER = 'true' ou 'false'
+    local FORMAT = PARAMETRES.format
+    local HEADER = PARAMETRES.header
 
     local PAGE = {}
     local DOC = {}
     local DOC_HEADER = {}
 
-    if TYPE == 'fiche' then
+    PAGE.enumi = '\\textbf{\\arabic*. }'
+    PAGE.enumii = '\\textbf{\\alph*. }'
+    PAGE.itemi = '\\textbullet'
+    PAGE.itemii = '$\\circ$'
+
+    if FORMAT == "fiche" then
       PAGE.width = '21cm'
       PAGE.height = '29.7cm'
-      --Paramètres de la page 'fiche' sans header
+      PAGE.parindent = '0pt'
+      PAGE.parskip = '0pt'
+      --Marges du format 'fiche' sans header
       DOC.top = '1cm'
       DOC.bottom = '1cm'
       DOC.right = '1cm'
@@ -26,7 +35,7 @@
       DOC.headheight = '0cm'
       DOC.headsep = '0cm'
       DOC.footskip = '0cm'
-      --Paramètres de la page 'fiche' avec header
+      --Marges du format 'fiche' avec header
       DOC_HEADER.top = '1cm'
       DOC_HEADER.bottom = '1cm'
       DOC_HEADER.right = '1cm'
@@ -36,10 +45,12 @@
       DOC_HEADER.headheight = '1cm'
       DOC_HEADER.headsep = '0.5cm'
       DOC_HEADER.footskip = '0cm'
-    elseif TYPE == 'diapo' then
+    elseif FORMAT == "diapo" then
       PAGE.width = '28.8cm'
       PAGE.height = '18cm'
-      --Paramètres de la page 'diapo' sans header
+      PAGE.parindent = '0pt'
+      PAGE.parskip = '0pt'
+      --Marges du format 'diapo' sans header
       DOC.top = '0.5cm'
       DOC.bottom = '3cm'
       DOC.right = '1cm'
@@ -49,7 +60,7 @@
       DOC.headheight = '0cm'
       DOC.headsep = '0cm'
       DOC.footskip = '0cm'
-      --Paramètres de la page 'diapo' avec header
+      --Marges du format 'diapo' avec header
       DOC_HEADER.top = '0.5cm'
       DOC_HEADER.bottom = '3cm'
       DOC_HEADER.right = '1cm'
@@ -60,49 +71,92 @@
       DOC_HEADER.headsep = '0.5cm'
       DOC_HEADER.footskip = '0cm'
     end
-
-    -- Format de la page
-    -- tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
-
-    tex.sprint(
-      '\\gdef\\FormatDoc{' ..
-        '\\newgeometry{' ..
-          'top=' .. DOC.top ..
-          ',bottom=' .. DOC.bottom ..
-          ',right=' .. DOC.right ..
-          ',left=' .. DOC.left ..
-          ',includehead' ..
-          ',includefoot' ..
-          ',marginparsep=' .. DOC.marginparsep ..
-          ',marginparwidth=' .. DOC.marginparwidth ..
-          ',headheight=' .. DOC.headheight ..
-          ',headsep=' .. DOC.headsep ..
-          ',footskip=' .. DOC.footskip ..
-        '}' ..
-      '}' ..
-      -- Définition de \FormatDocHeader
-      '\\gdef\\FormatDocHeader{' ..
-        '\\newgeometry{' ..
-          'top=' .. DOC_HEADER.top ..
-          ',bottom=' .. DOC_HEADER.bottom ..
-          ',right=' .. DOC_HEADER.right ..
-          ',left=' .. DOC_HEADER.left ..
-          ',includehead' ..
-          ',includefoot' ..
-          ',marginparsep=' .. DOC_HEADER.marginparsep ..
-          ',marginparwidth=' .. DOC_HEADER.marginparwidth ..
-          ',headheight=' .. DOC_HEADER.headheight ..
-          ',headsep=' .. DOC_HEADER.headsep ..
-          ',footskip=' .. DOC_HEADER.footskip ..
-        '}' ..
-      '}'
-    )
-
-    if HEADER then
-      tex.sprint('\\AtBeginDocument{\\FormatDocHeader}')
-    else
-      tex.sprint('\\AtBeginDocument{\\FormatDoc}')
-    end
-    return PAGE
+    return PAGE,DOC,DOC_HEADER
   end
-\end{luacode*}
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORMATAGES DIVERS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function PoliceUtilisateur()
+
+    local POLICE = {}
+
+    POLICE.taillefiche = '12pt'
+    POLICE.taillediapo = '20pt'
+    POLICE.texte = 'Calibri'
+    POLICE.math = 'STIX Two Math'
+    POLICE.mathcal = 'Libertinus Math Regular'
+
+    return POLICE
+  end
+\end{luacode}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DÉFINITION DES COULEURS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function CouleursUtilisateur(PARAMETRES)
+    local PRINT = PARAMETRES.print
+    local COULEURS = {}
+
+    if PRINT then
+      COULEURS.ligne = 'black'
+      COULEURS.interligne = 'black!30!white'
+    else
+      COULEURS.ligne = 'SlateBlue'
+      COULEURS.interligne = 'LightSteelBlue'
+    end
+    return COULEURS
+  end 
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% CHOIX DES LOGOS %%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function LogosUtilisateur()
+    local LOGOS = {}
+    LOGOS.activite = '\\reflectbox{\\faPencil*}'
+    LOGOS.basique = ''
+    LOGOS.corrige = '\\faEdit[regular]'
+    LOGOS.cours = '\\faBook'
+    LOGOS.DM = '\\faHome'
+    LOGOS.TD = '\\faEdit[regular]'
+    LOGOS.flash = '\\faUserSecret'
+    LOGOS.DS = '\\faFile*[regular]'
+
+
+  end
+\end{luacode}
+
+
+\def\logoactivite{}
+\def\logocorrige{}
+\def\logocours{}
+\def\logoTD{}
+\def\logoflash{}
+\def\logoDM{}
+\def\logoDS{ }
+\def\logointerro{\faFile*[regular]}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CRÉATION DES TITRES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Deux arguments : #1 = logo ; #2 = Texte souligné
+\newcommand{\titre}[2]{{\bfseries\LARGE #1  \underLine{#2}}}
+
+
+
+
+
+
+
+

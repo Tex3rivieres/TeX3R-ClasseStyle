@@ -113,10 +113,10 @@
 %%%% CHARGEMENT DES PRINCIPAUX PACKAGES, POUR CHACUNE DES COMPILATIONS %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage[no-math]{fontspec}%
-\RequirePackage{anyfontsize}
-\RequirePackage[french]{babel}
-\RequirePackage{enumitem}
+% \RequirePackage[no-math]{fontspec}%
+% \RequirePackage{anyfontsize}
+% \RequirePackage[french]{babel}
+% \RequirePackage{enumitem}
 \RequirePackage[np]{numprint}
 \RequirePackage{subfiles}
 \RequirePackage{environ}
@@ -155,9 +155,9 @@
 \RequirePackage{import}			
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
-\RequirePackage{tasks}
+% \RequirePackage{tasks}
 \RequirePackage{lastpage}
-\RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+% \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
 \RequirePackage{ccicons}%pour les copyrights
@@ -186,238 +186,238 @@
 \ifnum\rivmodulo{\conditionmacro}{3}=0 \diapotrue \else \diapofalse \fi
 \ifnum\rivmodulo{\conditionmacro}{29}=0 \headertrue \else \headerfalse \fi
 
-%Longueurs pour les marges et polices du document
+% %Longueurs pour les marges et polices du document
 
-%Fiche
-\newlength{\fichehaut}
-\newlength{\fichebas}
-\newlength{\fichedroite}
-\newlength{\fichegauche}
-\newlength{\fichetitre}
-\newlength{\ficheseparationtitre}
-\newlength{\fichepied}
+% %Fiche
+% \newlength{\fichehaut}
+% \newlength{\fichebas}
+% \newlength{\fichedroite}
+% \newlength{\fichegauche}
+% \newlength{\fichetitre}
+% \newlength{\ficheseparationtitre}
+% \newlength{\fichepied}
 
-%Diapo
-\newlength{\diapohaut}
-\newlength{\diapobas}
-\newlength{\diapodroite}
-\newlength{\diapogauche}
-\newlength{\diapotitre}
-\newlength{\diaposeparationtitre}
+% %Diapo
+% \newlength{\diapohaut}
+% \newlength{\diapobas}
+% \newlength{\diapodroite}
+% \newlength{\diapogauche}
+% \newlength{\diapotitre}
+% \newlength{\diaposeparationtitre}
 
-%Format de la page
-\RequirePackage{geometry}
-\iffiche%Pour les formats A4
-    \geometry{
-        paperwidth=21cm,
-        paperheight=29.7cm,
-    }%
-    \newcommand{\formatfichetitre}{
-        \newgeometry{
-        top=\fichehaut,
-        bottom=\fichebas,
-        right=\fichedroite,
-        left=\fichegauche,
-        includehead,
-        includefoot,
-        marginparsep=0cm,
-        marginparwidth=0cm,
-        headheight=\fichetitre,
-        headsep=\ficheseparationtitre,
-        footskip=\fichepied
-        }%
-    }
-    \newcommand{\formatfiche}{
-        \newgeometry{
-            top=\fichehaut,
-            bottom=\fichebas,
-            right=\fichedroite,
-            left=\fichegauche,
-            includehead,
-            includefoot,
-            marginparsep=0cm,
-            marginparwidth=0cm,
-            headheight=0cm,
-            headsep=0cm,
-            footskip=\fichepied
-        }%
-    }
-    \newcommand{\formatdiapo}{}
-    \newcommand{\formatdiapotitre}{}
-    \ifheader
-        \AtBeginDocument{\formatfichetitre}
-    \else
-        \AtBeginDocument{\formatfiche}
-    \fi
-\else
-    \ifdiapo%Pour les diaporamas
-        \geometry{
-            paperwidth=28.8cm,
-            paperheight=18cm
-        }%
-        \newcommand{\formatdiapotitre}{
-            \newgeometry{
-                top=\diapohaut,
-                bottom=\diapobas,
-                right=\diapodroite,
-                left=\diapogauche,
-                includehead,
-                includefoot,
-                marginparsep=0cm,
-                marginparwidth=0cm,
-                headheight=\diapotitre,
-                headsep=\diaposeparationtitre,
-                footskip=0cm
-            }%
-        }
-        \newcommand{\formatdiapo}{
-            \newgeometry{
-                top=\diapohaut,
-                bottom=\diapobas,
-                right=\diapodroite,
-                left=\diapogauche,
-                includehead,
-                includefoot,
-                marginparsep=0cm,
-                marginparwidth=0cm,
-                headheight=0cm,
-                headsep=0cm,
-                footskip=0cm
-            }%
-        }
-        \newcommand{\formatfiche}{}
-        \newcommand{\formatfichetitre}{}
-        \ifheader
-            \AtBeginDocument{\formatdiapotitre}
-        \else
-            \AtBeginDocument{\formatdiapo}
-        \fi
-    \fi
-\fi
+% %Format de la page
+% \RequirePackage{geometry}
+% \iffiche%Pour les formats A4
+%     \geometry{
+%         paperwidth=21cm,
+%         paperheight=29.7cm,
+%     }%
+%     \newcommand{\formatfichetitre}{
+%         \newgeometry{
+%         top=\fichehaut,
+%         bottom=\fichebas,
+%         right=\fichedroite,
+%         left=\fichegauche,
+%         includehead,
+%         includefoot,
+%         marginparsep=0cm,
+%         marginparwidth=0cm,
+%         headheight=\fichetitre,
+%         headsep=\ficheseparationtitre,
+%         footskip=\fichepied
+%         }%
+%     }
+%     \newcommand{\formatfiche}{
+%         \newgeometry{
+%             top=\fichehaut,
+%             bottom=\fichebas,
+%             right=\fichedroite,
+%             left=\fichegauche,
+%             includehead,
+%             includefoot,
+%             marginparsep=0cm,
+%             marginparwidth=0cm,
+%             headheight=0cm,
+%             headsep=0cm,
+%             footskip=\fichepied
+%         }%
+%     }
+%     \newcommand{\formatdiapo}{}
+%     \newcommand{\formatdiapotitre}{}
+%     \ifheader
+%         \AtBeginDocument{\formatfichetitre}
+%     \else
+%         \AtBeginDocument{\formatfiche}
+%     \fi
+% \else
+%     \ifdiapo%Pour les diaporamas
+%         \geometry{
+%             paperwidth=28.8cm,
+%             paperheight=18cm
+%         }%
+%         \newcommand{\formatdiapotitre}{
+%             \newgeometry{
+%                 top=\diapohaut,
+%                 bottom=\diapobas,
+%                 right=\diapodroite,
+%                 left=\diapogauche,
+%                 includehead,
+%                 includefoot,
+%                 marginparsep=0cm,
+%                 marginparwidth=0cm,
+%                 headheight=\diapotitre,
+%                 headsep=\diaposeparationtitre,
+%                 footskip=0cm
+%             }%
+%         }
+%         \newcommand{\formatdiapo}{
+%             \newgeometry{
+%                 top=\diapohaut,
+%                 bottom=\diapobas,
+%                 right=\diapodroite,
+%                 left=\diapogauche,
+%                 includehead,
+%                 includefoot,
+%                 marginparsep=0cm,
+%                 marginparwidth=0cm,
+%                 headheight=0cm,
+%                 headsep=0cm,
+%                 footskip=0cm
+%             }%
+%         }
+%         \newcommand{\formatfiche}{}
+%         \newcommand{\formatfichetitre}{}
+%         \ifheader
+%             \AtBeginDocument{\formatdiapotitre}
+%         \else
+%             \AtBeginDocument{\formatdiapo}
+%         \fi
+%     \fi
+% \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% DÉFINITION DES DIFFÉRENTES COMMANDES %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Commande tailletexte #1=niveau de taille du texte par rapport à 0 (remplace Large, LARGE, tiny etc)
-\newcommand{\tailletexte}[1]{
-    \ifnum#1=-4
-        \tiny
-    \else
-        \ifnum#1=-3
-            \scriptsize
-        \else
-            \ifnum#1=-2
-            \footnotesize
-            \else
-                \ifnum#1=-1
-                \small
-                \else
-                    \ifnum#1=0
-                    \normalsize
-                    \else
-                        \ifnum#1=1
-                        \large
-                        \else
-                            \ifnum#1=2
-                            \Large
-                            \else
-                                \ifnum#1=3
-                                \LARGE
-                                \else
-                                    \ifnum#1=4
-                                    \huge
-                                    \fi
-                                \fi
-                            \fi
-                        \fi
-                    \fi
-                \fi
-            \fi
-        \fi
-    \fi
-}
+% \newcommand{\tailletexte}[1]{
+%     \ifnum#1=-4
+%         \tiny
+%     \else
+%         \ifnum#1=-3
+%             \scriptsize
+%         \else
+%             \ifnum#1=-2
+%             \footnotesize
+%             \else
+%                 \ifnum#1=-1
+%                 \small
+%                 \else
+%                     \ifnum#1=0
+%                     \normalsize
+%                     \else
+%                         \ifnum#1=1
+%                         \large
+%                         \else
+%                             \ifnum#1=2
+%                             \Large
+%                             \else
+%                                 \ifnum#1=3
+%                                 \LARGE
+%                                 \else
+%                                     \ifnum#1=4
+%                                     \huge
+%                                     \fi
+%                                 \fi
+%                             \fi
+%                         \fi
+%                     \fi
+%                 \fi
+%             \fi
+%         \fi
+%     \fi
+% }
 
-\newcommand{\sautdeligne}{\vspace{\baselineskip}}
-\newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
-\newcommand{\sautfiche}{\iffiche \newpage \fi}
+% \newcommand{\sautdeligne}{\vspace{\baselineskip}}
+% \newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
+% \newcommand{\sautfiche}{\iffiche \newpage \fi}
 
-%Définition des booléens gérant l'affichage
-\newif\ifenonce
-\newif\ifcorrection
-\newif\iftheme
-\newif\ifdifficulte
-\newif\ifcompetence
-\newif\ifsource
-\newif\ifbareme
-\newif\ifdocumentation
-\newif\ifactivite
-\newif\ifbasique
-\newif\ifbrevet
-\newif\ifcorrige
-\newif\ifcours
-\newif\ifTD
-\newif\ifflash
-\newif\ifDM
-\newif\ifDS
-\newif\ifinterro
+% %Définition des booléens gérant l'affichage
+% \newif\ifenonce
+% \newif\ifcorrection
+% \newif\iftheme
+% \newif\ifdifficulte
+% \newif\ifcompetence
+% \newif\ifsource
+% \newif\ifbareme
+% \newif\ifdocumentation
+% \newif\ifactivite
+% \newif\ifbasique
+% \newif\ifbrevet
+% \newif\ifcorrige
+% \newif\ifcours
+% \newif\ifTD
+% \newif\ifflash
+% \newif\ifDM
+% \newif\ifDS
+% \newif\ifinterro
 
-%Initialisation des booléens gérant l'affichage
-\ifnum\rivmodulo{\conditionmacro}{5}=0 \enoncetrue \else \enoncefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{7}=0 \correctiontrue \else \correctionfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{11}=0 \themetrue \else \themefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{13}=0 \difficultetrue \else \difficultefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{17}=0 \competencetrue \else \competencefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{19}=0 \sourcetrue \else \sourcefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{107}=0 \baremetrue \else \baremefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{31}=0 \activitetrue \else \activitefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{37}=0 \basiquetrue \else \basiquefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{41}=0 \corrigetrue \else \corrigefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{43}=0 \courstrue \else \coursfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{59}=0 \TDtrue \else \TDfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{61}=0 \DMtrue \else \DMfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{67}=0 \DStrue \else \DSfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{71}=0 \interrotrue \else \interrofalse \fi
-\ifnum\rivmodulo{\conditionmacro}{97}=0 \flashtrue \else \flashfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{109}=0 \brevettrue \else \brevetfalse \fi
-\documentationfalse
+% %Initialisation des booléens gérant l'affichage
+% \ifnum\rivmodulo{\conditionmacro}{5}=0 \enoncetrue \else \enoncefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{7}=0 \correctiontrue \else \correctionfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{11}=0 \themetrue \else \themefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{13}=0 \difficultetrue \else \difficultefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{17}=0 \competencetrue \else \competencefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{19}=0 \sourcetrue \else \sourcefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{107}=0 \baremetrue \else \baremefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{31}=0 \activitetrue \else \activitefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{37}=0 \basiquetrue \else \basiquefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{41}=0 \corrigetrue \else \corrigefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{43}=0 \courstrue \else \coursfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{59}=0 \TDtrue \else \TDfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{61}=0 \DMtrue \else \DMfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{67}=0 \DStrue \else \DSfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{71}=0 \interrotrue \else \interrofalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{97}=0 \flashtrue \else \flashfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{109}=0 \brevettrue \else \brevetfalse \fi
+% \documentationfalse
 
 %Définition et initialisation des compteurs
-\newcounter{compteurfeuille}
-  \setcounter{compteurfeuille}{1}
-\newcounter{compteurDM}
-  \setcounter{compteurDM}{0}
-\newcounter{compteurDS}
-  \setcounter{compteurDS}{0}
-\newcounter{compteurFlash}
-  \setcounter{compteurFlash}{0}
-\newcounter{compteurinterro}
-  \setcounter{compteurinterro}{0}
-\newcounter{compteurexercice}
-  \setcounter{compteurexercice}{0}
-\newcounter{compteurbareme}
-  \setcounter{compteurbareme}{0}
-\newcounter{difficulte}
-  \setcounter{difficulte}{0}
+% \newcounter{compteurfeuille}
+%   \setcounter{compteurfeuille}{1}
+% \newcounter{compteurDM}
+%   \setcounter{compteurDM}{0}
+% \newcounter{compteurDS}
+%   \setcounter{compteurDS}{0}
+% \newcounter{compteurFlash}
+%   \setcounter{compteurFlash}{0}
+% \newcounter{compteurinterro}
+%   \setcounter{compteurinterro}{0}
+% \newcounter{compteurexercice}
+%   \setcounter{compteurexercice}{0}
+% \newcounter{compteurbareme}
+%   \setcounter{compteurbareme}{0}
+% \newcounter{difficulte}
+%   \setcounter{difficulte}{0}
 
 %Définition des commandes utilisées dans les environnements
-\newcommand{\rivtheme}{}
-\newcommand{\rivdifficulte}{\multido{\i=0+1}{\thedifficulte}{\faStar}}%
-\newcommand{\rivcompetence}{}
-\newcommand{\rivsource}{}
-\newcommand{\rivrepere}{}
+% \newcommand{\rivtheme}{}
+% \newcommand{\rivdifficulte}{\multido{\i=0+1}{\thedifficulte}{\faStar}}%
+% \newcommand{\rivcompetence}{}
+% \newcommand{\rivsource}{}
+% \newcommand{\rivrepere}{}
 
-\newcommand{\theme}[1]{\renewcommand{\rivtheme}{#1}}
-\newcommand{\difficulte}[1]{\setcounter{difficulte}{#1}}
-\newcommand{\competence}[1]{\renewcommand{\rivcompetence}{#1}}
-\newcommand{\source}[1]{\renewcommand{\rivsource}{#1}}
-\newcommand{\repere}[1]{\renewcommand{\rivrepere}{#1}}
+% \newcommand{\theme}[1]{\renewcommand{\rivtheme}{#1}}
+% \newcommand{\difficulte}[1]{\setcounter{difficulte}{#1}}
+% \newcommand{\competence}[1]{\renewcommand{\rivcompetence}{#1}}
+% \newcommand{\source}[1]{\renewcommand{\rivsource}{#1}}
+% \newcommand{\repere}[1]{\renewcommand{\rivrepere}{#1}}
 
-\newcommand{\rivchapitre}{}
-\newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\rivchapitre}{#2}}
-\newcommand{\rivniveau}{}
-\newcommand{\niveau}[1]{\renewcommand{\rivniveau}{#1$^\text{ème}$}}
-\newcommand{\feuille}[1]{\setcounter{compteurfeuille}{#1}}
+% \newcommand{\rivchapitre}{}
+% \newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\rivchapitre}{#2}}
+% \newcommand{\rivniveau}{}
+% \newcommand{\niveau}[1]{\renewcommand{\rivniveau}{#1$^\text{ème}$}}
+% \newcommand{\feuille}[1]{\setcounter{compteurfeuille}{#1}}
 
 %Commandes pour la mise en page de brevet
 
@@ -652,23 +652,23 @@
 
 %Définition des booléens et initialisation
 
-\newif\iflignes
-\newif\ifseyes
-\newif\ifsurligne
-\newif\ifcarreaux
-\newif\iflignesetoile
-\newif\ifseyesetoile
-\newif\ifsurligneetoile
-\newif\ifcarreauxetoile
+% \newif\iflignes
+% \newif\ifseyes
+% \newif\ifsurligne
+% \newif\ifcarreaux
+% \newif\iflignesetoile
+% \newif\ifseyesetoile
+% \newif\ifsurligneetoile
+% \newif\ifcarreauxetoile
 
-\ifnum\rivmodulo{\conditionmacro}{23}=0 \lignestrue \else \lignesfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{73}=0 \lignesetoiletrue \else \lignesetoilefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{23}=0 \lignestrue \else \lignesfalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{73}=0 \lignesetoiletrue \else \lignesetoilefalse \fi
 
-\ifnum\rivmodulo{\conditionmacro}{83}=0 \seyestrue\carreauxfalse\surlignefalse \else \seyesfalse\carreauxtrue\surlignefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{101}=0 \seyesfalse\carreauxfalse\surlignetrue \else \seyesfalse\carreauxtrue\surlignefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{83}=0 \seyestrue\carreauxfalse\surlignefalse \else \seyesfalse\carreauxtrue\surlignefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{101}=0 \seyesfalse\carreauxfalse\surlignetrue \else \seyesfalse\carreauxtrue\surlignefalse \fi
 
-\ifnum\rivmodulo{\conditionmacro}{89}=0 \seyesetoiletrue\carreauxetoilefalse\surligneetoilefalse \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{103}=0 \seyesetoilefalse\carreauxetoilefalse\surligneetoiletrue \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{89}=0 \seyesetoiletrue\carreauxetoilefalse\surligneetoilefalse \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
+% \ifnum\rivmodulo{\conditionmacro}{103}=0 \seyesetoilefalse\carreauxetoilefalse\surligneetoiletrue \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
 
 %Définition de la commande tracelignes #1=nombre de lignes
 
