@@ -15,7 +15,7 @@ PARAMETRES.correction = true
 PARAMETRES.theme = true
 PARAMETRES.cache = true
 PARAMETRES.header = true
-PARAMETRES.print = false
+PARAMETRES.print = true
 -- PARAMETRES.taille = '50pt'
 -- PARAMETRES
 \end{luacode}
@@ -24,53 +24,46 @@ PARAMETRES.print = false
 
 
 
-
-
-
-
-
-% \settasks{
-%   % label-width = 1.5em,
-%   label = \labelitemi,
-%   % item-indent = 1.5em,
-% }
-
-%Apparence de l'enumerate de tasks
-% \DeclareInstance{tasks}{itemize}{default}
-%   {
-%     label=\bfseries\arabic*.,
-%     label-width=1.125em
-%   }
-
-% Récupérer les valeurs de leftmargin pour itemize et enumerate
-% Récupérer les valeurs de leftmargin pour itemize et enumerate
-
-
-
 \usepackage{scratch3}
 
-% Nouveau underline soulignant de 2pts (en noir)
-\newunderlinetype\beginUnderlineTwoPts{\leaders\hbox{\rule[-0.5pt]{0pt}{2pt}}}
-
-% Commande pour utiliser le nouveau soulignement
-\NewDocumentCommand\underlineTwoPts{+m}{{\beginUnderlineTwoPts#1}}
 
 \begin{document}
+
+\chapitre{8}{Nombres relatifs}
+\niveau{5}
+
+\section{salut}
+
+\subsection{la subsection}
+
+\subsection{la subsection}
+
+\subsubsection{la subsubsection}
+
+\subsubsection{la subsubsection}
+
+\subsection{la subsection}
 
 \tracelignes{5}
 
 
 \titre{\faCloud}{TEst\hfill \mdseries test}
 
+\titreactivite
 
-% \underWavy{Texte avec un soulignement ondulé.}
-% \underlineTwoPts{Texte souligné avec une épaisseur de 2pts.}
+\titrecours
 
+\titrecorrige
 
+\titreDM
 
-\ul{test \hfill test}
+\titreDS
 
-% \titre{}{}
+\titreflash
+
+\titreTD
+
+\titreinterro
 
 \begin{enumerate}
   \item test
@@ -80,15 +73,6 @@ PARAMETRES.print = false
     \item test
   \end{enumerate}
 \end{enumerate}
-
-% \begin{itemize}
-%   \item test
-%   \item test
-%   \begin{itemize}
-%     \item test
-%     \item test
-%   \end{itemize}
-% \end{itemize}
 
 
 \begin{tasks}[style=enumerate]

@@ -57,7 +57,13 @@
       '\\setlist[enumerate,1]{label=' .. PAGE.enumi .. '}' ..
       '\\setlist[enumerate,2]{label=' .. PAGE.enumii .. '}' ..
       '\\DeclareInstance{tasks}{enumerate}{default}{label =' .. PAGE.enumi .. ',label-width=1em}' ..
-      '\\DeclareInstance{tasks}{itemize}{default}{label = ' .. PAGE.itemi .. ',label-width=1em}'
+      '\\DeclareInstance{tasks}{itemize}{default}{label = ' .. PAGE.itemi .. ',label-width=1em}' ..
+      '\\renewcommand*{\\sectionformat}{' .. PAGE.sectionnumber .. '}' ..
+      '\\renewcommand*{\\subsectionformat}{' .. PAGE.subsectionnumber .. '}' ..
+      '\\renewcommand*{\\subsubsectionformat}{' .. PAGE.subsubsectionnumber .. '}' ..
+      '\\setkomafont{section}{' .. PAGE.sectionname .. '}' ..
+      '\\setkomafont{subsection}{' .. PAGE.subsectionname .. '}' ..
+      '\\setkomafont{subsubsection}{' .. PAGE.subsubsectionname .. '}'
     )
 
     if FORMAT =='fiche' then
@@ -370,7 +376,10 @@ end
 
     tex.sprint(
       '\\colorlet{couleurligne}{' .. COULEURS.ligne .. '}' ..
-      '\\colorlet{couleurinterligne}{' .. COULEURS.interligne .. '}'
+      '\\colorlet{couleurinterligne}{' .. COULEURS.interligne .. '}' ..
+      '\\colorlet{couleursection}{' .. COULEURS.section .. '}' ..
+      '\\colorlet{couleursubsection}{' .. COULEURS.subsection .. '}' ..
+      '\\colorlet{couleursubsubsection}{' .. COULEURS.subsubsection .. '}'
     )
 
   end 
@@ -406,6 +415,61 @@ end
 \newfontfamily\myfontScratch{FreeSans}%Pour les blocs Scratch de ProfCollege
 \AtBeginEnvironment{scratch}{\KOMAoption{fontsize}{12pt}}%Scaling plutôt que taille de police
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CRÉATION DES LOGOS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function LogosDocument(LOGOS)
+    tex.sprint(
+      '\\def\\logoactivite{' .. LOGOS.activite ..'}' ..
+      '\\def\\logobasique{' .. LOGOS.basique ..'}' ..
+      '\\def\\logocorrige{'.. LOGOS.corrige ..'}' ..
+      '\\def\\logocours{'.. LOGOS.cours ..'}' ..
+      '\\def\\logoDM{' .. LOGOS.DM ..'}' ..
+      '\\def\\logoDS{' .. LOGOS.DS .. '}' ..  
+      '\\def\\logoflash{'.. LOGOS.flash .. '}' ..
+      '\\def\\logointerro{' .. LOGOS.interro .. '}' ..
+      '\\def\\logoTD{'.. LOGOS.TD .. '}'
+    )
+  end
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CRÉATION DES TITRES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\titre}[2]{{\bfseries\LARGE #1  \underLine{#2}}}
+\newcommand{\titreactivite}{
+  \titre{\logoactivite}{Activité\hfill \mdseries\large\rivniveau$^\text{ème}$}
+}
+\newcommand{\titrebasique}{}
+\newcommand{\titrecorrige}{
+  \titre{\logocorrige}{Correction~\mdseries|~\rivchapitre\hfill\large\rivniveau$^\text{ème}$}
+}
+
+\newcommand{\titrecours}{
+  \titre{\logocours}{Chapitre \thepart~\mdseries|~\rivchapitre\hfill\large\rivniveau$^\text{ème}$}
+}
+\newcommand{\titreDM}{%
+    \titre{\logoDM}{DM n°\stepcounter{compteurDM}\thecompteurDM~\mdseries|~{\mdseries\large NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}%
+}%
+\newcommand{\titreDS}{
+    \titre{\logoDS}{DS n°\stepcounter{compteurDS}\thecompteurDS~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}
+}
+\newcommand{\titreflash}{
+  \iffiche
+    \titre{\logoflash}{Questions Flash n°\stepcounter{compteurflash}\thecompteurflash~\mdseries|~{\large\mdseries NOM :}\hfill{\large\mdseries Prénom :}\hfill}
+  \else
+    \titre{\logoflash}{Questions Flash n°\stepcounter{compteurflash}\thecompteurflash\hfill}
+  \fi
+}
+\newcommand{\titreinterro}{
+  \titre{\logointerro}{Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}
+}
+\newcommand{\titreTD}{
+  \titre{\logoTD}{TD~\mdseries|~\rivchapitre \hfill \large \rivniveau$^\text{ème}$}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
@@ -455,10 +519,12 @@ end
   PAGE,DOC,DOC_HEADER = FormatUtilisateur(PARAMETRES)
   COULEURS = CouleursUtilisateur(PARAMETRES)
   POLICE = PoliceUtilisateur()
+  LOGOS = LogosUtilisateur()
   CouleursDocument(COULEURS)
   FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
   BooleensDocument(PARAMETRES)
   PoliceDocument(POLICE,PARAMETRES)
+  LogosDocument(LOGOS)
   }
 }
 

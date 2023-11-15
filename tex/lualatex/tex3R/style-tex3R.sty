@@ -340,61 +340,61 @@
 %%%% FORMATAGE DES DIFFÉRENTS TITRES %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\setul{0.5em}{1pt}
+% \setul{0.5em}{1pt}
 
-%Définition du style de titre générique définissant les autres titres
-\newcommand{\titre}[2]{%#1= logo (fontawesome5 par exemple), #2=Titre
-    {
-    \bfseries\LARGE #1  \uline{#2}
-    }
-}
-%Définition des logos de chaque type de titre
-\def\logoactivite{\reflectbox{\faPencil*}}
-\def\logocorrige{\faEdit[regular]}
-\def\logocours{\faBook}
-\def\logoTD{\faEdit[regular]}
-\def\logoflash{\faUserSecret}
-\def\logoDM{\faHome}
-\def\logoDS{\faFile*[regular] }
-\def\logointerro{\faFile*[regular]}
+% %Définition du style de titre générique définissant les autres titres
+% \newcommand{\titre}[2]{%#1= logo (fontawesome5 par exemple), #2=Titre
+%     {
+%     \bfseries\LARGE #1  \uline{#2}
+%     }
+% }
+% %Définition des logos de chaque type de titre
+% \def\logoactivite{\reflectbox{\faPencil*}}
+% \def\logocorrige{\faEdit[regular]}
+% \def\logocours{\faBook}
+% \def\logoTD{\faEdit[regular]}
+% \def\logoflash{\faUserSecret}
+% \def\logoDM{\faHome}
+% \def\logoDS{\faFile*[regular] }
+% \def\logointerro{\faFile*[regular]}
 
 %Définition des titres de chaque type
-\newcommand{\titreactivite}{
-    \titre{\logoactivite}{Activité\hfill \mdseries\large \rivniveau}
-}
+% \newcommand{\titreactivite}{
+%     \titre{\logoactivite}{Activité\hfill \mdseries\large \rivniveau}
+% }
 
-\newcommand{\titrecorrige}{
-    \titre{\logocorrige}{Correction | \mdseries\rivchapitre \hfill \large \rivniveau}
-}
+% \newcommand{\titrecorrige}{
+%     \titre{\logocorrige}{Correction | \mdseries\rivchapitre \hfill \large \rivniveau}
+% }
 
-\newcommand{\titrecours}{
-    \titre{\logocours}{Chapitre \thepart~{\mdseries|} \mdseries\rivchapitre\hfill\large\rivniveau}
-}
+% \newcommand{\titrecours}{
+%     \titre{\logocours}{Chapitre \thepart~{\mdseries|} \mdseries\rivchapitre\hfill\large\rivniveau}
+% }
 
 \newcommand{\titreTD}{
     \titre{\logoTD}{TD | \mdseries\rivchapitre \hfill \large \rivniveau}
 }
 
 \ifdiapo
-    \newcommand{\titreflash}{
-        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hfill}
-    }
-\else
-    \newcommand{\titreflash}{
-        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hspace{1.5cm}{\large\mdseries NOM :}\hfill{\large\mdseries PRENOM :}\hfill}
-    }
+%     \newcommand{\titreflash}{
+%         \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hfill}
+%     }
+% \else
+%     \newcommand{\titreflash}{
+%         \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hspace{1.5cm}{\large\mdseries NOM :}\hfill{\large\mdseries PRENOM :}\hfill}
+%     }
 \fi
-\newcommand{\titreDM}{%
-    \titre{\logoDM}{DM n$^\circ$\stepcounter{compteurDM}\thecompteurDM\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}%
-}%
+% \newcommand{\titreDM}{%
+%     \titre{\logoDM}{DM n$^\circ$\stepcounter{compteurDM}\thecompteurDM\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}%
+% }%
 
-\newcommand{\titreDS}{
-    \titre{\logoDS}{DS n$^\circ$\stepcounter{compteurDS}\thecompteurDS\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
-}
+% \newcommand{\titreDS}{
+%     \titre{\logoDS}{DS n$^\circ$\stepcounter{compteurDS}\thecompteurDS\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
+% }
 
-\newcommand{\titreinterro}{
-    \titre{\logointerro}{Interrogation n$^\circ$\stepcounter{compteurinterro}\thecompteurinterro\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
-}
+% \newcommand{\titreinterro}{
+%     \titre{\logointerro}{Interrogation n$^\circ$\stepcounter{compteurinterro}\thecompteurinterro\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% PERSONNALISATION DES PARTIES, SOUS-SECTIONS ET SOUS-SOUS-SECTIONS %%%%

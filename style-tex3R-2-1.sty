@@ -20,6 +20,14 @@
     PAGE.itemi = '\\textbullet'
     PAGE.itemii = '$\\circ$'
 
+    PAGE.sectionname = '\\LARGE\\bfseries\\textcolor{couleursection}'
+    PAGE.subsectionname = '\\Large\\bfseries\\textcolor{couleursubsection}'
+    PAGE.subsubsectionname = '\\normalfont\\large\\bfseries\\textcolor{couleursubsubsection}'
+
+    PAGE.sectionnumber = '\\colorbox{couleursection}{\\textcolor{white}{\\normalfont\\LARGE\\textbf{{\\Roman{section}}}}} '
+    PAGE.subsectionnumber = '\\colorbox{couleursubsection}{\\textcolor{white}{\\normalfont\\Large\\textbf{{\\arabic{subsection}}}}} '
+    PAGE.subsubsectionnumber = '\\colorbox{couleursubsubsection}{\\textcolor{white}{\\normalfont\\large\\textbf{{\\Alph{subsubsection}}}}} '
+
     if FORMAT == "fiche" then
       PAGE.width = '21cm'
       PAGE.height = '29.7cm'
@@ -106,10 +114,16 @@
 
     if PRINT then
       COULEURS.ligne = 'black'
-      COULEURS.interligne = 'black!30!white'
+      COULEURS.interligne = 'black!30'
+      COULEURS.section = 'black'
+      COULEURS.subsection = 'black!70'
+      COULEURS.subsubsection = 'black!40'
     else
       COULEURS.ligne = 'SlateBlue'
       COULEURS.interligne = 'LightSteelBlue'
+      COULEURS.section = 'black'
+      COULEURS.subsection = 'Red'
+      COULEURS.subsubsection = 'Green'
     end
     return COULEURS
   end 
@@ -121,37 +135,38 @@
 
 \begin{luacode}
   function LogosUtilisateur()
+
     local LOGOS = {}
+
     LOGOS.activite = '\\reflectbox{\\faPencil*}'
     LOGOS.basique = ''
     LOGOS.corrige = '\\faEdit[regular]'
     LOGOS.cours = '\\faBook'
     LOGOS.DM = '\\faHome'
-    LOGOS.TD = '\\faEdit[regular]'
-    LOGOS.flash = '\\faUserSecret'
     LOGOS.DS = '\\faFile*[regular]'
-
-
+    LOGOS.flash = '\\faUserSecret'
+    LOGOS.interro = '\\faFile*[regular]'
+    LOGOS.TD = '\\faEdit[regular]'
+    return LOGOS
   end
 \end{luacode}
 
 
-\def\logoactivite{}
-\def\logocorrige{}
-\def\logocours{}
-\def\logoTD{}
-\def\logoflash{}
-\def\logoDM{}
-\def\logoDS{ }
-\def\logointerro{\faFile*[regular]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% REDÉFINITION DES TITRES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \renewcommand{\titreactivite}[2]{}
+% \renewcommand{\titrebasique}[2]{}
+% \renewcommand{\titrecours}[2]{}
+% \renewcommand{\titrecorrige}[2]{}
+% \renewcommand{\titreDM}[2]{}
+% \renewcommand{\titreDS}[2]{}
+% \renewcommand{\titreflash}[2]{}
+% \renewcommand{\titreinterro}[2]{}
+% \renewcommand{\titreTD}[2]{}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% CRÉATION DES TITRES %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%Deux arguments : #1 = logo ; #2 = Texte souligné
-\newcommand{\titre}[2]{{\bfseries\LARGE #1  \underLine{#2}}}
 
 
 

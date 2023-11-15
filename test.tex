@@ -1,20 +1,48 @@
-\documentclass{article}
+\documentclass{scrartcl}
 
-\usepackage{showframe}
+% \usepackage{showframe}
 \usepackage{luacode}
 \usepackage{geometry}
+\usepackage[svgnames]{xcolor}
 
-\begin{luacode}
-  function setMargin()
-    -- tex.sprint('\\global\\geometry{paperwidth=10cm,paperheight=10cm}')
-    tex.sprint([[
-      Hello
-      Darkness
-    \string\textbf{aaa} My Old Friend
-    ]])
-  end
-\end{luacode}
 
+% \begin{luacode}
+%   function setMargin()
+%     -- tex.sprint('\\global\\geometry{paperwidth=10cm,paperheight=10cm}')
+%     tex.sprint([[
+%       Hello
+%       Darkness
+%     \string\textbf{aaa} My Old Friend
+%     ]])
+%   end
+% \end{luacode}
+
+
+
+ \renewcommand*{\sectionformat}{%
+        \colorbox{black!100!white}{%
+        \textcolor{white}{\normalfont\LARGE\textbf{{\Roman{section}}}}%
+        }%
+}
+\setkomafont{section}{\LARGE\bfseries\textcolor{black}}
+
+%Subsections
+
+ \renewcommand*{\subsectionformat}{%
+    \colorbox{red!100!white}{%
+    \textcolor{white}{\normalfont\Large\textbf{{\arabic{subsection}}}}%
+    }%
+ }
+\setkomafont{subsection}{\Large\bfseries\textcolor{Red}}
+
+%Subsubssections
+
+ \renewcommand*{\subsubsectionformat}{%
+        \colorbox{Green!100!white}{%
+        \textcolor{white}{\normalfont\large\textbf{{\Alph{subsubsection}}}}%
+        }%
+}
+\setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{Green}}
 
 
 % \begin{luacode}
@@ -23,8 +51,18 @@
 
 \begin{document}
 
-\directlua{setMargin()}
+% \directlua{setMargin()}
 
-test
+\section{salut}
+
+\subsection{la subsection}
+
+\subsection{la subsection}
+
+\subsubsection{la subsubsection}
+
+\subsubsection{la subsubsection}
+
+\subsection{la subsection}
 
 \end{document}
