@@ -9,13 +9,13 @@
 PARAMETRES = {}
 
 PARAMETRES.format = 'fiche'
-PARAMETRES.type = 'interro'
+PARAMETRES.type = 'DM'
 PARAMETRES.enonce = false
 PARAMETRES.correction = true
 PARAMETRES.theme = true
 PARAMETRES.cache = true
 PARAMETRES.header = true
-PARAMETRES.print = true
+PARAMETRES.print = false
 -- PARAMETRES.taille = '50pt'
 -- PARAMETRES
 \end{luacode}
@@ -23,14 +23,46 @@ PARAMETRES.print = true
 \rivparametrage
 
 
+% \renewcommand*\partlineswithprefixformat[3]{%
+% \thispagestyle{empty}
+% \hfill
+% \vfill
+%   \begin{tcolorbox}[
+%     colframe = black, 
+%     colback=white,
+%     coltitle=white,
+%     sharp corners,
+%     valign=center,
+%     top=2cm,
+%     bottom=2cm,
+%     left=0.5cm,
+%     enhanced,
+%     before skip=0cm,
+%   ]
+%   \hfill
+%   test
+
+%   \makeatletter
+%   \@ifstar{}{\Large Chapitre \Roman{part}}
+%   \makeatother
+  
+%   \tcblower
+%   #3%
+%   \end{tcolorbox}
+%   \vfill
+%   \hfill
+% }
+
 
 \usepackage{scratch3}
 
-
 \begin{document}
+
+\logoactif
 
 \chapitre{8}{Nombres relatifs}
 \niveau{5}
+
 
 \section{salut}
 
@@ -46,24 +78,21 @@ PARAMETRES.print = true
 
 \tracelignes{5}
 
+\titreactif
 
-\titre{\faCloud}{TEst\hfill \mdseries test}
+% \titrecours
 
-\titreactivite
+% \titrecorrige
 
-\titrecours
+% \titreDM
 
-\titrecorrige
+% \titreDS
 
-\titreDM
+% \titreflash
 
-\titreDS
+% \titreTD
 
-\titreflash
-
-\titreTD
-
-\titreinterro
+% \titreinterro
 
 \begin{enumerate}
   \item test

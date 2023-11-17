@@ -25,6 +25,8 @@
 \RequirePackage{fontawesome5}
 \RequirePackage[minimal]{lua-ul}
 \RequirePackage{soul}
+\RequirePackage{tcolorbox}
+  \tcbuselibrary{skins,breakable}
 
 \RequirePackage{tikz}
 
@@ -56,14 +58,15 @@
       '\\frenchbsetup{ItemLabelii=' .. PAGE.itemii ..'}' ..
       '\\setlist[enumerate,1]{label=' .. PAGE.enumi .. '}' ..
       '\\setlist[enumerate,2]{label=' .. PAGE.enumii .. '}' ..
-      '\\DeclareInstance{tasks}{enumerate}{default}{label =' .. PAGE.enumi .. ',label-width=1em}' ..
-      '\\DeclareInstance{tasks}{itemize}{default}{label = ' .. PAGE.itemi .. ',label-width=1em}' ..
+      '\\DeclareInstance{tasks}{enumerate}{default}{label =' .. PAGE.enumi .. ',label-width=1.125em}' ..
+      '\\DeclareInstance{tasks}{itemize}{default}{label = ' .. PAGE.itemi .. ',label-width=1.125em}' ..
       '\\renewcommand*{\\sectionformat}{' .. PAGE.sectionnumber .. '}' ..
       '\\renewcommand*{\\subsectionformat}{' .. PAGE.subsectionnumber .. '}' ..
       '\\renewcommand*{\\subsubsectionformat}{' .. PAGE.subsubsectionnumber .. '}' ..
       '\\setkomafont{section}{' .. PAGE.sectionname .. '}' ..
       '\\setkomafont{subsection}{' .. PAGE.subsectionname .. '}' ..
-      '\\setkomafont{subsubsection}{' .. PAGE.subsubsectionname .. '}'
+      '\\setkomafont{subsubsection}{' .. PAGE.subsubsectionname .. '}' ..
+      '\\renewcommand*{\\sectionlinesformat}[4]{' .. PAGE.sectionsformat .. '}'
     )
 
     if FORMAT =='fiche' then
@@ -419,19 +422,34 @@ end
 %%% CRÉATION DES LOGOS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\logoactif}{}
+
 \begin{luacode}
-  function LogosDocument(LOGOS)
-    tex.sprint(
-      '\\def\\logoactivite{' .. LOGOS.activite ..'}' ..
-      '\\def\\logobasique{' .. LOGOS.basique ..'}' ..
-      '\\def\\logocorrige{'.. LOGOS.corrige ..'}' ..
-      '\\def\\logocours{'.. LOGOS.cours ..'}' ..
-      '\\def\\logoDM{' .. LOGOS.DM ..'}' ..
-      '\\def\\logoDS{' .. LOGOS.DS .. '}' ..  
-      '\\def\\logoflash{'.. LOGOS.flash .. '}' ..
-      '\\def\\logointerro{' .. LOGOS.interro .. '}' ..
-      '\\def\\logoTD{'.. LOGOS.TD .. '}'
-    )
+  function LogosDocument(PARAMETRES,LOGOS)
+
+    local TYPE = PARAMETRES.type
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.activite ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.basique ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.bilan ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.corrige ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.cours ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DM ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DS ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.flash ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.interro ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.TD ..'}')
+    end
   end
 \end{luacode}
 
@@ -439,37 +457,71 @@ end
 %%% CRÉATION DES TITRES %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\titre}[2]{{\bfseries\LARGE #1  \underLine{#2}}}
-\newcommand{\titreactivite}{
-  \titre{\logoactivite}{Activité\hfill \mdseries\large\rivniveau$^\text{ème}$}
-}
-\newcommand{\titrebasique}{}
-\newcommand{\titrecorrige}{
-  \titre{\logocorrige}{Correction~\mdseries|~\rivchapitre\hfill\large\rivniveau$^\text{ème}$}
-}
+\newcommand{\titre}[1]{}
+\newcommand{\titreactif}[1]{}
+\newcommand{\styleactif}[1]{}
 
-\newcommand{\titrecours}{
-  \titre{\logocours}{Chapitre \thepart~\mdseries|~\rivchapitre\hfill\large\rivniveau$^\text{ème}$}
-}
-\newcommand{\titreDM}{%
-    \titre{\logoDM}{DM n°\stepcounter{compteurDM}\thecompteurDM~\mdseries|~{\mdseries\large NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}%
-}%
-\newcommand{\titreDS}{
-    \titre{\logoDS}{DS n°\stepcounter{compteurDS}\thecompteurDS~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}
-}
-\newcommand{\titreflash}{
-  \iffiche
-    \titre{\logoflash}{Questions Flash n°\stepcounter{compteurflash}\thecompteurflash~\mdseries|~{\large\mdseries NOM :}\hfill{\large\mdseries Prénom :}\hfill}
-  \else
-    \titre{\logoflash}{Questions Flash n°\stepcounter{compteurflash}\thecompteurflash\hfill}
-  \fi
-}
-\newcommand{\titreinterro}{
-  \titre{\logointerro}{Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau$^\text{ème}$}
-}
-\newcommand{\titreTD}{
-  \titre{\logoTD}{TD~\mdseries|~\rivchapitre \hfill \large \rivniveau$^\text{ème}$}
-}
+\begin{luacode}
+  function StylesTitresDocument(PARAMETRES,STYLESTITRES)
+
+    local TYPE = PARAMETRES.type
+
+    tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre ..'}')
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.activite ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.basique ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.bilan ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.corrige ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.cours ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.DM ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.DS ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.flash ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.interro ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.TD ..'}')
+    end
+  end
+\end{luacode}
+
+
+
+% \begin{luacode}
+%   function TitresDocument(PARAMETRES,TITRES)
+%     local TYPE = PARAMETRES.type
+%     if TYPE == 'activite' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.activite ..'}')
+%     elseif TYPE == 'basique' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.basique ..'}')
+%     elseif TYPE == 'bilan' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.bilan ..'}')
+%     elseif TYPE == 'corrige' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.corrige ..'}')
+%     elseif TYPE == 'cours' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.cours ..'}')
+%     elseif TYPE == 'DM' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DM ..'}')
+%     elseif TYPE == 'DS' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DS ..'}')
+%     elseif TYPE == 'flash' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.flash ..'}')
+%     elseif TYPE == 'interro' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.interro ..'}')
+%     elseif TYPE == 'TD' then
+%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.TD ..'}')
+%     end
+%   end
+% \end{luacode}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
@@ -516,15 +568,30 @@ end
 %Commande de paramétrage
 \newcommand{\rivparametrage}{
   \directlua{
+
   PAGE,DOC,DOC_HEADER = FormatUtilisateur(PARAMETRES)
-  COULEURS = CouleursUtilisateur(PARAMETRES)
-  POLICE = PoliceUtilisateur()
-  LOGOS = LogosUtilisateur()
-  CouleursDocument(COULEURS)
   FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
+
+  POLICE = PoliceUtilisateur()
+
+    COULEURS = CouleursUtilisateur(PARAMETRES)
+    CouleursDocument(COULEURS)
+    LOGOS = LogosUtilisateur()
+    print('MESSAGE')
+    print(LOGOS)
+    LogosDocument(PARAMETRES,LOGOS)
+
+
   BooleensDocument(PARAMETRES)
   PoliceDocument(POLICE,PARAMETRES)
-  LogosDocument(LOGOS)
+
+
+  STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
+  StylesTitresDocument(PARAMETRES,STYLESTITRES)
+  TitresUtilisateur(PARAMETRES)
+  
+
+
   }
 }
 

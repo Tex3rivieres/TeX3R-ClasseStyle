@@ -405,36 +405,36 @@
 
 %Sections
 
- \renewcommand*{\sectionformat}{%
-        \colorbox{black!100!white}{%
-        \textcolor{white}{\normalfont\LARGE\textbf{{\Roman{section}}}}%
-        }%
-}
-\setkomafont{section}{\LARGE\bfseries\textcolor{black}}
+%  \renewcommand*{\sectionformat}{%
+%         \colorbox{black!100!white}{%
+%         \textcolor{white}{\normalfont\LARGE\textbf{{\Roman{section}}}}%
+%         }%
+% }
+% \setkomafont{section}{\LARGE\bfseries\textcolor{black}}
 
-%Subsections
+% %Subsections
 
- \renewcommand*{\subsectionformat}{%
-    \colorbox{red!100!white}{%
-    \textcolor{white}{\normalfont\Large\textbf{{\arabic{subsection}}}}%
-    }%
- }
-\setkomafont{subsection}{\Large\bfseries\textcolor{Red}}
+%  \renewcommand*{\subsectionformat}{%
+%     \colorbox{red!100!white}{%
+%     \textcolor{white}{\normalfont\Large\textbf{{\arabic{subsection}}}}%
+%     }%
+%  }
+% \setkomafont{subsection}{\Large\bfseries\textcolor{Red}}
 
-%Subsubssections
+% %Subsubssections
 
- \renewcommand*{\subsubsectionformat}{%
-        \colorbox{Green!100!white}{%
-        \textcolor{white}{\normalfont\large\textbf{{\Alph{subsubsection}}}}%
-        }%
-}
-\setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{Green}}
+%  \renewcommand*{\subsubsectionformat}{%
+%         \colorbox{Green!100!white}{%
+%         \textcolor{white}{\normalfont\large\textbf{{\Alph{subsubsection}}}}%
+%         }%
+% }
+% \setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{Green}}
 
 %Formatage global
 
-\renewcommand*{\sectionlinesformat}[4]{%
-    #3 \uline{#4}\par\vspace{0.5em}%
-}
+% \renewcommand*{\sectionlinesformat}[4]{%
+%     #3 \uline{#4}\par\vspace{0.5em}%
+% }
 
 %Partie (collection regroupant tout un chapitre, dans un megadocument)
 \renewcommand*\partlineswithprefixformat[3]{%
@@ -443,7 +443,7 @@
 \vfill
   \begin{tcolorbox}[
     colframe = black, 
-    colback=black!0,
+    colback=white,
     coltitle=white,
     sharp corners,
     valign=center,

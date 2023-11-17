@@ -5,6 +5,9 @@
 %%% FORMAT DE LA PAGE %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
+%#1 = couleur ; #2 = type de section
+\newcommand{\stylesections}[3]{\colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}}}
+
 \begin{luacode}
   function FormatUtilisateur (PARAMETRES)
 
@@ -24,9 +27,12 @@
     PAGE.subsectionname = '\\Large\\bfseries\\textcolor{couleursubsection}'
     PAGE.subsubsectionname = '\\normalfont\\large\\bfseries\\textcolor{couleursubsubsection}'
 
-    PAGE.sectionnumber = '\\colorbox{couleursection}{\\textcolor{white}{\\normalfont\\LARGE\\textbf{{\\Roman{section}}}}} '
-    PAGE.subsectionnumber = '\\colorbox{couleursubsection}{\\textcolor{white}{\\normalfont\\Large\\textbf{{\\arabic{subsection}}}}} '
-    PAGE.subsubsectionnumber = '\\colorbox{couleursubsubsection}{\\textcolor{white}{\\normalfont\\large\\textbf{{\\Alph{subsubsection}}}}} '
+    PAGE.sectionnumber = '\\stylesections{couleursection}{\\LARGE}{~\\Roman{section}~}\\,'
+    PAGE.subsectionnumber = '\\stylesections{couleursubsection}{\\LARGE}{\\Alph{subsection}}\\,'
+    PAGE.subsubsectionnumber = '\\stylesections{couleursubsubsection}{\\LARGE}{\\arabic{subsubsection}}\\,'
+
+    PAGE.sectionsformat = '#3 \\ul{#4}\\par\\vspace{0.5em}'
+    PAGE.partformat = ''
 
     if FORMAT == "fiche" then
       PAGE.width = '21cm'
@@ -140,6 +146,7 @@
 
     LOGOS.activite = '\\reflectbox{\\faPencil*}'
     LOGOS.basique = ''
+    LOGOS.bilan = '\\faEdit[regular]'
     LOGOS.corrige = '\\faEdit[regular]'
     LOGOS.cours = '\\faBook'
     LOGOS.DM = '\\faHome'
@@ -147,31 +154,86 @@
     LOGOS.flash = '\\faUserSecret'
     LOGOS.interro = '\\faFile*[regular]'
     LOGOS.TD = '\\faEdit[regular]'
+
     return LOGOS
   end
 \end{luacode}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% REDÉFINITION DES TITRES %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \renewcommand{\titreactivite}[2]{}
-% \renewcommand{\titrebasique}[2]{}
-% \renewcommand{\titrecours}[2]{}
-% \renewcommand{\titrecorrige}[2]{}
-% \renewcommand{\titreDM}[2]{}
-% \renewcommand{\titreDS}[2]{}
-% \renewcommand{\titreflash}[2]{}
-% \renewcommand{\titreinterro}[2]{}
-% \renewcommand{\titreTD}[2]{}
+\begin{luacode}
+  function StylesTitresUtilisateur(PARAMETRES)
 
+    local STYLESTITRES = {}
+    local FORMAT = PARAMETRES.format
 
+    STYLESTITRES.titre = '{\\bfseries\\LARGE\\logoactif~ \\underLine{#1}\\par\\vspace{0.5cm}}'
+    STYLESTITRES['sans'] = '\\titre{#1}'
+    STYLESTITRES['un'] = '\\titre{#1\\hfill\\mdseries\\large\\rivniveau$^\\text{ème}$}'
+    STYLESTITRES['deux'] = '\\titre{#1~\\mdseries|~\\rivchapitre\\hfill\\large\\rivniveau$^\\text{ème}$}'
+    STYLESTITRES['trois'] = '\\titre{#1~\\mdseries|~{\\large\\mdseries NOM :} \\hfill {\\large\\mdseries Prénom :} \\hfill \\mdseries\\large\\rivniveau$^\\text{ème}$}'
 
+    if FORMAT == "fiche" then    
 
+    STYLESTITRES.activite = STYLESTITRES['un']
+    STYLESTITRES.basique = STYLESTITRES['sans']
+    STYLESTITRES.bilan = STYLESTITRES['un']
+    STYLESTITRES.corrige = STYLESTITRES['deux']
+    STYLESTITRES.cours = STYLESTITRES['deux']
+    STYLESTITRES.DM = STYLESTITRES['trois']
+    STYLESTITRES.DS = STYLESTITRES['trois']
+    STYLESTITRES.flash = STYLESTITRES['un']
+    STYLESTITRES.interro = STYLESTITRES['trois']
+    STYLESTITRES.TD = STYLESTITRES['deux']
 
+    elseif FORMAT == "diapo" then
 
+    STYLESTITRES.activite = STYLESTITRES['un']
+    STYLESTITRES.basique = STYLESTITRES['sans']
+    STYLESTITRES.bilan = STYLESTITRES['un']
+    STYLESTITRES.corrige = STYLESTITRES['deux']
+    STYLESTITRES.cours = STYLESTITRES['deux']
+    STYLESTITRES.DM = STYLESTITRES['trois']
+    STYLESTITRES.DS = STYLESTITRES['trois']
+    STYLESTITRES.flash = STYLESTITRES['un']
+    STYLESTITRES.interro = STYLESTITRES['trois']
+    STYLESTITRES.TD = STYLESTITRES['deux']
 
+    end
 
+    return STYLESTITRES
+  end
 
+  function TitresUtilisateur(PARAMETRES)
 
+    local FORMAT = PARAMETRES.format
+    local TYPE = PARAMETRES.type
+    local TITRE = nil
+
+    if TYPE == 'activite' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Activité}}'
+    elseif TYPE == 'basique' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{}}'
+    elseif TYPE == 'bilan' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Bilan}}'
+    elseif TYPE == 'corrige' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Corrigé}}'
+    elseif TYPE == 'cours' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Chapitre \\thepart}}'
+    elseif TYPE == 'DM' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{DM n°\\stepcounter{compteurDM}\\thecompteurDM}}'
+    elseif TYPE == 'DS' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{DS n°\\stepcounter{compteurDS}\\thecompteurDS}}'
+    elseif TYPE == 'flash' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Questions Flash n°\\stepcounter{compteurflash}\\thecompteurflash}}'
+    elseif TYPE == 'interro' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{Interrogation n°\\stepcounter{compteurinterro}\\thecompteurinterro}}'
+    elseif TYPE == 'TD' then
+      TITRE = '\\renewcommand{\\titreactif}{\\styleactif{TD}}'
+    end
+    tex.sprint(TITRE)
+
+  end
+\end{luacode}
