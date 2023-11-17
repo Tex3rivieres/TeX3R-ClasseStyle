@@ -2,25 +2,28 @@
 
 
 \usepackage{style-tex3R-2-1}
-
+\usepackage{lipsum}
 
 
 \begin{luacode}
 PARAMETRES = {}
 
 PARAMETRES.format = 'fiche'
-PARAMETRES.type = 'DM'
+PARAMETRES.type = 'activite'
 PARAMETRES.enonce = false
 PARAMETRES.correction = true
 PARAMETRES.theme = true
 PARAMETRES.cache = true
-PARAMETRES.header = true
-PARAMETRES.print = false
+PARAMETRES.header = false
+PARAMETRES.print = true
+
 -- PARAMETRES.taille = '50pt'
 -- PARAMETRES
 \end{luacode}
 
 \rivparametrage
+
+
 
 
 % \renewcommand*\partlineswithprefixformat[3]{%
@@ -54,11 +57,22 @@ PARAMETRES.print = false
 % }
 
 
+
+
 \usepackage{scratch3}
 
 \begin{document}
 
-\logoactif
+% \chapitre{Blabla}
+
+% \niveau{5}
+
+% \tracesurligne{25}
+% \lipsum[1-10]
+
+\titreactif
+
+\tracecarreaux{5}
 
 \chapitre{8}{Nombres relatifs}
 \niveau{5}

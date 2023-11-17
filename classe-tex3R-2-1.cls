@@ -29,10 +29,11 @@
   \tcbuselibrary{skins,breakable}
 
 \RequirePackage{tikz}
+\usetikzlibrary{calc}
 
 
 
-\RequirePackage{showframe}
+\RequirePackage{showframe}%A enlever
 
 %%%%%%%%%%%%%%%%%%%%%%
 % BOOLÉENS DU FORMAT %
@@ -355,6 +356,22 @@ end
   \end{tikzpicture}\hfill
 }
 
+\newcommand{\tracecarreaux}[1]{
+  \hfill\begin{tikzpicture}
+      \draw[xstep=0.5,ystep=0.5, color=couleurcarreau] (0,0) grid (\linewidth-0.8pt,#1);
+  \end{tikzpicture}\hfill
+}
+
+% \newcommand{\tracesurligne}[1]{%
+%   \begin{tikzpicture}[overlay]
+%     \foreach \i in {0,2,...,#1} {
+%     \fill [couleursurligneligne] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+%     \fill [red] ($(0,0.15)+(0,-(\i +1)*\baselineskip)$) rectangle ($(0,0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+%     }
+% \end{tikzpicture}%
+% }
+
+
 %Nouveau soulignement pour le titre, utilisant lua-ul
 \newunderlinetype\beginUnderLine{\cleaders\hbox{%
   \setlength\unitlength{.1ex}%
@@ -382,7 +399,9 @@ end
       '\\colorlet{couleurinterligne}{' .. COULEURS.interligne .. '}' ..
       '\\colorlet{couleursection}{' .. COULEURS.section .. '}' ..
       '\\colorlet{couleursubsection}{' .. COULEURS.subsection .. '}' ..
-      '\\colorlet{couleursubsubsection}{' .. COULEURS.subsubsection .. '}'
+      '\\colorlet{couleursubsubsection}{' .. COULEURS.subsubsection .. '}' ..
+      '\\colorlet{couleurcarreau}{' .. COULEURS.carreau .. '}' ..
+      '\\colorlet{couleursurligneligne}{' .. COULEURS.surligneligne .. '}'
     )
 
   end 
@@ -569,28 +588,23 @@ end
 \newcommand{\rivparametrage}{
   \directlua{
 
-  PAGE,DOC,DOC_HEADER = FormatUtilisateur(PARAMETRES)
-  FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
+    PAGE,DOC,DOC_HEADER = FormatUtilisateur(PARAMETRES)
+    FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
 
-  POLICE = PoliceUtilisateur()
+    POLICE = PoliceUtilisateur()
+    PoliceDocument(POLICE,PARAMETRES)
 
     COULEURS = CouleursUtilisateur(PARAMETRES)
     CouleursDocument(COULEURS)
+
     LOGOS = LogosUtilisateur()
-    print('MESSAGE')
-    print(LOGOS)
     LogosDocument(PARAMETRES,LOGOS)
 
+    BooleensDocument(PARAMETRES)
 
-  BooleensDocument(PARAMETRES)
-  PoliceDocument(POLICE,PARAMETRES)
-
-
-  STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
-  StylesTitresDocument(PARAMETRES,STYLESTITRES)
-  TitresUtilisateur(PARAMETRES)
-  
-
+    STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
+    StylesTitresDocument(PARAMETRES,STYLESTITRES)
+    TitresUtilisateur(PARAMETRES)
 
   }
 }
