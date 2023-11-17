@@ -120,7 +120,7 @@
 \RequirePackage[np]{numprint}
 \RequirePackage{subfiles}
 \RequirePackage{environ}
-% \RequirePackage{ProfCollege}
+\RequirePackage{ProfCollege}
 \RequirePackage[export]{adjustbox}
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
