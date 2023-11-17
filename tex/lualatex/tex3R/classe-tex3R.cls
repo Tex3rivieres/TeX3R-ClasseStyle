@@ -1,6 +1,6 @@
-\NeedsTeXFormat{LaTeX2e}[2022-11-01]
+\NeedsTeXFormat{LaTeX2e}[12-11-2023]
 
-\ProvidesClass{classe-tex3R}[21/03/2023|Classe tex3R|Voir la documentation pour plus d'informations]
+\ProvidesClass{classe-tex3R}[12/11/2023|Classe tex3R|Voir la documentation pour plus d'informations]
 
 \RequirePackage{silence}
   \WarningFilter{latex}{Label}%Désactive les Warning dûs à subfiles
@@ -27,85 +27,85 @@
 %%%% OPTIONS DE CLASSE PERMETTANT DE FAIRE UNE COMPILATION SIMPLE A PARTIR D'UNE GRAINE %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newif\ifTDmultiple
-\newif\ifcoursmultiple
-\newif\ifflashmultiple
-\newif\ifDSmultiple
-\newif\ifmulti
+% \newif\ifTDmultiple
+% \newif\ifcoursmultiple
+% \newif\ifflashmultiple
+% \newif\ifDSmultiple
+% \newif\ifmulti
 
-\TDmultiplefalse
-\coursmultiplefalse
-\flashmultiplefalse
-\DSmultiplefalse
-\multifalse
+% \TDmultiplefalse
+% \coursmultiplefalse
+% \flashmultiplefalse
+% \DSmultiplefalse
+% \multifalse
 
 \RequirePackage{xkeyval}
 
-\DeclareOptionX{graine}{\newcommand{\conditionmacro}[0]{#1}}
-\ProcessOptionsX\relax
+% \DeclareOptionX{graine}{\newcommand{\conditionmacro}[0]{#1}}
+% \ProcessOptionsX\relax
 
 \DeclareOption{diapo}{\newcommand{\conditionmacro}[0]{3}}
 \DeclareOption{fiche}{\newcommand{\conditionmacro}[0]{2}}
-\DeclareOption{multiTD}{\TDmultipletrue\multitrue}
-\DeclareOption{multicours}{\coursmultipletrue\multitrue}
-\DeclareOption{multiflash}{\flashmultipletrue\multitrue}
-\DeclareOption{multiDS}{\DSmultipletrue\multitrue}
+% \DeclareOption{multiTD}{\TDmultipletrue\multitrue}
+% \DeclareOption{multicours}{\coursmultipletrue\multitrue}
+% \DeclareOption{multiflash}{\flashmultipletrue\multitrue}
+% \DeclareOption{multiDS}{\DSmultipletrue\multitrue}
 \ProcessOptions\relax
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% DÉFINITION DE LA COMMANDE RUNLUALATEX QUI PERMET DE LANCER UNE INVITE DE COMMANDE POUR EXECUTER UNE INSTANCE DE COMPILATION %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\ifx\conditionmacro\undefined
-\newcommand{\runlualatex}[2]{%#1=nom du fichier ; #2=graine
-\ShellEscape{%
-  lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-  "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-}%
-\ShellEscape{%
-  lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-  "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-}%
-\ShellEscape{%
-  lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-  "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-}%
-}%
-\fi
+% \ifx\conditionmacro\undefined
+% \newcommand{\runlualatex}[2]{%#1=nom du fichier ; #2=graine
+% \ShellEscape{%
+%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
+%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
+% }%
+% \ShellEscape{%
+%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
+%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
+% }%
+% \ShellEscape{%
+%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
+%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
+% }%
+% }%
+% \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% EXÉCUTION DE PLUSIEURS COMPILATIONS EN FONCTION DE L'OPTION DE CLASSE %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ifx\conditionmacro\undefined%pour l'option multiTD
-  \ifTDmultiple
-    \runlualatex{TD-fiche-enonce}{41594410}
-    \runlualatex{TD-fiche-correction}{58232174}
-    \runlualatex{TD-fiche-enonce-correction}{291160870}
-    \runlualatex{TD-diapo-enonce}{62391615}
-    \runlualatex{TD-diapo-enonce-correction-lignes}{436741305}
-    \expandafter\stop
-  \fi
-  \ifcoursmultiple%pour l'option multicours
-      \runlualatex{cours-fiche}{86}
-      \runlualatex{cours-fiche-trame}{144394}
-      \runlualatex{cours-diapo}{3741}
-      \runlualatex{cours-diapo-trame}{86043}
-      \expandafter\stop
-  \fi
-  \ifflashmultiple%pour l'option multiflash
-    \runlualatex{flash-fiche-enonce}{28130}
-    \runlualatex{flash-fiche-correction}{4528930}
-    \runlualatex{flash-fiche-enonce-correction}{196910}
-    \runlualatex{flash-diapo-enonce}{42195}
-    \runlualatex{flash-diapo-enonce-correction}{295365}
-    \expandafter\stop
-  \fi
-  \ifDSmultiple
-  \runlualatex{DS-fiche-enonce}{4294030}
-  \runlualatex{DS-fiche-correction}{938}
-  \expandafter\stop
-\fi
+%   \ifTDmultiple
+%     \runlualatex{TD-fiche-enonce}{41594410}
+%     \runlualatex{TD-fiche-correction}{58232174}
+%     \runlualatex{TD-fiche-enonce-correction}{291160870}
+%     \runlualatex{TD-diapo-enonce}{62391615}
+%     \runlualatex{TD-diapo-enonce-correction-lignes}{436741305}
+%     \expandafter\stop
+%   \fi
+%   \ifcoursmultiple%pour l'option multicours
+%       \runlualatex{cours-fiche}{86}
+%       \runlualatex{cours-fiche-trame}{144394}
+%       \runlualatex{cours-diapo}{3741}
+%       \runlualatex{cours-diapo-trame}{86043}
+%       \expandafter\stop
+%   \fi
+%   \ifflashmultiple%pour l'option multiflash
+%     \runlualatex{flash-fiche-enonce}{28130}
+%     \runlualatex{flash-fiche-correction}{4528930}
+%     \runlualatex{flash-fiche-enonce-correction}{196910}
+%     \runlualatex{flash-diapo-enonce}{42195}
+%     \runlualatex{flash-diapo-enonce-correction}{295365}
+%     \expandafter\stop
+%   \fi
+%   \ifDSmultiple
+%   \runlualatex{DS-fiche-enonce}{4294030}
+%   \runlualatex{DS-fiche-correction}{938}
+%   \expandafter\stop
+% \fi
   \def\conditionmacro{2}%si aucune option n'a été sélectionnée, type=fiche
 \fi
 
@@ -135,7 +135,7 @@
 \RequirePackage{tabularx}
 \RequirePackage{listings}
 \RequirePackage{calc}
-% \RequirePackage{scratch3}
+\RequirePackage{scratch3}
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
 \RequirePackage{amsmath}
@@ -149,7 +149,7 @@
 \RequirePackage{url} 	
   \urlstyle{sf}         
 \RequirePackage{fancybox}			
-\RequirePackage{colortbl} 		
+\RequirePackage{colortbl} 	
 \RequirePackage{setspace}				
 \RequirePackage{multirow}			
 \RequirePackage{import}			
@@ -161,6 +161,7 @@
 \WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
 \RequirePackage{ccicons}%pour les copyrights
+	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% COMMANDES ET BOOLÉENS UTILISÉS DANS style-tex3R %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1174,13 +1175,13 @@
 \fi
 }
 
-\ifmulti
-  \def\parametres#1{}
-\else
-  \makeatletter
-  \def\parametres{\@ifstar\parametresetoile\parametresnormal}
-  \makeatother
-\fi
+% \ifmulti
+%   \def\parametres#1{}
+% \else
+%   \makeatletter
+%   \def\parametres{\@ifstar\parametresetoile\parametresnormal}
+%   \makeatother
+% \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% RÉGLAGES DE LA TOC %%%%
