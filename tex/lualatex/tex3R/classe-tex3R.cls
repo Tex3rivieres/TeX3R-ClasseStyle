@@ -123,20 +123,31 @@
 \RequirePackage[np]{numprint}
 \RequirePackage{subfiles}
 \RequirePackage{environ}
+
+
 \RequirePackage{ProfCollege}
+\usetikzlibrary{positioning}
+\let\oldusetikzlibrary\usetikzlibrary
+\renewcommand{\usetikzlibrary}[1]{%
+  \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
+}
+\RequirePackage{scratch3}
+
 \RequirePackage[export]{adjustbox}
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
-  \pgfplotsset{compat=1.18}
+  \pgfplotsset{compat=1.13}
 \tcbuselibrary{skins,breakable}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
+ 
+
 
 \RequirePackage{bookmark}
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
 \RequirePackage{listings}
 \RequirePackage{calc}
-\RequirePackage{scratch3}
+
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
 \RequirePackage{amsmath}
