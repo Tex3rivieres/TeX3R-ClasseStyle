@@ -3,6 +3,7 @@
 \ProvidesClass{classe-tex3R-2-1}[14/11/2023-Branche test de TEX3R]
 
 \LoadClass{scrartcl}
+\PassOptionsToPackage{table,svgnames}{xcolor}
 
 \RequirePackage{iftex}
 \ifluatex
@@ -13,7 +14,7 @@
 
 %Formatage de la page et du texte
 \RequirePackage{geometry}
-% \RequirePackage[svgnames]{xcolor}
+% \RequirePackage{xcolor}
 \RequirePackage{fontspec}
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
