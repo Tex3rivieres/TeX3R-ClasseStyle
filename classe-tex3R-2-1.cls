@@ -13,7 +13,7 @@
 
 %Formatage de la page et du texte
 \RequirePackage{geometry}
-\RequirePackage[svgnames]{xcolor}
+% \RequirePackage[svgnames]{xcolor}
 \RequirePackage{fontspec}
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
@@ -33,6 +33,82 @@
 
 \RequirePackage{tikz}
 \usetikzlibrary{calc}
+
+
+
+\RequirePackage{pstricks}
+\RequirePackage{pst-plot}
+\RequirePackage{pst-eucl}
+\let\clipbox\relax
+% \RequirePackage[no-math]{fontspec}%
+% \RequirePackage{anyfontsize}
+% \RequirePackage[french]{babel}
+% \RequirePackage{enumitem}
+% \RequirePackage[np]{numprint}
+\RequirePackage{subfiles}
+% \RequirePackage{environ}
+
+
+\RequirePackage{ProfCollege}
+% \usetikzlibrary{positioning}
+\let\oldusetikzlibrary\usetikzlibrary
+\renewcommand{\usetikzlibrary}[1]{%
+  \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
+}
+\RequirePackage{scratch3}
+
+\RequirePackage[export]{adjustbox}
+\RequirePackage{pgf}
+\RequirePackage{pgfplots}
+  \pgfplotsset{compat=1.13}
+\tcbuselibrary{skins,breakable}
+  \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
+ 
+
+
+% \RequirePackage{bookmark}
+\RequirePackage{pdflscape}
+\RequirePackage{tabularx}
+\RequirePackage{listings}
+\RequirePackage{calc}
+
+\RequirePackage{tkz-fct,tkz-tab}
+\RequirePackage{tkz-euclide}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{mathrsfs}	
+\RequirePackage{bbding}						
+\RequirePackage[misc]{ifsym}
+\RequirePackage{soul}	
+\RequirePackage{ulem}	
+\RequirePackage{cancel}
+\RequirePackage{url} 	
+  \urlstyle{sf}         
+\RequirePackage{fancybox}			
+\RequirePackage{colortbl} 	
+\RequirePackage{setspace}				
+\RequirePackage{multirow}			
+\RequirePackage{import}			
+\RequirePackage[]{qrcode}
+\RequirePackage{tikzsymbols}
+% \RequirePackage{tasks}
+% \RequirePackage{lastpage}
+% \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+% \WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
+% \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
+\RequirePackage{ccicons}%pour les copyrights
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
