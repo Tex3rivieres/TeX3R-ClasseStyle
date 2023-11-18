@@ -8,7 +8,7 @@
   \WarningFilter{lastpage}{Rerun to get}%Désactive les Warning dûs à lastpage
 
 \LoadClass{scrartcl}
-
+\PassOptionsToPackage{table,svgnames}{xcolor}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% VÉRIFICATION DE LA COMPILATION EN LUALATEX %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -112,7 +112,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% CHARGEMENT DES PRINCIPAUX PACKAGES, POUR CHACUNE DES COMPILATIONS %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\RequirePackage{pstricks}
+\RequirePackage{pst-plot}
+\RequirePackage{pst-eucl}
+\let\clipbox\relax
 \RequirePackage[no-math]{fontspec}%
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
@@ -127,9 +130,7 @@
   \pgfplotsset{compat=1.18}
 \tcbuselibrary{skins,breakable}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
-\RequirePackage{pstricks}
-\RequirePackage{pst-plot}
-\RequirePackage{pst-eucl}
+
 \RequirePackage{bookmark}
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
