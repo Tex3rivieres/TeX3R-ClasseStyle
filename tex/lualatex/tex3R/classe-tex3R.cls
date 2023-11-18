@@ -132,7 +132,12 @@
   \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
 }
 \RequirePackage{scratch3}
-
+\catcode`\_11
+\renewcommand{\turn_arrow}[1]{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,#1]
+\draw[-{Triangle[angle=110:0.4ex 0.2ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=190,radius=1ex];%
+}
+\scr_restorecatcode
 \RequirePackage[export]{adjustbox}
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
