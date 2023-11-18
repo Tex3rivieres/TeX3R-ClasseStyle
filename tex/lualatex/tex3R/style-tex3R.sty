@@ -85,21 +85,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Définition des couleurs pour les environnements
-\colorlet{couleursubsectioncours}{Red}
-\colorlet{couleursubsubsectioncours}{Green}
-\colorlet{couleurdefinition}{Green}
-\colorlet{couleurpropriete}{Red}
-\colorlet{couleurmethode}{Black}
-\colorlet{couleurapplication}{Black}
-\colorlet{couleurexercice}{Black}
-\colorlet{couleurexemple}{Blue}
-\colorlet{couleurpreuve}{Black}
-\colorlet{couleurremarque}{Black}
-\colorlet{couleurtitreTD}{Black}
-\colorlet{couleurtitreflash}{Black}
-\colorlet{couleursurligne}{lightgray}
-\colorlet{couleurcorrection}{Green}
-\colorlet{couleurconvention}{Black}
+% \colorlet{couleursubsectioncours}{Red}
+% \colorlet{couleursubsubsectioncours}{Green}
+% \colorlet{couleurdefinition}{Green}
+% \colorlet{couleurpropriete}{Red}
+% \colorlet{couleurmethode}{Black}
+% \colorlet{couleurapplication}{Black}
+% \colorlet{couleurexercice}{Black}
+% \colorlet{couleurexemple}{Blue}
+% \colorlet{couleurpreuve}{Black}
+% \colorlet{couleurremarque}{Black}
+% \colorlet{couleurtitreTD}{Black}
+% \colorlet{couleurtitreflash}{Black}
+% \colorlet{couleursurligne}{lightgray}
+% \colorlet{couleurcorrection}{Green}
+% \colorlet{couleurconvention}{Black}
 
 \newcommand{\rivimportant}[1]{\hl{#1}}
 
@@ -107,61 +107,61 @@
 % Ajout 12/10/23
 
 
-\NewEnviron{enonce}{%
-\ifenonce
-    \stepcounter{compteurexercice}
-    \ifdocumentation
-    \else
-        \phantomsection
-        \addcontentsline{toc}{subsection}{Exercice \thecompteurexercice}
-    \fi
-    \iftheme 
-        \hfill\textsc{\rivtheme} 
+% \NewEnviron{enonce}{%
+% \ifenonce
+%     \stepcounter{compteurexercice}
+%     \ifdocumentation
+%     \else
+%         \phantomsection
+%         \addcontentsline{toc}{subsection}{Exercice \thecompteurexercice}
+%     \fi
+%     \iftheme 
+%         \hfill\textsc{\rivtheme} 
 
-        \vspace{0.3cm}
+%         \vspace{0.3cm}
 
-        \iffiche
-            \vspace{-0.9cm}
-            \ifdiapo
-                \vspace{-1.5cm}
-            \fi
-        \fi
-    \fi
-    \ifflash
-        \begin{tcolorbox}[
-            colback=white,
-            colframe=black,
-            fonttitle=\large\bfseries,
-            colbacktitle=black!40!white,
-            top=1em,
-            left=0.5em,
-            right=0.5em,
-            bottom=0.5em,
-            enhanced,
-            shield externalize=true,
-            attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-            title=Question \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
-            ]
-            {\BODY}
-        \end{tcolorbox}
-    \else
-        \ifbrevet
-            \textbf{Exercice \thecompteurexercice}\hfill \textbf{\rivbareme}\par
+%         \iffiche
+%             \vspace{-0.9cm}
+%             \ifdiapo
+%                 \vspace{-1.5cm}
+%             \fi
+%         \fi
+%     \fi
+%     \ifflash
+%         \begin{tcolorbox}[
+%             colback=white,
+%             colframe=black,
+%             fonttitle=\large\bfseries,
+%             colbacktitle=black!40!white,
+%             top=1em,
+%             left=0.5em,
+%             right=0.5em,
+%             bottom=0.5em,
+%             enhanced,
+%             shield externalize=true,
+%             attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
+%             title=Question \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
+%             ]
+%             {\BODY}
+%         \end{tcolorbox}
+%     \else
+%         \ifbrevet
+%             \textbf{Exercice \thecompteurexercice}\hfill \textbf{\rivbareme}\par
 
-            \BODY
-        \else%Pour les diapos et les fiches hors flash et hors brevet
+%             \BODY
+%         \else%Pour les diapos et les fiches hors flash et hors brevet
 
-        % \vfill
+%         % \vfill
 
-        \colorbox{black!100!white}{%
-    \textcolor{white}{{\normalfont\Large\textbf{\thecompteurexercice}}\ifdifficulte{\raisebox{0.2em}{\scriptsize\rivdifficulte}}\fi}}\ifcompetence\hspace{0.3em}\uline{\rivcompetence}\fi\par%
+%         \colorbox{black!100!white}{%
+%     \textcolor{white}{{\normalfont\Large\textbf{\thecompteurexercice}}\ifdifficulte{\raisebox{0.2em}{\scriptsize\rivdifficulte}}\fi}}\ifcompetence\hspace{0.3em}\uline{\rivcompetence}\fi\par%
 
-    \medskip
+%     \medskip
 
-    \BODY
-    % \hrule
+%     \BODY
+%     % \hrule
 
-    \medskip
+%     \medskip
             % \begin{tcolorbox}[
             %     colback=white,
             %     colframe=black,
@@ -249,92 +249,92 @@
 %%%% DÉFINITION DES ENVIRONNEMENTS DE COURS %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\formatEnvCours}[2]{% tcolorbox : #1=couleur de la ligne à gauche, #2=Nom affiché
-\begin{tcolorbox}[
-    colback=white!95!black,      
-    colframe=white,    
-    boxrule=0pt,      
-    left=0.5em,
-    top=0pt,
-    bottom=0pt,
-    right=0pt,       
-    title=,          
-    enhanced,
-    shield externalize=true, 
-    %leftrule=2mm,        
-    borderline west={4pt}{0pt}{#1}
-    ]
-    #2
-\end{tcolorbox}
-}
+% \newcommand{\formatEnvCours}[2]{% tcolorbox : #1=couleur de la ligne à gauche, #2=Nom affiché
+% \begin{tcolorbox}[
+%     colback=white!95!black,      
+%     colframe=white,    
+%     boxrule=0pt,      
+%     left=0.5em,
+%     top=0pt,
+%     bottom=0pt,
+%     right=0pt,       
+%     title=,          
+%     enhanced,
+%     shield externalize=true, 
+%     %leftrule=2mm,        
+%     borderline west={4pt}{0pt}{#1}
+%     ]
+%     #2
+% \end{tcolorbox}
+% }
 
-\NewEnviron{definition}[1][Définition]{
-    \formatEnvCours{couleurdefinition}{\textcolor{couleurdefinition}{\large\underline{#1} :}
+% \NewEnviron{definition}[1][Définition]{
+%     \formatEnvCours{couleurdefinition}{\textcolor{couleurdefinition}{\large\underline{#1} :}
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{propriete}[1][Propriété]{
-    \formatEnvCours{couleurpropriete}{\textcolor{couleurpropriete}{\large\underline{#1} :} 
+% \NewEnviron{propriete}[1][Propriété]{
+%     \formatEnvCours{couleurpropriete}{\textcolor{couleurpropriete}{\large\underline{#1} :} 
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{methode}[1][Méthode]{
-    \formatEnvCours{couleurmethode}{\textcolor{couleurmethode}{\large\underline{#1} :}
+% \NewEnviron{methode}[1][Méthode]{
+%     \formatEnvCours{couleurmethode}{\textcolor{couleurmethode}{\large\underline{#1} :}
 
-    \medskip 
-    \BODY}
+%     \medskip 
+%     \BODY}
 
-}
+% }
 
-\NewEnviron{application}[1][Application]{
-    \formatEnvCours{couleurapplication}{\textcolor{couleurapplication}{\large\underline{#1} :} 
+% \NewEnviron{application}[1][Application]{
+%     \formatEnvCours{couleurapplication}{\textcolor{couleurapplication}{\large\underline{#1} :} 
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{exercice}[1][Exercice]{
-    \formatEnvCours{couleurexercice}{\textcolor{couleurexercice}{\large\underline{#1} :} 
+% \NewEnviron{exercice}[1][Exercice]{
+%     \formatEnvCours{couleurexercice}{\textcolor{couleurexercice}{\large\underline{#1} :} 
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{exemple}[1][Exemple]{
-    \formatEnvCours{couleurexemple}{\textcolor{couleurexemple}{\large\underline{#1} :} 
+% \NewEnviron{exemple}[1][Exemple]{
+%     \formatEnvCours{couleurexemple}{\textcolor{couleurexemple}{\large\underline{#1} :} 
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{remarque}[1][Remarque]{
-    \formatEnvCours{couleurremarque}{\textcolor{couleurremarque}{\large\underline{#1} :}  
+% \NewEnviron{remarque}[1][Remarque]{
+%     \formatEnvCours{couleurremarque}{\textcolor{couleurremarque}{\large\underline{#1} :}  
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{preuve}[1][Preuve]{
-    \formatEnvCours{couleurpreuve}{\textcolor{couleurpreuve}{\large\underline{#1} :}  
+% \NewEnviron{preuve}[1][Preuve]{
+%     \formatEnvCours{couleurpreuve}{\textcolor{couleurpreuve}{\large\underline{#1} :}  
 
-    \medskip 
-    \BODY\hfill$\blacksquare$}
-}
+%     \medskip 
+%     \BODY\hfill$\blacksquare$}
+% }
 
-\NewEnviron{convention}[1][Convention]{
-    \formatEnvCours{couleurconvention}{\textcolor{couleurconvention}{\large\underline{#1} :}  
+% \NewEnviron{convention}[1][Convention]{
+%     \formatEnvCours{couleurconvention}{\textcolor{couleurconvention}{\large\underline{#1} :}  
 
-    \medskip 
-    \BODY}
-}
+%     \medskip 
+%     \BODY}
+% }
 
-\NewEnviron{basique}{
-    \BODY
-}
+% \NewEnviron{basique}{
+%     \BODY
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% FORMATAGE DES DIFFÉRENTS TITRES %%%%
@@ -371,9 +371,9 @@
 %     \titre{\logocours}{Chapitre \thepart~{\mdseries|} \mdseries\rivchapitre\hfill\large\rivniveau}
 % }
 
-\newcommand{\titreTD}{
-    \titre{\logoTD}{TD | \mdseries\rivchapitre \hfill \large \rivniveau}
-}
+% \newcommand{\titreTD}{
+%     \titre{\logoTD}{TD | \mdseries\rivchapitre \hfill \large \rivniveau}
+% }
 
 \ifdiapo
 %     \newcommand{\titreflash}{

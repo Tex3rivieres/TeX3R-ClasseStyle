@@ -1,29 +1,435 @@
-\documentclass{scrartcl}
+\documentclass{article}
 
-% \usepackage{showframe}
-% \usepackage{luacode}
-% \usepackage{geometry}
+\usepackage{environ}
+\usepackage{etoolbox}
+
+\usepackage{tikz}
+  \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
+
+
+\let\oldusetikzlibrary\usetikzlibrary
+\renewcommand{\usetikzlibrary}[1]{%
+\ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
+}
+
+\usepackage{scratch3}
+
+
+\RequirePackage{pgf}
+\RequirePackage{pgfplots}
+  \pgfplotsset{compat=1.18}
+% \tcbuselibrary{skins,breakable}
+
+
+\NewEnviron{scratch*}[1][]{
+  \begin{scratch}[#1]
+  \renewarrow
+  \BODY
+  \end{scratch}
+}
+
+\newcommand{\renewarrow}{
+\renewcommand{\turnleft}{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex]
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]}, line width=.3333ex] (0,0) arc[start angle=-80, end angle=180, radius=1ex];
+}
+\renewcommand{\turnright}{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,xscale=-1]
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=180,radius=1ex];
+}
+}
+
+
+
+
+\begin{document}
+
+\begin{scratch*}[print]
+
+\blockmove{\turnleft test}
+\blockmove{\turnright test}
+
+\end{scratch*}
+
+
+\end{document}
+
+
+% \documentclass{scrartcl}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+% \usepackage{lipsum}  % Package utilisé pour générer du faux texte (lipsum)
+% \usepackage{fancyhdr}
+
+% % Configuration fancyhdr
+% \pagestyle{fancy}
+% \fancyhead{}  % Effacer les en-têtes précédemment définis
+% \fancyhead[R]{Mon En-Tête}  % En-tête à droite
+% \renewcommand{\headrulewidth}{0.4pt}  % Épaisseur de la ligne de l'en-tête
+
+% \begin{document}
+
+% \title{Mon Document avec En-Tête}
+% \author{Moi}
+% \date{\today}
+
+% \maketitle
+
+% \section{Section 1}
+% \lipsum[1-10]  % Génère du faux texte
+
+% \end{document}
+
+
+
+
+
+
+
+
+
+
+% \documentclass{article}
+
 % \usepackage[french]{babel}
 % \usepackage{lipsum}
-% \usepackage{atbegshi}
-
-
 % \usepackage[svgnames]{xcolor}
+% \usepackage{showframe}
+% \usepackage{geometry}
 
-% \usepackage{pstricks}
-\usepackage{ProfCollege}
+
+% \usepackage{fontspec}
+% \usepackage{anyfontsize}
+% \usepackage[french]{babel}
+% \usepackage{unicode-math}
+% \usepackage{enumitem}
+% \usepackage{tasks}
+
+% %Formatages divers
+% % \usepackage{fontawesome5}
+% % \usepackage[minimal]{lua-ul}
+% % \usepackage{soul}
+% % \usepackage{tcolorbox}
+% %   \tcbuselibrary{skins,breakable}
+% % \usepackage{environ}
+
+% % \usepackage{tikz}
+% % \usepackage{calc}
+% % \usepackage
+
+
+
+% \RequirePackage{showframe}%A enlever
+
+
+
+
+% \AddToHook{shipout/before}{TEST\newpage}
+
+
+% \begin{document}
+
+% \lipsum[1-25]
+
+
+% \end{document}
+
+
+
+
+% \documentclass{article}
+
+% \newcommand{\test}[1]{#1}
+% \usepackage{luacode}
+% \usepackage{tcolorbox}
+
+
+
+% \begin{document}
+
+% \begin{luacode*}
+% tex.sprint([[\begin{tcolorbox}[colback=red,
+% colframe=red]salut\end{tcolorbox} ]])
+% \end{luacode*}
+
+
+% \test{Coucou}
+% % \important
+
+% \begin{test}
+% Salut les petits potes
+% \end{test}
+% \end{document}
+
+
+
+% \usepackage{luacode}
+% \usepackage{environ}
+
+% \newif\ifvisible
+
+% \begin{luacode}
+% PARAMETRES = {}
+
+% PARAMETRES.visible = true
+
+% function VerificationVisible(FLAG,PARAMETRES)
+%   local VISIBLE = tostring(PARAMETRES.visible)
+
+%   if FLAG == VISIBLE then
+%     tex.sprint('\\visibletrue')
+%   else
+%     tex.sprint('\\visiblefalse')
+%   end
+% end
+
+% \end{luacode}
+
+% \newcommand{\visible}[2][true]{%
+%   \directlua{VerificationVisible('#1',PARAMETRES)}
+%   \ifvisible
+%     #2
+%   \fi
+% }
+
+
+% \NewEnviron{visibleu}[1][true]{%
+%   \directlua{VerificationVisible('#1',PARAMETRES)}
+%   \ifvisible
+%     \BODY
+%   \fi
+% }
+
+
+
+
+% \newenvironment{visible}[1][true]{\directlua{VerificationVisible('#1',PARAMETRES)}\ifvisible \makeatletter\def\monenv@code{} \collect@body\monenv@code\makeatother \fi}{}
+
+% \newenvironment{visible}[1][true]{%
+%   \directlua{VerificationVisible('#1',PARAMETRES)}%
+%   \ifvisible
+%     \makeatletter
+%     \def\monenv@code{} % Initialisation de \monenv@code
+%     \collect@body\monenv@code
+%     \makeatother
+%   \fi
+% }{}
+
+% \newenvironment{visible}[1][true]{%
+%   \directlua{VerificationVisible('#1', PARAMETRES)}%
+%   \ifvisible
+%     \expandafter\monenv@start
+%   \else
+%     % Ne rien faire si \ifvisible est faux
+%   \fi
+% }{%
+%   \ifvisible
+%     \monenv@end
+%   \fi
+% }
+
+% \makeatletter
+% \def\monenv@start#1\monenv@end{%
+%   \def\monenv@code{#1}%
+%   % Autres actions à effectuer au début de l'environnement
+% }
+
+% \def\monenv@end{%
+%   % Actions à effectuer à la fin de l'environnement
+%   \collect@body\monenv@code
+% }
+% \makeatother
+
+
+
+
+\begin{document}
+
+\visible{salut}
+
+\begin{visibleu}[true]
+
+visible true
+\end{visibleu}
+
+\begin{visibleu}[false]
+
+visible false
+\end{visibleu}
+
+
+\end{document}
+
+
+
+
+
+% \documentclass{article}
+% \usepackage{environ}
+% \usepackage{showframe}
+% % \NewEnviron{monenv}{
+% %   \expandafter\splitbody\BODY\separation\relax
+% % }
+
+% \long\def\splitbody#1\separation#2\relax{
+%   % Traitement de la première partie (#1) avant la séparation
+%   \textbf{Partie 1:} #1\par
+%   % Traitement de la deuxième partie (#2) après la séparation
+%   \textbf{Partie 2:} #2\par
+% }
+
+
+
+% \begin{document}
+
+% \newif\ifswitch
+
+% \switchtrue
+
+% \newenvironment{monenv}{\ifswitch}{\fi}
+
+% \begin{monenv}
+
+% test test 
+
+% \else
+
+% test 
+
+% \end{monenv}
+
+
+
+% \splitbody 
+
+% \begin{minipage}{\linewidth}
+%   test
+% \end{minipage}
+
+
+% \fbox{salut}
+
+
+% \separation 
+
+
+% les gars
+
+% \relax
+
+% % \begin{monenv}
+% %   Contenu 1
+% %   \separation
+
+% %   Contenu 2
+% % \end{monenv}
+
+% \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \PassOptionsToPackage{table, svgnames}{xcolor}
+
+% \documentclass{scrartcl}
+
+% \usepackage{showframe}
+% % \usepackage{luacode}
+% % \usepackage{geometry}
+% \usepackage[french]{babel}
+% \usepackage{lipsum}
+% % \usepackage{atbegshi}
+
+% % \usepackage[svgnames]{xcolor}
+
+% % \RequirePackage{pstricks}
+% % \RequirePackage{pst-plot}
+% % \RequirePackage{pst-eucl}
+% % \usepackage{ProfCollege}
 
 
 % \usepackage{xcolor}
+% \usepackage{tcolorbox}
+%   \tcbuselibrary{skins,breakable}
+
+% \tcbset{
+%   mystyleabove/.style={
+%     fonttitle=\bfseries\large,
+%     coltitle=blue,
+%     colback=yellow!10,
+%   },
+%   mystylebelow/.style={
+%     fonttitle=\itshape\large,
+%     coltitle=red,
+%     colback=green!10,
+%   },
+% }
+
+% \newtcolorbox{mytwopartbox}{
+%   enhanced,
+%   colframe=black,
+%   colback=white,
+%   title={Partie supérieure},
+%   mystyleabove, % Style pour la partie supérieure
+%   %before lower=\tcblower, % Marque le passage à la partie inférieure
+%   before upper={\tcbtitle\par}, % Applique le style avant la partie supérieure
+%   after upper={\par}, % Saut de ligne après la partie supérieure
+%   mystylebelow, % Style pour la partie inférieure
+% }
 
 
+% % \newtcolorbox{invisiblebox}{
+% %   enhanced,
+% %   colback=white, % Couleur de fond
+% %   colframe=white, % Couleur du cadre
+% %   arc=0mm, % Rayon des coins
+% %   boxrule=0mm, % Épaisseur du cadre
+% %   top=0mm, % Marge supérieure
+% %   bottom=0mm, % Marge inférieure
+% %   left=0mm, % Indentation à la valeur de \parindent
+% %   right=0mm, % Marge droite
+% %   boxsep=0mm, % Padding interne
+% %   before skip=\baselineskip -0.9em, % Espace avant
+% %   after skip=\baselineskip - 0.9em, % Espace après
+% %   before upper={}, % Contenu en haut
+% %   after upper={}, % Espace entre les parties
+% %   before lower={}, % Contenu en bas
+% % }
 
-% \newcommand{\maCommande}{\textcolor{Red}{TEST} }
 
-% \AtBeginShipout{\maCommande}
-% \AtBeginDocument{\maCommande}
+% % \newcommand{\maCommande}{\textcolor{Red}{TEST} }
 
-\begin{document}
-test
+% % \AtBeginShipout{\maCommande}
+% % \AtBeginDocument{\maCommande}
 
-\end{document}
+% \begin{document}
+
+% \begin{mytwopartbox}[upperbox=ignored]
+%   Ceci est le contenu de la partie supérieure.
+%   \tcblower
+%   Ceci est le contenu de la partie inférieure.
+% \end{mytwopartbox}
+
+
+% \lipsum[1]
+% % \begin{invisiblebox}
+% %   \lipsum[1]
+% % \end{invisiblebox}\par
+
+% \lipsum[1]
+% % \lipsum[1]\par
+% % \lipsum[1]\par
+% % \begin{invisiblebox}
+% %  \lipsum[1]
+% % \end{invisiblebox}
+% \end{document}

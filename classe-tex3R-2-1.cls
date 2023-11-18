@@ -27,6 +27,9 @@
 \RequirePackage{soul}
 \RequirePackage{tcolorbox}
   \tcbuselibrary{skins,breakable}
+\RequirePackage{environ}
+\RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
+\RequirePackage{bookmark}
 
 \RequirePackage{tikz}
 \usetikzlibrary{calc}
@@ -46,7 +49,7 @@
 
 \begin{luacode}
 --Formatage de la page d'après les paramètres utilisateurs
-  function FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
+  function FormatDocument(PAGE,PARAMETRES)
 
     local HEADER = PARAMETRES.header
     local FORMAT = PARAMETRES.format
@@ -78,6 +81,25 @@
 
     if HEADER then
       tex.sprint('\\headertrue')
+      tex.sprint(
+      '\\setkomafont{pagehead}{\\normalfont}' ..
+      '\\ihead{\\vspace*{-1em}{\\titreactif}}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}'
+      )
+    else
+      tex.sprint(
+        '\\setkomafont{pagehead}{\\normalfont}' ..
+        '\\ihead{}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}' 
+      )
     end
 
     if PRINT then
@@ -87,42 +109,26 @@
     tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
 
     tex.sprint(
-      '\\gdef\\FormatDoc{' ..
+      '\\gdef\\FormatPage{' ..
         '\\newgeometry{' ..
-          'top=' .. DOC.top ..
-          ',bottom=' .. DOC.bottom ..
-          ',right=' .. DOC.right ..
-          ',left=' .. DOC.left ..
+          'top=' .. PAGE.top ..
+          ',bottom=' .. PAGE.bottom ..
+          ',right=' .. PAGE.right ..
+          ',left=' .. PAGE.left ..
           ',includehead' ..
           ',includefoot' ..
-          ',marginparsep=' .. DOC.marginparsep ..
-          ',marginparwidth=' .. DOC.marginparwidth ..
-          ',headheight=' .. DOC.headheight ..
-          ',headsep=' .. DOC.headsep ..
-          ',footskip=' .. DOC.footskip ..
-        '}' ..
-      '}' ..
-      '\\gdef\\FormatDocHeader{' ..
-        '\\newgeometry{' ..
-          'top=' .. DOC_HEADER.top ..
-          ',bottom=' .. DOC_HEADER.bottom ..
-          ',right=' .. DOC_HEADER.right ..
-          ',left=' .. DOC_HEADER.left ..
-          ',includehead' ..
-          ',includefoot' ..
-          ',marginparsep=' .. DOC_HEADER.marginparsep ..
-          ',marginparwidth=' .. DOC_HEADER.marginparwidth ..
-          ',headheight=' .. DOC_HEADER.headheight ..
-          ',headsep=' .. DOC_HEADER.headsep ..
-          ',footskip=' .. DOC_HEADER.footskip ..
+          ',marginparsep=' .. PAGE.marginparsep ..
+          ',marginparwidth=' .. PAGE.marginparwidth ..
+          ',headheight=' .. PAGE.headheight ..
+          ',headsep=' .. PAGE.headsep ..
+          ',footskip=' .. PAGE.footskip ..
         '}' ..
       '}'
     )
+    tex.sprint('\\AtBeginDocument{\\FormatPage}')
 
-    if HEADER then
-      tex.sprint('\\AtBeginDocument{\\FormatDocHeader}')
-    else
-      tex.sprint('\\AtBeginDocument{\\FormatDoc}')
+    if not HEADER then
+      tex.sprint('\\AtBeginDocument{\\titreactif}')
     end
   end
 \end{luacode}
@@ -306,21 +312,23 @@ end
 \fi
 }
 
+\newcommand{\important}[1]{}
+
 \newcommand{\sautdeligne}{\vspace{\baselineskip}}
 \newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 
 %Commandes des environnements
 %
-\newcommand{\rivchapitre}{}
-\newcommand{\rivniveau}{}
+\newcommand{\contenuchapitre}{}
+\newcommand{\contenuniveau}{}
 
-\newcommand{\rivcompetence}{}
-\newcommand{\rivdifficulte}{}%
-\newcommand{\rivsource}{}
-\newcommand{\rivtheme}{}
+\newcommand{\contenucompetence}{}
+\newcommand{\contenudifficulte}{}
+\newcommand{\contenusource}{}
+\newcommand{\contenutheme}{}
 
-\newcommand{\rivrepere}{}
+\newcommand{\contenurepere}{}
 
 %
 \begin{luacode}
@@ -333,15 +341,15 @@ end
   end
 \end{luacode}
 
-\newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\rivchapitre}{#2}}
-\newcommand{\niveau}[1]{\renewcommand{\rivniveau}{#1}}
+\newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\contenuchapitre}{#2}}
+\newcommand{\niveau}[1]{\renewcommand{\contenuniveau}{#1}}
 
-\newcommand{\competence}[1]{\renewcommand{\rivcompetence}{#1}}
-\newcommand{\difficulte}[1]{\renewcommand{\rivdifficulte}{\directlua{Difficulte(#1)}}}
-\newcommand{\source}[1]{\renewcommand{\rivsource}{#1}}
-\newcommand{\theme}[1]{\renewcommand{\rivtheme}{#1}}
+\newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
+\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{Difficulte(#1)}}}
+\newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
+\newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
 
-\newcommand{\repere}[1]{\renewcommand{\rivrepere}{#1}}
+\newcommand{\repere}[1]{\renewcommand{\contenurepere}{#1}}
 
 %Commandes de lignes
 \newcommand{\tracelignes}[1]{
@@ -362,14 +370,14 @@ end
   \end{tikzpicture}\hfill
 }
 
-% \newcommand{\tracesurligne}[1]{%
-%   \begin{tikzpicture}[overlay]
-%     \foreach \i in {0,2,...,#1} {
-%     \fill [couleursurligneligne] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
-%     \fill [red] ($(0,0.15)+(0,-(\i +1)*\baselineskip)$) rectangle ($(0,0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
-%     }
-% \end{tikzpicture}%
-% }
+\newcommand{\tracesurligne}[1]{%
+  \begin{tikzpicture}[overlay]
+    \foreach \i in {0,2,...,#1} {%
+    \fill [couleursurlignelignea] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+    \fill [couleursurligneligneb] ($(0,-0.15)+(0,-\i*\baselineskip-\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-2\baselineskip)$);
+    }%
+\end{tikzpicture}%
+}%
 
 
 %Nouveau soulignement pour le titre, utilisant lua-ul
@@ -401,8 +409,25 @@ end
       '\\colorlet{couleursubsection}{' .. COULEURS.subsection .. '}' ..
       '\\colorlet{couleursubsubsection}{' .. COULEURS.subsubsection .. '}' ..
       '\\colorlet{couleurcarreau}{' .. COULEURS.carreau .. '}' ..
-      '\\colorlet{couleursurligneligne}{' .. COULEURS.surligneligne .. '}'
+      '\\colorlet{couleursurlignelignea}{' .. COULEURS.surlignelignea .. '}' ..
+      '\\colorlet{couleursurligneligneb}{' .. COULEURS.surligneligneb .. '}' ..
+      '\\colorlet{couleurboitecours}{' .. COULEURS.boitecours .. '}' ..
+      '\\colorlet{couleurbackground}{' .. COULEURS.background .. '}' ..
+      '\\colorlet{couleurapplication}{' .. COULEURS.application .. '}' ..
+      '\\colorlet{couleurdefinition}{' .. COULEURS.definition .. '}' ..
+      '\\colorlet{couleurconvention}{' .. COULEURS.convention .. '}' ..
+      '\\colorlet{couleurexercice}{' .. COULEURS.exercice .. '}' ..
+      '\\colorlet{couleurexemple}{' .. COULEURS.exemple .. '}' ..
+      '\\colorlet{couleurmethode}{' .. COULEURS.methode .. '}' ..
+      '\\colorlet{couleurpreuve}{' .. COULEURS.preuve .. '}' ..
+      '\\colorlet{couleurpropriete}{' .. COULEURS.propriete .. '}' ..
+      '\\colorlet{couleurremarque}{' .. COULEURS.remarque .. '}' ..
+      '\\colorlet{couleurenonce}{' .. COULEURS.enonce .. '}' ..
+      '\\colorlet{couleurcorrection}{' .. COULEURS.correction .. '}' ..
+      '\\colorlet{couleursurligne}{' .. COULEURS.surligne .. '}'
     )
+
+    tex.sprint('\\sethlcolor{couleursurligne}')
 
   end 
 \end{luacode}
@@ -479,13 +504,19 @@ end
 \newcommand{\titre}[1]{}
 \newcommand{\titreactif}[1]{}
 \newcommand{\styleactif}[1]{}
+\newcommand{\stylesections}[3]{}
 
 \begin{luacode}
   function StylesTitresDocument(PARAMETRES,STYLESTITRES)
 
     local TYPE = PARAMETRES.type
+    local HEADER = PARAMETRES.header
 
-    tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre ..'}')
+    if HEADER then
+      tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre ..'}')
+    else
+      tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre .. '\\vspace{' .. STYLESTITRES.espacement ..'}}')
+    end
 
     if TYPE == 'activite' then
       tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.activite ..'}')
@@ -511,36 +542,63 @@ end
   end
 \end{luacode}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifvisible
+
+\begin{luacode}
+
+function VerificationVisible(FLAG,PARAMETRES)
+  local VISIBLE = tostring(PARAMETRES.visible)
+
+  if FLAG == VISIBLE then
+    tex.sprint('\\visibletrue')
+  else
+    tex.sprint('\\visiblefalse')
+  end
+end
+
+\end{luacode}
 
 
-% \begin{luacode}
-%   function TitresDocument(PARAMETRES,TITRES)
-%     local TYPE = PARAMETRES.type
-%     if TYPE == 'activite' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.activite ..'}')
-%     elseif TYPE == 'basique' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.basique ..'}')
-%     elseif TYPE == 'bilan' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.bilan ..'}')
-%     elseif TYPE == 'corrige' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.corrige ..'}')
-%     elseif TYPE == 'cours' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.cours ..'}')
-%     elseif TYPE == 'DM' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DM ..'}')
-%     elseif TYPE == 'DS' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DS ..'}')
-%     elseif TYPE == 'flash' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.flash ..'}')
-%     elseif TYPE == 'interro' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.interro ..'}')
-%     elseif TYPE == 'TD' then
-%       -- tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.TD ..'}')
-%     end
-%   end
-% \end{luacode}
+\NewEnviron{visible*}[1][true]{%
+  \directlua{VerificationVisible('#1',PARAMETRES)}
+  \ifvisible
+    \BODY
+  \fi
+}
 
+\newcommand{\visible}[2][true]{%
+  \directlua{VerificationVisible('#1',PARAMETRES)}
+  \ifvisible
+    #2
+  \fi
+}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENTS DE COURS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\formatEnvCours}[2][]{}
+
+\NewEnviron{application}[1][]{}
+\NewEnviron{definition}[1][]{}
+\NewEnviron{convention}[1][]{}
+\NewEnviron{exercice}[1][]{}
+\NewEnviron{exemple}[1][]{}
+\NewEnviron{methode}[1][]{}
+\NewEnviron{preuve}[1][]{}
+\NewEnviron{propriete}[1][]{}
+\NewEnviron{remarque}[1][]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENTS D'EXERCICES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewEnviron{correction}[1][]{}
+\NewEnviron{enonce}[1][]{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
@@ -550,10 +608,9 @@ end
   function TitreDocument(PARAMETRES)
     local HEADER = PARAMETRES.header
 
+    -- tex.sprint('\\AtBeginDocument{\\titreactif}')
     if HEADER then
-
-    else
-
+    -- tex.sprint('\\AddToHook{shipout/after}{TEST}')
     end
   end
 \end{luacode}
@@ -585,11 +642,11 @@ end
 
 
 %Commande de paramétrage
-\newcommand{\rivparametrage}{
+\newcommand{\parametrage}{
   \directlua{
 
-    PAGE,DOC,DOC_HEADER = FormatUtilisateur(PARAMETRES)
-    FormatDocument(PAGE,DOC,DOC_HEADER,PARAMETRES)
+    PAGE = FormatUtilisateur(PARAMETRES)
+    FormatDocument(PAGE,PARAMETRES)
 
     POLICE = PoliceUtilisateur()
     PoliceDocument(POLICE,PARAMETRES)
@@ -605,6 +662,8 @@ end
     STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
     StylesTitresDocument(PARAMETRES,STYLESTITRES)
     TitresUtilisateur(PARAMETRES)
+    TitreDocument(PARAMETRES)
+    % EnvironnementsUtilisateur()
 
   }
 }

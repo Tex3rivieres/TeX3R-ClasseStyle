@@ -1,6 +1,5 @@
 \documentclass{classe-tex3R-2-1}
 
-
 \usepackage{style-tex3R-2-1}
 \usepackage{lipsum}
 
@@ -8,20 +7,31 @@
 \begin{luacode}
 PARAMETRES = {}
 
+format = 'fiche'
+
 PARAMETRES.format = 'fiche'
-PARAMETRES.type = 'activite'
-PARAMETRES.enonce = false
+PARAMETRES.type = 'cours'
+PARAMETRES.enonce = true
 PARAMETRES.correction = true
 PARAMETRES.theme = true
 PARAMETRES.cache = true
 PARAMETRES.header = false
-PARAMETRES.print = true
+PARAMETRES.print = false
+PARAMETRES.visible = false
+PARAMETRES.difficulte = true
+PARAMETRES.competence = true
+PARAMETRES.source = true
+PARAMETRES.theme = true
+
 
 -- PARAMETRES.taille = '50pt'
 -- PARAMETRES
 \end{luacode}
 
-\rivparametrage
+\parametrage
+
+\niveau{5}
+\chapitre{4}{blablaabalba}
 
 
 
@@ -63,11 +73,37 @@ PARAMETRES.print = true
 
 \begin{document}
 
-% \chapitre{Blabla}
 
-% \niveau{5}
+%%%%%%%%%%%%%%%%
+%%%% ÉNONCÉ %%%%
+%%%%%%%%%%%%%%%%
 
+\source{Vincent Crombez}
+\theme{Géométrie}
+\competence{Calculer, Modéliser}
+\difficulte{3}
+
+% \begin{enonce}
+%       \hl{test}
+% \end{enonce}
+
+
+
+% \begin{correction}
+%       test correction
+% \end{correction}
+
+
+
+% \begin{definition}
+% test
+% \end{definition}
+
+% \begin{propriete}[Propriété admise]
+% test
+% \end{propriete}
 % \tracesurligne{25}
+% davjaiv japvij apji
 % \lipsum[1-10]
 
 \titreactif
@@ -129,8 +165,6 @@ $5x+8 $
 $\mathcal{ABCDEFGHIJK}$
 
 \difficulte{5}
-
-\rivdifficulte
 
 
 \begin{scratch}
@@ -197,6 +231,6 @@ $\mathcal{ABCDEFGHIJK}$
 % / \ifmegadoctoc \textcolor{green}{megadoctoc}\par \else \hfill \textcolor{red}{no} \textcolor{red}{megadoctoc}\par \fi
 % / \ifmegadoc \textcolor{green}{megadoc}\par \else \hfill \textcolor{red}{no} \textcolor{red}{megadoc}\par \fi
 
-
+\newpage test
 
 \end{document}
