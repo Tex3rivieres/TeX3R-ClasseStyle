@@ -126,7 +126,7 @@
 
 
 \RequirePackage{ProfCollege}
-\usetikzlibrary{positioning}
+% \usetikzlibrary{positioning}
 \let\oldusetikzlibrary\usetikzlibrary
 \renewcommand{\usetikzlibrary}[1]{%
   \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
