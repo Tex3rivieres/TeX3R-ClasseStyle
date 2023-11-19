@@ -2,7 +2,7 @@
 
 \ProvidesClass{classe-tex3R-2-1}[14/11/2023-Branche test de TEX3R]
 
-\LoadClass{scrartcl}
+\LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
 
 \RequirePackage{iftex}
@@ -14,11 +14,17 @@
 
 %Formatage de la page et du texte
 \RequirePackage{geometry}
-% \RequirePackage{xcolor}
+\RequirePackage{silence}
+\RequirePackage[np]{numprint}
+
+\RequirePackage{pstricks}
+\RequirePackage{pst-plot}
+\RequirePackage{pst-eucl}
+
+\RequirePackage{xcolor}
 \RequirePackage{fontspec}
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
-\RequirePackage{unicode-math}
 \RequirePackage{enumitem}
 \RequirePackage{tasks}
 
@@ -32,26 +38,15 @@
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
 \RequirePackage{bookmark}
 
+\RequirePackage{etoolbox}
 \RequirePackage{tikz}
 \usetikzlibrary{calc}
-
-
-
-\RequirePackage{pstricks}
-\RequirePackage{pst-plot}
-\RequirePackage{pst-eucl}
-\let\clipbox\relax
-% \RequirePackage[no-math]{fontspec}%
-% \RequirePackage{anyfontsize}
-% \RequirePackage[french]{babel}
-% \RequirePackage{enumitem}
-% \RequirePackage[np]{numprint}
 \RequirePackage{subfiles}
-% \RequirePackage{environ}
 
+\let\clipbox\relax
 
 \RequirePackage{ProfCollege}
-% \usetikzlibrary{positioning}
+\RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \let\oldusetikzlibrary\usetikzlibrary
 \renewcommand{\usetikzlibrary}[1]{%
   \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
@@ -62,42 +57,34 @@
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
   \pgfplotsset{compat=1.13}
-\tcbuselibrary{skins,breakable}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
  
 
 
-% \RequirePackage{bookmark}
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
 \RequirePackage{listings}
-\RequirePackage{calc}
 
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
+
 \RequirePackage{amsmath}
 \RequirePackage{amsfonts}
 \RequirePackage{mathrsfs}	
 \RequirePackage{bbding}						
 \RequirePackage[misc]{ifsym}
-\RequirePackage{soul}	
-\RequirePackage{ulem}	
 \RequirePackage{cancel}
-\RequirePackage{url} 	
-  \urlstyle{sf}         
-\RequirePackage{fancybox}			
-\RequirePackage{colortbl} 	
-\RequirePackage{setspace}				
-\RequirePackage{multirow}			
-\RequirePackage{import}			
+\RequirePackage{url} 	      
+\RequirePackage{fancybox}	
+\RequirePackage{colortbl}
+\RequirePackage{setspace}	
+\RequirePackage{multirow}	
+\RequirePackage{import}
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
-% \RequirePackage{tasks}
-% \RequirePackage{lastpage}
-% \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
-% \WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
-% \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
-\RequirePackage{ccicons}%pour les copyrights
+% % \RequirePackage{lastpage}
+\WarningsOff[scrlayer-scrpage]
+\RequirePackage{ccicons}
 
 
 
@@ -206,6 +193,7 @@
 
     if not HEADER then
       tex.sprint('\\AtBeginDocument{\\titreactif}')
+      -- Chargement police se fait après
     end
   end
 \end{luacode}
@@ -722,11 +710,13 @@ end
 \newcommand{\parametrage}{
   \directlua{
 
+    POLICE = PoliceUtilisateur()
+    PoliceDocument(POLICE,PARAMETRES)
+
     PAGE = FormatUtilisateur(PARAMETRES)
     FormatDocument(PAGE,PARAMETRES)
 
-    POLICE = PoliceUtilisateur()
-    PoliceDocument(POLICE,PARAMETRES)
+
 
     COULEURS = CouleursUtilisateur(PARAMETRES)
     CouleursDocument(COULEURS)

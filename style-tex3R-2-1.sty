@@ -335,3 +335,25 @@
 
 %  end
 % \end{luacode*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PATCH DE SCRATCH3 %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewEnviron{scratch*}[1][]{
+  \begin{scratch}[#1]
+  \nouvellefleche
+  \BODY
+  \end{scratch}
+}
+
+\newcommand{\nouvellefleche}{
+\renewcommand{\turnleft}{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex]
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]}, line width=.3333ex] (0,0) arc[start angle=-80, end angle=180, radius=1ex];
+}
+\renewcommand{\turnright}{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,xscale=-1]
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=180,radius=1ex];
+}
+}
