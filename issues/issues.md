@@ -59,6 +59,16 @@ Création d'un environnement parametres afin de fusionner la commande ```\parame
 
 Nécessité de définir le scope de cet environnement dans le settings.json afin d'apparaître comme du lua. Faire de même avec ```\directlua``` tant qu'à faire.
 
+### Commande ```\chapitre```
+
+- Permettre que la commande ```\chapitre``` puisse avoir deux arguments nuls (définition de chapitre à 0 si le numéro n'est pas spécifié)
+- Désactivation de la commande ```\chapitre``` en cas de megadoc
+
+### Paramètres par défaut
+
+- Création des paramètres par défaut choisis par l'utilisateur en cas d'absence de paramétrage en début de document.
+- Prédéfinition de paramètres personnalisés (monparam = TD initialise les booléens voulus à certaines valeurs par exemple)
+
 ## Extension VS Code / VS Codium
 
 - Définir les commandes à ajouter/supprimer dans le panel

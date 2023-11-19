@@ -672,7 +672,7 @@ end
 \newcommand{\rivimportant}[1]{\important{#1}}
 \newcommand{\ajoutlignes}[1]{}
 \newcommand{\adjustbox}[2]{#2}
-
+\newcommand{\parametres}[1]{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDE PERMETTANT DE MODIFIER LES OPTIONS %%%
