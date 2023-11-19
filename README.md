@@ -3,14 +3,41 @@
 Tex3R est un travail collaboratif initié par @vcrombez et @fleothaud, visant à faciliter la présentation de cours de maths au collège. Ce travail comporte notamment :
 - Une classe LaTeX (classe-tex3R.cls)
 - Un style LaTeX associé (style-tex3R.sty)
-- Une extension VS Code associée (basée sur latex-workshop)
+- Une extension pour VS Code et VS Codium associée (nécessitant l'excellente extension latex-workshop)
 
-TEST 21h43
+Le projet n'est pas achevé (voir le dossier issues pour plus de détails)
 
-TEST 21h48
+Les nouveaux paramètres en début de document s'utilisent comme suit :
 
-TEST 21h49
+```latex
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
 
-MAJ 21h50
+\begin{luacode}
 
-MAJ 22h40
+  -- Paramètres généraux du document
+  Format = 'fiche'
+  Type = 'cours'
+  Impression = false
+  Header = true
+  Taille = nil
+
+  -- Paramètres des environnements
+  Correction = true
+  Enonce = true
+  Visible = true
+  
+  Competence = true
+  Difficulte = false
+  Source = true
+  Theme = true
+
+\end{luacode}
+
+% Application des options
+\parametrage
+
+\begin{document}
+
+\end{document}
+ ```

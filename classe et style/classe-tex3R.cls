@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R-2-1}[14/11/2023-Branche test de TEX3R]
+\ProvidesClass{classe-tex3R}[19/11/2023 - Version 2.0 de la classe-tex3R]
 
 \LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
@@ -17,9 +17,12 @@
 \RequirePackage{silence}
 \RequirePackage[np]{numprint}
 
+% \RequirePackage[export]{adjustbox}
+
 \RequirePackage{pstricks}
 \RequirePackage{pst-plot}
 \RequirePackage{pst-eucl}
+\let\clipbox\relax
 
 \RequirePackage{xcolor}
 \RequirePackage{fontspec}
@@ -43,8 +46,6 @@
 \usetikzlibrary{calc}
 \RequirePackage{subfiles}
 
-\let\clipbox\relax
-
 \RequirePackage{ProfCollege}
 \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \let\oldusetikzlibrary\usetikzlibrary
@@ -52,8 +53,13 @@
   \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
 }
 \RequirePackage{scratch3}
+\catcode`\_11
+\renewcommand{\turn_arrow}[1]{%
+\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,#1]
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=190,radius=1ex];%
+}
+\scr_restorecatcode
 
-\RequirePackage[export]{adjustbox}
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
   \pgfplotsset{compat=1.13}
@@ -82,25 +88,13 @@
 \RequirePackage{import}
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
-% % \RequirePackage{lastpage}
-\WarningsOff[scrlayer-scrpage]
 \RequirePackage{ccicons}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SUPPRESSIONS DE WARNINGS ABUSIFS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\WarningsOff[scrlayer-scrpage]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-\RequirePackage{showframe}%A enlever
 
 %%%%%%%%%%%%%%%%%%%%%%
 % BOOLÉENS DU FORMAT %
@@ -112,6 +106,7 @@
 \newif\ifprint
 
 \begin{luacode}
+  PARAMETRES = {}
 --Formatage de la page d'après les paramètres utilisateurs
   function FormatDocument(PAGE,PARAMETRES)
 
@@ -206,7 +201,7 @@
 %type
 \newif\ifactivite
 \newif\ifbasique
-\newif\ifbrevet
+\newif\ifbilan
 \newif\ifcorrige
 \newif\ifcours
 \newif\ifTD
@@ -215,12 +210,12 @@
 \newif\ifDS
 \newif\ifinterro
 
-\newif\ifbareme
-\newif\ifcache
-\newif\ifdifficulte
-\newif\ifenonce
-\newif\ifcompetence
 \newif\ifcorrection
+\newif\ifenonce
+\newif\ifvisible
+
+\newif\ifdifficulte
+\newif\ifcompetence
 \newif\ifsource
 \newif\iftheme
 
@@ -233,7 +228,6 @@ function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les para
   tex.sprint(
     '\\activitefalse' ..
     '\\basiquefalse' ..
-    '\\brevetfalse' ..
     '\\corrigefalse' ..
     '\\coursfalse' ..
     '\\flashfalse' ..
@@ -248,8 +242,8 @@ function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les para
     tex.sprint('\\activitetrue')
   elseif PARAMETRES.type == 'basique' then
     tex.sprint('\\basiquetrue')
-  elseif PARAMETRES.type == 'brevet' then
-    tex.sprint('\\brevettrue')
+  elseif PARAMETRES.type == 'bilan' then
+    tex.sprint('\\bilantrue')
   elseif PARAMETRES.type == 'corrige' then
     tex.sprint('\\corrigetrue')
   elseif PARAMETRES.type == 'cours' then
@@ -264,38 +258,27 @@ function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les para
     tex.sprint('\\DStrue')
   elseif PARAMETRES.type == 'interro' then
     tex.sprint('\\interrotrue')
-  elseif PARAMETRES.type == 'basique' then
-    tex.sprint('\\flashtrue')
-  end
-
-  if PARAMETRES.bareme then
-    tex.sprint('\\baremetrue')
-  end
-
-  if PARAMETRES.cache then
-    tex.sprint('\\cachetrue')
-  end
-
-  if PARAMETRES.competence then
-    tex.sprint('\\competencetrue')
   end
 
   if PARAMETRES.correction then
     tex.sprint('\\correctiontrue')
   end
-
-  if PARAMETRES.difficulte then
-    tex.sprint('\\difficultetrue')
-  end
-
   if PARAMETRES.enonce then
     tex.sprint('\\enoncetrue')
   end
+    if PARAMETRES.visible then
+    tex.sprint('\\visibletrue')
+  end
 
+  if PARAMETRES.competence then
+    tex.sprint('\\competencetrue')
+  end
+  if PARAMETRES.difficulte then
+    tex.sprint('\\difficultetrue')
+  end
   if PARAMETRES.source then
     tex.sprint('\\sourcetrue')
   end
-
   if PARAMETRES.theme then
     tex.sprint('\\themetrue')
   end
@@ -318,8 +301,6 @@ end
 \newcounter{compteurDS}
 \newcounter{compteurTD}
 
-\newcounter{compteurbareme}
-
 %Initialisation
 \setcounter{compteurfeuille}{1}
 
@@ -331,8 +312,6 @@ end
 \setcounter{compteurDM}{0}
 \setcounter{compteurDS}{0}
 \setcounter{compteurTD}{0}
-
-\setcounter{compteurbareme}{0}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % COMMANDES PERSONNELLES %
@@ -489,7 +468,10 @@ end
       '\\colorlet{couleurremarque}{' .. COULEURS.remarque .. '}' ..
       '\\colorlet{couleurenonce}{' .. COULEURS.enonce .. '}' ..
       '\\colorlet{couleurcorrection}{' .. COULEURS.correction .. '}' ..
-      '\\colorlet{couleursurligne}{' .. COULEURS.surligne .. '}'
+      '\\colorlet{couleursurligne}{' .. COULEURS.surligne .. '}' ..
+      '\\colorlet{rouge}{' .. COULEURS.rouge .. '}' ..
+      '\\colorlet{vert}{' .. COULEURS.vert .. '}' ..
+      '\\colorlet{bleu}{' .. COULEURS.bleu .. '}'
     )
 
     tex.sprint('\\sethlcolor{couleursurligne}')
@@ -648,22 +630,22 @@ end
 
 \newcommand{\formatEnvCours}[2][]{}
 
-\NewEnviron{application}[1][]{}
-\NewEnviron{definition}[1][]{}
-\NewEnviron{convention}[1][]{}
-\NewEnviron{exercice}[1][]{}
-\NewEnviron{exemple}[1][]{}
-\NewEnviron{methode}[1][]{}
-\NewEnviron{preuve}[1][]{}
-\NewEnviron{propriete}[1][]{}
-\NewEnviron{remarque}[1][]{}
+\NewEnviron{application}[1][]{\BODY}
+\NewEnviron{definition}[1][]{\BODY}
+\NewEnviron{convention}[1][]{\BODY}
+\NewEnviron{exercice}[1][]{\BODY}
+\NewEnviron{exemple}[1][]{\BODY}
+\NewEnviron{methode}[1][]{\BODY}
+\NewEnviron{preuve}[1][]{\BODY}
+\NewEnviron{propriete}[1][]{\BODY}
+\NewEnviron{remarque}[1][]{\BODY}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENTS D'EXERCICES %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewEnviron{correction}[1][]{}
-\NewEnviron{enonce}[1][]{}
+\NewEnviron{correction}[1][]{\BODY}
+\NewEnviron{enonce}[1][]{\BODY}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
@@ -680,35 +662,38 @@ end
   end
 \end{luacode}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewEnviron{lignes}{\BODY}
+\NewEnviron{lignes*}{\BODY}
+\newcommand{\rivcorrection}[2]{\ifvisible #1 \else #2 \fi}
+\newcommand{\rivimportant}[1]{\important{#1}}
+\newcommand{\ajoutlignes}[1]{}
+\newcommand{\adjustbox}[2]{#2}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDE PERMETTANT DE MODIFIER LES OPTIONS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%Commande de paramétrage
 \newcommand{\parametrage}{
   \directlua{
+  PARAMETRES.format = Format
+  PARAMETRES.type = Type
+  PARAMETRES.print = Impression
+  PARAMETRES.header = Header
+  PARAMETRES.taille = Taille
+
+  PARAMETRES.correction = Correction
+  PARAMETRES.enonce = Enonce
+  PARAMETRES.visible = Visible
+
+  PARAMETRES.competence = Competence
+  PARAMETRES.difficulte = Difficulte
+  PARAMETRES.source = Source
+  PARAMETRES.theme = Theme
 
     POLICE = PoliceUtilisateur()
     PoliceDocument(POLICE,PARAMETRES)

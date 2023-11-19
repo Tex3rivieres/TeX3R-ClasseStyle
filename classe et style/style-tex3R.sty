@@ -1,5 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
-\ProvidesPackage{style-tex3R-2-1}
+\ProvidesPackage{style-tex3R}
+%VERSION 2.0 du Package
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%% FORMAT DE LA PAGE %%%
@@ -149,7 +150,9 @@
       COULEURS.correction = 'black'
       COULEURS.surligne = 'black!5'
 
-
+      COULEURS.rouge = 'black'
+      COULEURS.bleu = 'black'
+      COULEURS.vert = 'black'
 
     else
       COULEURS.ligne = 'SlateBlue'
@@ -175,6 +178,10 @@
       COULEURS.enonce = 'black'
       COULEURS.correction = 'Green'
       COULEURS.surligne = 'yellow!100'
+
+      COULEURS.rouge = 'Red'
+      COULEURS.bleu = 'Blue'
+      COULEURS.vert = 'Green'
     end
     return COULEURS
   end 
@@ -331,29 +338,10 @@
       \BODY
     \fi
     }
+
+    \renewcommand{\important}[1]{\hl{#1}}
+
 %   ]])
 
 %  end
 % \end{luacode*}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% PATCH DE SCRATCH3 %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\NewEnviron{scratch*}[1][]{
-  \begin{scratch}[#1]
-  \nouvellefleche
-  \BODY
-  \end{scratch}
-}
-
-\newcommand{\nouvellefleche}{
-\renewcommand{\turnleft}{%
-\tikz[baseline=.25ex,x=6.5ex,y=6.5ex]
-\draw[-{Triangle[angle=110:0.6ex 0.15ex]}, line width=.3333ex] (0,0) arc[start angle=-80, end angle=180, radius=1ex];
-}
-\renewcommand{\turnright}{%
-\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,xscale=-1]
-\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=180,radius=1ex];
-}
-}
