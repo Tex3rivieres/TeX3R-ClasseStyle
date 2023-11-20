@@ -264,31 +264,42 @@
 
     local FORMAT = PARAMETRES.format
     local TYPE = PARAMETRES.type
-    local TITRE = nil
+    local TITRES = {}
 
     if TYPE == "activite" then
-      TITRE = [[Activité]]
+      TITRES.format = [[Activité]]
     elseif TYPE == "basique" then
-      TITRE = [[ ]]
+      TITRES.format = [[ ]]
     elseif TYPE == "bilan" then
-      TITRE = [[Bilan]]
+      TITRES.format = [[Bilan]]
     elseif TYPE == "corrige" then
-      TITRE = [[Corrigé]]
+      TITRES.format = [[Corrigé]]
     elseif TYPE == "cours" then
-      TITRE = [[Chapitre~\thepart]]
+      TITRES.format = [[Chapitre~\thepart]]
     elseif TYPE == "DM" then
-      TITRE = [[DM n°\stepcounter{compteurDM}\thecompteurDM]]
+      TITRES.format = [[DM n°\stepcounter{compteurDM}\thecompteurDM]]
     elseif TYPE == "DS" then
-      TITRE = [[DS n°\stepcounter{compteurDS}\thecompteurDS]]
+      TITRES.format = [[DS n°\stepcounter{compteurDS}\thecompteurDS]]
     elseif TYPE == "flash" then
-      TITRE = [[Questions Flash n°\stepcounter{compteurflash}\thecompteurflash]]
+      TITRES.format = [[Questions Flash n°\stepcounter{compteurflash}\thecompteurflash]]
     elseif TYPE == "interro" then
-      TITRE = [[Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro]]
+      TITRES.format = [[Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro]]
     elseif TYPE == "TD" then
-      TITRE = [[TD]]
+      TITRES.format = [[TD]]
     end
 
-    return TITRE
+    TITRES.tocactivite = 'Activité'
+    TITRES.tocbasique = 'Sans titre'
+    TITRES.tocbilan = 'Bilan'
+    TITRES.toccorrige = 'Corrigé'
+    TITRES.toccours = 'Cours'
+    TITRES.tocDM = 'DM'
+    TITRES.tocDS = 'DS'
+    TITRES.tocflash = 'Flash'
+    TITRES.tocinterro = 'Interrogation'
+    TITRES.tocTD = 'TD'
+
+    return TITRES
   end
 \end{luacode*}
 

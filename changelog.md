@@ -17,8 +17,11 @@ Ajout du paramètre ```stretch```.
 
 -----------------
 
-Ergonomie du style utilisateur amliorée pour la modification.
+Ergonomie du style utilisateur améliorée pour la modification.
 
+-------------------------
+
+Ajout des titres de fiches dans la TOC en tant que sections.
 
 ## 19/11/2023
 

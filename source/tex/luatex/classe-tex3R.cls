@@ -107,6 +107,7 @@
 
 \begin{luacode}
   PARAMETRES = {}
+
 --Formatage de la page d'après les paramètres utilisateurs
   function FormatDocument(PAGE,PARAMETRES)
 
@@ -601,9 +602,41 @@ end
   end
 \end{luacode}
 
+\newcommand{\motcletitretoc}{}
+\newif\iftitretoc
+
+
 \begin{luacode}
-  function TitresDocument(TITRE)
-    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' .. TITRE .. '}}')
+  function TitresDocument(PARAMETRES,TITRES)
+    local TITRETOC = PARAMETRES.titretoc
+    local TYPE = PARAMETRES.type
+
+    tex.sprint('\\titretoctrue')
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocactivite ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocbasique ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocbilan ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.toccorrige ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.toccours ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocDM ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocDS ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocflash ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocinterro ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocTD ..'}')
+    end
+
+
+    tex.sprint('\\renewcommand{\\titreactif}{\\iftitretoc\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi\\styleactif{' .. TITRES.format .. '}}')
   end
 \end{luacode}
 
@@ -752,8 +785,8 @@ end
 
     STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
     StylesTitresDocument(PARAMETRES,STYLESTITRES)
-    TITRE = TitresUtilisateur(PARAMETRES)
-    TitresDocument(TITRE)
+    TITRES = TitresUtilisateur(PARAMETRES)
+    TitresDocument(PARAMETRES,TITRES)
     ENVIRONNEMENTS = EnvironnementsUtilisateur()
     EnvironnementsDocument(ENVIRONNEMENTS)
   }
