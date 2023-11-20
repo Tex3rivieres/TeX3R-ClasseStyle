@@ -17,12 +17,12 @@
 \RequirePackage{silence}
 \RequirePackage[np]{numprint}
 
-% \RequirePackage[export]{adjustbox}
-
 \RequirePackage{pstricks}
 \RequirePackage{pst-plot}
 \RequirePackage{pst-eucl}
-\let\clipbox\relax
+\let\clipbox\undefined
+%La commande clipbox de pstricks n'est plus définie : attention à son utilisation
+\RequirePackage[export]{adjustbox}
 
 \RequirePackage{xcolor}
 \RequirePackage{fontspec}
@@ -671,7 +671,7 @@ end
 \newcommand{\rivcorrection}[2]{\ifvisible #1 \else #2 \fi}
 \newcommand{\rivimportant}[1]{\important{#1}}
 \newcommand{\ajoutlignes}[1]{}
-\newcommand{\adjustbox}[2]{#2}
+\providecommand{\adjustbox}[2]{#2}
 \newcommand{\parametres}[1]{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,16 +1,10 @@
-# Implémentations à venir
+# Implémentations à venir 
 
 ## Conflits de package
 
 ### Adjustbox/pstricks
 
-Actuellement, adjustbox et pstricks semblent en conflit. (création d'une commande commune \clipbox)
-
-```\let\clipbox\relax```  n'a pas résolu le problème
- 
- 
-
-adjustbox a été désactivé pour le moment.
+Redéfinir ```\clipbox``` dans ```pstricks``` plutôt que de la supprimer, en s'aidant des hooks, si cela est nécessaire. A priori pas nécessaire, mais à voir en fonction.
 
 ## Rétrocompatibilité
 
