@@ -47,6 +47,8 @@ Générer le nom du pdf en fonction du ```Type``` choisi dans les options
 
 Améliorer l'ergonomie de la modification du style.
 
+Gommer les sauts de ligne de manière systématique dans les chaînes de type ```[[ ... ]]```
+
 ### Environnement ```parametres```
 
 Création d'un environnement parametres afin de fusionner la commande ```\parametre``` et l'environnement ```luacode``` en début de document. 

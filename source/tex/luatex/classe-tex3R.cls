@@ -219,24 +219,27 @@
 \newif\ifsource
 \newif\iftheme
 
+\newif\ifstretch
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FONCTION LUA REMPLAÇANT L'ANCIENNE FONCTION TEX PARAMETRE %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{luacode*}
 function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les paramètres
-  tex.sprint(
-    '\\activitefalse' ..
-    '\\basiquefalse' ..
-    '\\corrigefalse' ..
-    '\\coursfalse' ..
-    '\\flashfalse' ..
-    '\\TDfalse' ..
-    '\\DMfalse' ..
-    '\\DSfalse' ..
-    '\\interrofalse' ..
-    '\\flashfalse'
-  )
+  -- tex.sprint(
+  --   '\\activitefalse' ..
+  --   '\\basiquefalse' ..
+  --   '\\bilanfalse' ..
+  --   '\\corrigefalse' ..
+  --   '\\coursfalse' ..
+  --   '\\flashfalse' ..
+  --   '\\TDfalse' ..
+  --   '\\DMfalse' ..
+  --   '\\DSfalse' ..
+  --   '\\interrofalse' ..
+  --   '\\flashfalse'
+  -- )
 
   if PARAMETRES.type == 'activite' then
     tex.sprint('\\activitetrue')
@@ -281,6 +284,10 @@ function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les para
   end
   if PARAMETRES.theme then
     tex.sprint('\\themetrue')
+  end
+
+  if PARAMETRES.stretch then
+    tex.sprint('\\stretchtrue')
   end
 end
 \end{luacode*}
@@ -383,9 +390,16 @@ end
       end
     end
   end
+
+  function Chapitre(nombre)
+    if nombre then
+      tex.sprint('\\setcounter{part}{#1}')
+    end
+  end
 \end{luacode}
 
-\newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\contenuchapitre}{#2}}
+
+\newcommand{\chapitre}[2]{\directlua{#1}\renewcommand{\contenuchapitre}{#2}}
 \newcommand{\niveau}[1]{\renewcommand{\contenuniveau}{#1}}
 
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
@@ -435,9 +449,6 @@ end
 }}
 
 \NewDocumentCommand\underLine{+m}{{\beginUnderLine#1}}
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DÉFINITION DES COULEURS %%%
@@ -497,6 +508,7 @@ end
     else
       tex.sprint('\\KOMAoption{fontsize}{' .. TAILLE ..'}')
     end
+    tex.sprint('\\renewcommand{\\important}[1]{'.. POLICE.important ..'}')
 
   tex.sprint(
     '\\IfFontExistsTF{' .. POLICE.texte ..'}{\\setmainfont{' .. POLICE.texte .. '}}\\n' ..
@@ -589,6 +601,13 @@ end
   end
 \end{luacode}
 
+\begin{luacode}
+  function TitresDocument(TITRE)
+    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' .. TITRE .. '}}')
+  end
+\end{luacode}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -624,9 +643,9 @@ end
   \fi
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ENVIRONNEMENTS DE COURS %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENTS DE COURS ET EXERCICES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\formatEnvCours}[2][]{}
 
@@ -640,27 +659,45 @@ end
 \NewEnviron{propriete}[1][]{\BODY}
 \NewEnviron{remarque}[1][]{\BODY}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ENVIRONNEMENTS D'EXERCICES %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \NewEnviron{correction}[1][]{\BODY}
 \NewEnviron{enonce}[1][]{\BODY}
+
+\begin{luacode*}
+  function EnvironnementsDocument(ENVIRONNEMENTS)
+    ENVIRONNEMENTS.formatcours = string.gsub(ENVIRONNEMENTS.formatcours, "\n", "")
+    ENVIRONNEMENTS.enonce = string.gsub(ENVIRONNEMENTS.enonce, "\n", "")
+    ENVIRONNEMENTS.correction = string.gsub(ENVIRONNEMENTS.correction, "\n", "")
+
+    tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'.. ENVIRONNEMENTS.formatcours ..'}')
+    tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurcorrection}\\ifenonce\\ifstretch\\vfill\\fi\\stepcounter{compteurenonce}' .. ENVIRONNEMENTS.enonce .. '\\fi}' )
+    tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.correction .. '\\fi}' )
+
+    tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
+    tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
+    tex.sprint([[\RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}}]])
+    tex.sprint([[\RenewEnviron{exercice}[1][Exercice]{\formatEnvCours[#1]{couleurexercice}}]])
+    tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
+    tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
+    tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
+    tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
+    tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
+  end
+\end{luacode*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{luacode}
-  function TitreDocument(PARAMETRES)
-    local HEADER = PARAMETRES.header
+% \begin{luacode}
+%   function TitreDocument(PARAMETRES)
+%     local HEADER = PARAMETRES.header
 
-    -- tex.sprint('\\AtBeginDocument{\\titreactif}')
-    if HEADER then
-    -- tex.sprint('\\AddToHook{shipout/after}{TEST}')
-    end
-  end
-\end{luacode}
+%     -- tex.sprint('\\AtBeginDocument{\\titreactif}')
+%     if HEADER then
+%     -- tex.sprint('\\AddToHook{shipout/after}{TEST}')
+%     end
+%   end
+% \end{luacode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
@@ -674,9 +711,9 @@ end
 \providecommand{\adjustbox}[2]{#2}
 \newcommand{\parametres}[1]{}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% COMMANDE PERMETTANT DE MODIFIER LES OPTIONS %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDE PARAMETRAGE PERMETTANT DE MODIFIER LES OPTIONS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\parametrage}{
   \directlua{
@@ -694,6 +731,8 @@ end
   PARAMETRES.difficulte = Difficulte
   PARAMETRES.source = Source
   PARAMETRES.theme = Theme
+
+  PARAMETRES.stretch = Stretch
 
     POLICE = PoliceUtilisateur()
     PoliceDocument(POLICE,PARAMETRES)
@@ -713,10 +752,10 @@ end
 
     STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
     StylesTitresDocument(PARAMETRES,STYLESTITRES)
-    TitresUtilisateur(PARAMETRES)
-    TitreDocument(PARAMETRES)
-    % EnvironnementsUtilisateur()
-
+    TITRE = TitresUtilisateur(PARAMETRES)
+    TitresDocument(TITRE)
+    ENVIRONNEMENTS = EnvironnementsUtilisateur()
+    EnvironnementsDocument(ENVIRONNEMENTS)
   }
 }
 

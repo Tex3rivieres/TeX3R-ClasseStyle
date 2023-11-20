@@ -100,7 +100,7 @@
 %%% FORMATAGES DIVERS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{luacode}
+\begin{luacode*}
   function PoliceUtilisateur()
 
     local POLICE = {}
@@ -110,10 +110,11 @@
     POLICE.texte = 'Calibri'
     POLICE.math = 'STIX Two Math'
     POLICE.mathcal = 'Libertinus Math Regular'
+    POLICE.important = [[\hl{#1}]]
 
     return POLICE
   end
-\end{luacode}
+\end{luacode*}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -176,7 +177,7 @@
       COULEURS.propriete = 'Red'
       COULEURS.remarque = 'black'
       COULEURS.enonce = 'black'
-      COULEURS.correction = 'Green'
+      COULEURS.correction = 'black'
       COULEURS.surligne = 'yellow!100'
 
       COULEURS.rouge = 'Red'
@@ -286,62 +287,64 @@
     elseif TYPE == "TD" then
       TITRE = [[TD]]
     end
-    tex.sprint([[\renewcommand{\titreactif}{\styleactif{]] .. TITRE .. '}}')
 
+    return TITRE
   end
 \end{luacode*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENTS DE COURS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \begin{luacode*}
   
-% function EnvironnementsUtilisateur()
+\begin{luacode*}
+function EnvironnementsUtilisateur()
+  local ENVIRONNEMENTS = {}
+  --#1 = nom modifiable (optionnel) ; #2 = couleur
+  ENVIRONNEMENTS.formatcours = [[
+    \begin{tcolorbox}[
+      colback=couleurboitecours, 
+      colframe=couleurbackground, 
+      boxrule=0pt, 
+      left=0.5em, 
+      top=0pt, 
+      bottom=0pt, 
+      right=0pt, 
+      enhanced, 
+      shield externalize=true, 
+      borderline west={4pt}{0pt}{#2}
+      ]
+      \textcolor{#2}{\large\underLine{#1} :}\par
+      \medskip 
+      \BODY 
+    \end{tcolorbox}
+    ]]
 
-%   tex.sprint([[
-  
-  \renewcommand{\formatEnvCours}[3][]{
-  \begin{tcolorbox}[colback=couleurboitecours, colframe=couleurbackground, boxrule=0pt, left=0.5em, top=0pt, bottom=0pt, right=0pt, enhanced, shield externalize=true, borderline west={4pt}{0pt}{#2}]
-    \textcolor{#2}{\large\underLine{#1} :} \par\medskip 
-    #3
-  \end{tcolorbox}
-  }
-  % ]])
-
-  % tex.sprint([[
-    \RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}{\BODY}}
-    \RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}{\BODY}}
-    \RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}{\BODY}}
-    \RenewEnviron{exercice}[1][Exercice]{\formatEnvCours[#1]{couleurexercice}{\BODY}}
-    \RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}{\BODY}}
-    \RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}{\BODY}}
-    \RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}{\BODY}}
-    \RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}{\BODY}}
-    \RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}{\BODY}}
-
-    \RenewEnviron{enonce}{%
-    \stepcounter{compteurcorrection}
-    \ifenonce
-      \stepcounter{compteurenonce}\iftheme\hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\fi
-      \colorbox{couleurenonce}{\textcolor{white}{{\normalfont\Large\textbf{\thecompteurenonce}}\ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi}}\ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}} \fi\par%
+  ENVIRONNEMENTS.enonce = [[
+    \iftheme
+      \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
+    \fi
+    \colorbox{couleurenonce}{\textcolor{white}{
+      {
+      \normalfont\Large\textbf{\thecompteurenonce}}
+      \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+      }
+    }
+    \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\par
       \medskip
       \BODY
-      \ifsource\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}\fi
-    \fi
-    }
+      \ifsource\par
+        \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+      \fi
+  ]]
 
-    \RenewEnviron{correction}{%
-    \ifcorrection
-      \colorbox{couleurcorrection}{\textcolor{white}{\normalfont\Large\textbf{\thecompteurcorrection} | Correction}}\par%
-      \medskip
-      \BODY
-    \fi
-    }
+  ENVIRONNEMENTS.correction = [[
+    \colorbox{couleurcorrection}{\textcolor{white}{
+      \normalfont\Large\textbf{\thecompteurcorrection} | Correction}
+    }\par
+  \medskip
+  \BODY
+  ]]
 
-    \renewcommand{\important}[1]{\hl{#1}}
-
-%   ]])
-
-%  end
-% \end{luacode*}
+  return ENVIRONNEMENTS
+end
+\end{luacode*}
