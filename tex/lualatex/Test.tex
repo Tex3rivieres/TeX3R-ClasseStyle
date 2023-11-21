@@ -1,38 +1,37 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{classe-tex3R}
-\usepackage{style-tex3R}
+\documentclass{article}
 
-\begin{luacode}
-
-  -- Paramètres généraux du document
-  Format = 'fiche'
-  Type = 'TD'
-  Impression = false
-  Header = false
-  Taille = nil
-
-  -- Paramètres des environnements
-  Correction = false
-  Enonce = true
-  Visible = true
-
-  Competence = true
-  Difficulte = false
-  Source = false
-  Theme = false
-
-\end{luacode}
-
-% Application des options
-\parametrage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\chapitre{0}{}
-\niveau{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\usepackage{bookmark}
+\usepackage[french]{babel}
+\usepackage{lipsum}
 
 \begin{document}
-test
+
+\tableofcontents
+
+\newpage
+
+\section{test1}
+
+
+
+  \subsection{test}
+
+\lipsum[1]
+
+\section{test2}
+
+
+
+\subsection{blabla}
+
+\lipsum[1-2]
+
+\subsection{blibli}
+
+\lipsum[3-5]
+
+\section{test3}
+
+\section{test4}
 \end{document}

@@ -108,6 +108,10 @@
   PARAMETRES = {}
   PARAMETRES.numeropage = 1
 
+  function SupprimeNewline(string)
+    return string.gsub(string, "\n", "")
+  end
+
 --Formatage de la page d'après les paramètres utilisateurs
   function FormatDocument(PAGE,PARAMETRES)
 
@@ -716,9 +720,9 @@ end
 
 \begin{luacode*}
   function EnvironnementsDocument(ENVIRONNEMENTS)
-    ENVIRONNEMENTS.formatcours = string.gsub(ENVIRONNEMENTS.formatcours, "\n", "")
-    ENVIRONNEMENTS.enonce = string.gsub(ENVIRONNEMENTS.enonce, "\n", "")
-    ENVIRONNEMENTS.correction = string.gsub(ENVIRONNEMENTS.correction, "\n", "")
+    ENVIRONNEMENTS.formatcours = SupprimeNewline(ENVIRONNEMENTS.formatcours)
+    ENVIRONNEMENTS.enonce = SupprimeNewline(ENVIRONNEMENTS.enonce)
+    ENVIRONNEMENTS.correction = SupprimeNewline(ENVIRONNEMENTS.correction)
 
     tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'.. ENVIRONNEMENTS.formatcours ..'}')
     tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'.. ENVIRONNEMENTS.tocexercice ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'.. ENVIRONNEMENTS.tocenonce ..'}\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.enonce .. '\\fi}')
