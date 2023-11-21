@@ -109,7 +109,7 @@
   PARAMETRES.numeropage = 1
 
   function SupprimeNewline(string)
-    local newstring = string.gsub(string, "\n", "")
+  local newstring = string.gsub(string, "\n", "")
     return newstring
   end
 
