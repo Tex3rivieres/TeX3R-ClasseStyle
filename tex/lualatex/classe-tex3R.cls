@@ -104,12 +104,13 @@
 \newif\ifheader
 \newif\ifprint
 
-\begin{luacode}
+\begin{luacode*}
   PARAMETRES = {}
   PARAMETRES.numeropage = 1
 
   function SupprimeNewline(string)
-    return string.gsub(string, "\n", "")
+  local newstring = string.gsub(string, "\n", "")
+    return newstring
   end
 
 --Formatage de la page d'après les paramètres utilisateurs
@@ -200,7 +201,7 @@
       -- Chargement police se fait après
     end
   end
-\end{luacode}
+\end{luacode*}
 
 
 %%%%%%%%%%%%%%%%%%%
