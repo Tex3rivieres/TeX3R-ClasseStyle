@@ -1,5 +1,13 @@
 # Changelog
 
+## 21/11/2023
+
+Ajout de ```enonce``` et ```correction``` à la TOC en tant que ```subsubsection``` d'un exercice lui même en ```subsection```.
+
+---------------
+
+
+
 ## 20/11/2023
 
 Package ```adjustbox``` rajouté à la classe. Le conflit entre ```adjustbox``` et ```pstricks``` a été résolu en supprimant la commande ```\clipbox``` de ```pstricks```.

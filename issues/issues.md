@@ -6,6 +6,10 @@
 
 Redéfinir ```\clipbox``` dans ```pstricks``` plutôt que de la supprimer, en s'aidant des hooks, si cela est nécessaire. A priori pas nécessaire, mais à voir en fonction.
 
+### ProfCollege et ???
+
+Colonne X déjà définie pour le tableur créé avec ```nicematrix```.
+
 ## Rétrocompatibilité
 
 Les commandes et environnements suivants sont encore maintenus le temps de modifier les anciens documents, mais sont voué à disparaître :
@@ -23,8 +27,6 @@ Les commandes et environnements suivants sont encore maintenus le temps de modif
 ### Megadocument
 
 - ```\part``` à redéfinir comme équivalent du chapitre
-- Coder les ```enonce``` et ```correction``` dans la TOC en tant que subsection
-- Coder ```\titreactif``` en tant que section dans la TOC
 - Adapter la compatibilité avec ```subfile```
 - Modifier les parametres dans le code lua pour qu'ils soient persistants (rajouter compteur d'exécution, et adapter en cas d'exécution $\geqslant$ 2)
 

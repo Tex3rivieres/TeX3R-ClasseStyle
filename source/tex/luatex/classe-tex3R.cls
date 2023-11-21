@@ -35,8 +35,8 @@
 \RequirePackage{fontawesome5}
 \RequirePackage[minimal]{lua-ul}
 \RequirePackage{soul}
-\RequirePackage{tcolorbox}
-  \tcbuselibrary{skins,breakable}
+% \RequirePackage{tcolorbox}
+
 \RequirePackage{environ}
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
 \RequirePackage{bookmark}
@@ -47,6 +47,7 @@
 \RequirePackage{subfiles}
 
 \RequirePackage{ProfCollege}
+  \tcbuselibrary{skins,breakable}
 \RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \let\oldusetikzlibrary\usetikzlibrary
 \renewcommand{\usetikzlibrary}[1]{%
@@ -65,8 +66,6 @@
   \pgfplotsset{compat=1.13}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
  
-
-
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
 \RequirePackage{listings}
@@ -107,6 +106,11 @@
 
 \begin{luacode}
   PARAMETRES = {}
+  PARAMETRES.numeropage = 1
+
+  function SupprimeNewline(string)
+    return string.gsub(string, "\n", "")
+  end
 
 --Formatage de la page d'après les paramètres utilisateurs
   function FormatDocument(PAGE,PARAMETRES)
@@ -131,6 +135,10 @@
       '\\setkomafont{subsection}{' .. PAGE.subsectionname .. '}' ..
       '\\setkomafont{subsubsection}{' .. PAGE.subsubsectionname .. '}' ..
       '\\renewcommand*{\\sectionlinesformat}[4]{' .. PAGE.sectionsformat .. '}'
+    )
+
+    tex.sprint(
+      
     )
 
     if FORMAT =='fiche' then
@@ -300,8 +308,7 @@ end
 %Création
 \newcounter{compteurfeuille}
 
-\newcounter{compteurenonce}
-\newcounter{compteurcorrection}
+\newcounter{compteurexercice}
 
 \newcounter{compteurinterro}
 \newcounter{compteurflash}
@@ -312,8 +319,7 @@ end
 %Initialisation
 \setcounter{compteurfeuille}{1}
 
-\setcounter{compteurenonce}{0}
-\setcounter{compteurcorrection}{0}
+\setcounter{compteurexercice}{0}
 
 \setcounter{compteurinterro}{0}
 \setcounter{compteurflash}{0}
@@ -326,42 +332,33 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Commandes de mise en page
+
+\begin{luacode}
+  function TailleTexte(nombre)
+    if nombre == -4 then
+      tex.sprint('\\tiny')
+    elseif nombre == -3 then
+      tex.sprint('\\scriptsize')
+    elseif nombre == -2 then
+      tex.sprint('\\footnotesize')
+    elseif nombre == -1 then
+      tex.sprint('\\small')
+    elseif nombre == 1 then
+      tex.sprint('\\large')
+    elseif nombre == 2 then
+    tex.sprint('\\Large')
+    elseif nombre == 3 then
+    tex.sprint('\\LARGE')
+    elseif nombre == 4 then
+    tex.sprint('\\huge') 
+    else
+      tex.sprint('\\normalsize')
+    end
+  end
+\end{luacode}
+
 \newcommand{\tailletexte}[1]{
-\ifnum#1=-4
-  \tiny
-\else
-  \ifnum#1=-3
-    \scriptsize
-  \else
-    \ifnum#1=-2
-      \footnotesize
-    \else
-      \ifnum#1=-1
-        \small
-      \else
-        \ifnum#1=0
-          \normalsize
-        \else
-          \ifnum#1=1
-            \large
-          \else
-            \ifnum#1=2
-              \Large
-            \else
-              \ifnum#1=3
-                \LARGE
-              \else
-                \ifnum#1=4
-                  \huge
-                \fi
-              \fi
-            \fi
-          \fi
-        \fi
-      \fi
-    \fi
-  \fi
-\fi
+  \directlua{TailleTexte{#1}}
 }
 
 \newcommand{\important}[1]{}
@@ -394,13 +391,13 @@ end
 
   function Chapitre(nombre)
     if nombre then
-      tex.sprint('\\setcounter{part}{#1}')
+      tex.sprint('\\setcounter{part}{' .. nombre ..'}')
     end
   end
 \end{luacode}
 
 
-\newcommand{\chapitre}[2]{\directlua{#1}\renewcommand{\contenuchapitre}{#2}}
+\newcommand{\chapitre}[2]{\directlua{Chapitre(#1)}\renewcommand{\contenuchapitre}{#2}}
 \newcommand{\niveau}[1]{\renewcommand{\contenuniveau}{#1}}
 
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
@@ -411,6 +408,30 @@ end
 \newcommand{\repere}[1]{\renewcommand{\contenurepere}{#1}}
 
 %Commandes de lignes
+
+\begin{luacode}
+
+function Lignes(arg,nombre)
+
+  if nombre == nil then
+    nombre = 1
+  end
+
+  if arg == 'carreaux' or arg == 'carreau' then
+    tex.sprint('\\tracecarreaux{' ..nombre ..'}')
+  elseif arg == 'surligne' then
+    tex.sprint('\\tracesurligne{' ..nombre ..'}')
+  else
+    tex.sprint('\\tracelignes{' ..nombre ..'}')
+  end
+
+end
+
+\end{luacode}
+
+\newcommand{\lignes}[2]{\directlua{Lignes(#1,#2)}}
+
+
 \newcommand{\tracelignes}[1]{
   \hfill\begin{tikzpicture}[x=\linewidth-0.8pt,y=0.2cm]
     \draw[color=couleurligne,line width=0.8pt] (0,4)--(1,4);
@@ -635,8 +656,10 @@ end
       tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocTD ..'}')
     end
 
-
-    tex.sprint('\\renewcommand{\\titreactif}{\\iftitretoc\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi\\styleactif{' .. TITRES.format .. '}}')
+    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' .. TITRES.format .. '}}')
+    tex.sprint('\\AtBeginDocument{\\iftitretoc\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi}')
+    tex.sprint('\\AddToHook{shipout/before}{\\iftitretoc\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi}')
+ 
   end
 \end{luacode}
 
@@ -697,13 +720,14 @@ end
 
 \begin{luacode*}
   function EnvironnementsDocument(ENVIRONNEMENTS)
-    ENVIRONNEMENTS.formatcours = string.gsub(ENVIRONNEMENTS.formatcours, "\n", "")
-    ENVIRONNEMENTS.enonce = string.gsub(ENVIRONNEMENTS.enonce, "\n", "")
-    ENVIRONNEMENTS.correction = string.gsub(ENVIRONNEMENTS.correction, "\n", "")
+    ENVIRONNEMENTS.formatcours = SupprimeNewline(ENVIRONNEMENTS.formatcours)
+    ENVIRONNEMENTS.enonce = SupprimeNewline(ENVIRONNEMENTS.enonce)
+    ENVIRONNEMENTS.correction = SupprimeNewline(ENVIRONNEMENTS.correction)
 
     tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'.. ENVIRONNEMENTS.formatcours ..'}')
-    tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurcorrection}\\ifenonce\\ifstretch\\vfill\\fi\\stepcounter{compteurenonce}' .. ENVIRONNEMENTS.enonce .. '\\fi}' )
-    tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.correction .. '\\fi}' )
+    tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'.. ENVIRONNEMENTS.tocexercice ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'.. ENVIRONNEMENTS.tocenonce ..'}\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.enonce .. '\\fi}')
+
+    tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\phantomsection\\addcontentsline{toc}{subsubsection}{' .. ENVIRONNEMENTS.toccorrection .. '}\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.correction .. '\\fi}')
 
     tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
     tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
@@ -721,6 +745,7 @@ end
 %%% CRÉATION DU TITRE SELON LE HEADER %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 % \begin{luacode}
 %   function TitreDocument(PARAMETRES)
 %     local HEADER = PARAMETRES.header
@@ -736,8 +761,8 @@ end
 %%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewEnviron{lignes}{\BODY}
-\NewEnviron{lignes*}{\BODY}
+% \NewEnviron{lignes}{\BODY}
+% \NewEnviron{lignes*}{\BODY}
 \newcommand{\rivcorrection}[2]{\ifvisible #1 \else #2 \fi}
 \newcommand{\rivimportant}[1]{\important{#1}}
 \newcommand{\ajoutlignes}[1]{}
