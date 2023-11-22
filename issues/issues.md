@@ -29,6 +29,9 @@ Les commandes et environnements suivants sont encore maintenus le temps de modif
 - ```\part``` à redéfinir comme équivalent du chapitre
 - Adapter la compatibilité avec ```subfile```
 - Modifier les parametres dans le code lua pour qu'ils soient persistants (rajouter compteur d'exécution, et adapter en cas d'exécution $\geqslant$ 2)
+- Réinitialiser les compteurs à chaque parametrage. 
+- Passer diapo ou fiche en paramètre de classe.
+- appeler parametrage en fin de style
 
 ### Brevet
 

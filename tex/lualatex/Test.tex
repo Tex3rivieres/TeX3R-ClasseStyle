@@ -2,37 +2,27 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 
-\begin{luacode}
+\begin{document}
 
-  -- Paramètres généraux du document
-  Format = 'fiche'
-  Type = 'TD'
-  Impression = false
-  Header = false
-  Taille = nil
-
-  -- Paramètres des environnements
-  Correction = false
+\begin{luacode*}
+  Type = 'activite'
+  Header = true
+  Stretch = false
   Enonce = true
-  Visible = true
-
+  Correction = true
   Competence = true
-  Difficulte = false
-  Source = false
-  Theme = false
-
-\end{luacode}
-
-% Application des options
+\end{luacode*}
 \parametrage
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\competence{Modéliser}
 
-\chapitre{0}{}
-\niveau{}
+\begin{enonce}
+  Un autre contenu
+\end{enonce}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{correction}
+  Un autre contenu
+\end{correction}
 
-\begin{document}
-test
+
 \end{document}
