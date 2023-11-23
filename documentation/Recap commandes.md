@@ -148,3 +148,14 @@ Au choix :
 \contenusource
 ```
 
+## Commandes maths à rajouter 
+
+```latex
+$\geqslant$
+$\leqslant$
+$\perp$
+$\in$
+$\notin$
+Remplacer x° : ^\circ par ° ou le supprimer carrément ?
+Enlever les \mathrm ? Les utilise-t-on systématiquement ?  Les remplacer par \text ?
+```
