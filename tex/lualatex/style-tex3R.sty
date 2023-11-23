@@ -32,6 +32,8 @@
       PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\, ]]
 
       PAGE.sectionsformat = [[ #3 \underLine{#4}\par\vspace{0.5em} ]]
+      PAGE.chapitrenormalformat = [[ \huge\bfseries Chapitre \thepart ]]
+      PAGE.chapitreetoileformat = [[]]
       PAGE.partformat = [[
         \newpage
         \hfill
@@ -48,7 +50,7 @@
           enhanced,
           before skip=0cm,
         ]
-        {\huge\bfseries Chapitre \thepart}
+        \formatchapitre
         \tcblower
         {\huge\bfseries #3}
         \end{tcolorbox}
@@ -160,8 +162,6 @@
     local PRINT = PARAMETRES.print
     local PREMIER = PARAMETRES.premier
 
-    if PREMIER then
-
       if PRINT then
         COULEURS.ligne = 'black'
         COULEURS.interligne = 'black!30'
@@ -220,7 +220,6 @@
         COULEURS.bleu = 'Blue'
         COULEURS.vert = 'Green'
       end
-    end
   end 
 \end{luacode}
 
@@ -384,7 +383,7 @@ function EnvironnementsUtilisateur()
       \fi
       \colorbox{couleurenonce}{\textcolor{white}{
         {
-        \normalfont\Large\textbf{\thecompteurexercice}}
+        \Large\textbf{\thecompteurexercice}}
         \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
         }
       }

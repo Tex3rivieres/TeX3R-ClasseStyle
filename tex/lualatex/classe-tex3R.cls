@@ -168,7 +168,9 @@
         '\\setkomafont{subsection}{' ..  FormatageString(PAGE.subsectionname) .. '}' ..
         '\\setkomafont{subsubsection}{' ..  FormatageString(PAGE.subsubsectionname) .. '}' ..
         '\\renewcommand*{\\sectionlinesformat}[4]{' ..  FormatageString(PAGE.sectionsformat) .. '}' ..
-        '\\renewcommand*\\partlineswithprefixformat[3]{\\thispagestyle{empty}'.. FormatageString(PAGE.partformat) .. '}'
+        '\\renewcommand*\\partlineswithprefixformat[3]{\\thispagestyle{empty}'.. FormatageString(PAGE.partformat) .. '}' ..
+        '\\renewcommand{\\formatchapitrenormal}{' .. FormatageString(PAGE.chapitrenormalformat) .. '}' ..
+        '\\renewcommand{\\formatchapitreetoile}{' .. FormatageString(PAGE.chapitreetoileformat) .. '}'
       )
 
       if FORMAT =='fiche' then
@@ -205,8 +207,6 @@
       tex.sprint('\\printtrue')
     end
 
-    print(FormatageString(PAGE.width))
-    print(PREMIER)
     if PREMIER then
       tex.sprint('\\gdef\\mygeometry{\\geometry{paperwidth=' ..  FormatageString(PAGE.width) .. ',paperheight=' ..  FormatageString(PAGE.height) ..'}}')
     end
@@ -252,6 +252,7 @@
 \newif\ifenonce
 \newif\ifvisible
 
+\newif\ifbareme
 \newif\ifdifficulte
 \newif\ifcompetence
 \newif\ifsource
@@ -277,6 +278,7 @@ function BooleensDocument()
     \DSfalse
     \interrofalse
     \flashfalse
+    \baremefalse
     \correctionfalse
     \enoncefalse
     \visiblefalse
@@ -320,6 +322,9 @@ function BooleensDocument()
     tex.sprint('\\visibletrue')
   end
 
+  if PARAMETRES.bareme then
+    tex.sprint('\\baremetrue')
+  end
   if PARAMETRES.competence then
     tex.sprint('\\competencetrue')
   end
@@ -372,7 +377,7 @@ end
 %Commandes de mise en page
 
 \begin{luacode}
-  function TailleTexte(nombre)
+  function TailleTexteLua(nombre)
     if nombre == -4 then
       tex.sprint('\\tiny')
     elseif nombre == -3 then
@@ -396,12 +401,12 @@ end
 \end{luacode}
 
 \newcommand{\tailletexte}[1]{
-  \directlua{TailleTexte{#1}}
+  \directlua{TailleTexteLua{#1}}
 }
 
 \newcommand{\important}[1]{}
 
-\newcommand{\sautdeligne}{\vspace{\baselineskip}}
+\newcommand{\sautligne}{\vspace{\baselineskip}}
 \newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 
@@ -410,16 +415,15 @@ end
 \newcommand{\contenuchapitre}{}
 \newcommand{\contenuniveau}{}
 
+\newcommand{\contenubareme}{}
 \newcommand{\contenucompetence}{}
 \newcommand{\contenudifficulte}{}
 \newcommand{\contenusource}{}
 \newcommand{\contenutheme}{}
 
-\newcommand{\contenurepere}{}
-
 %
 \begin{luacode}
-  function Difficulte(nombre)
+  function DifficulteLua(nombre)
     if nombre then
       for i=1,nombre do
         tex.sprint('\\faStar')
@@ -427,7 +431,7 @@ end
     end
   end
 
-  function Chapitre(nombre)
+  function ChapitreLua(nombre)
     if nombre then
 
       tex.sprint('\\setcounter{part}{' .. nombre ..'}')
@@ -436,21 +440,44 @@ end
 \end{luacode}
 
 
-\newcommand{\definirchapitre}[2]{\directlua{Chapitre(#1)}\renewcommand{\contenuchapitre}{#2}}
-\newcommand{\niveau}[1]{\renewcommand{\contenuniveau}{#1}}
+\newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
+\newcommand{\definirniveau}[1]{\renewcommand{\contenuniveau}{#1}}
 
+\newcommand{\bareme}[1]{\renewcommand{\contenubareme}{#1}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
-\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{Difficulte(#1)}}}
+\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{DifficulteLua(#1)}}}
 \newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
 \newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
 
-\newcommand{\repere}[1]{\renewcommand{\contenurepere}{#1}}
 
-\newcommand{\chapitre}[1]{
+%%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\formatchapitreetoile}{}
+\newcommand{\formatchapitrenormal}{}
+
+\newif\ifpartetoile
+
+\newcommand{\formatchapitre}{\ifpartetoile \formatchapitreetoile \else \formatchapitrenormal \fi}
+
+\newcommand{\chapitrenormal}[1]{
+  \partetoilefalse
   \part{#1}
   \renewcommand{\contenuchapitre}{#1}
   \setcounter{compteurexercice}{0}
-  }
+}
+
+\newcommand{\chapitreetoile}[1]{
+  \partetoiletrue
+  \part*{#1}
+  \phantomsection\addcontentsline{toc}{part}{#1}
+  \renewcommand{\contenuchapitre}{#1}
+  \setcounter{compteurexercice}{0}
+}
+
+\makeatletter
+\def\chapitre{\@ifstar\chapitreetoile\chapitrenormal}
+\makeatother
+
 \newcommand{\partie}[1]{\subsection{#1}}
 \newcommand{\souspartie}[1]{\subsubsection{#1}}
 
@@ -527,39 +554,36 @@ end
 
     local PREMIER = PARAMETRES.premier
 
-    if PREMIER then
+    tex.sprint(
+      '\\colorlet{couleurligne}{' ..  FormatageString(COULEURS.ligne) .. '}' ..
+      '\\colorlet{couleurinterligne}{' ..  FormatageString(COULEURS.interligne) .. '}' ..
+      '\\colorlet{couleursection}{' ..  FormatageString(COULEURS.section) .. '}' ..
+      '\\colorlet{couleursubsection}{' ..  FormatageString(COULEURS.subsection) .. '}' ..
+      '\\colorlet{couleursubsubsection}{' ..  FormatageString(COULEURS.subsubsection) .. '}' ..
+      '\\colorlet{couleurcarreau}{' ..  FormatageString(COULEURS.carreau) .. '}' ..
+      '\\colorlet{couleursurlignelignea}{' ..  FormatageString(COULEURS.surlignelignea) .. '}' ..
+      '\\colorlet{couleursurligneligneb}{' ..  FormatageString(COULEURS.surligneligneb) .. '}' ..
+      '\\colorlet{couleurboitecours}{' ..  FormatageString(COULEURS.boitecours) .. '}' ..
+      '\\colorlet{couleurbackground}{' ..  FormatageString(COULEURS.background) .. '}' ..
+      '\\colorlet{couleurapplication}{' ..  FormatageString(COULEURS.application) .. '}' ..
+      '\\colorlet{couleurdefinition}{' ..  FormatageString(COULEURS.definition) .. '}' ..
+      '\\colorlet{couleurconvention}{' ..  FormatageString(COULEURS.convention) .. '}' ..
+      '\\colorlet{couleurexercice}{' ..  FormatageString(COULEURS.exercice) .. '}' ..
+      '\\colorlet{couleurexemple}{' ..  FormatageString(COULEURS.exemple) .. '}' ..
+      '\\colorlet{couleurmethode}{' ..  FormatageString(COULEURS.methode) .. '}' ..
+      '\\colorlet{couleurpreuve}{' ..  FormatageString(COULEURS.preuve) .. '}' ..
+      '\\colorlet{couleurpropriete}{' ..  FormatageString(COULEURS.propriete) .. '}' ..
+      '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
+      '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
+      '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
+      '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
+      '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
+      '\\colorlet{vert}{' ..  FormatageString(COULEURS.vert) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}'
+    )
 
-      tex.sprint(
-        '\\colorlet{couleurligne}{' ..  FormatageString(COULEURS.ligne) .. '}' ..
-        '\\colorlet{couleurinterligne}{' ..  FormatageString(COULEURS.interligne) .. '}' ..
-        '\\colorlet{couleursection}{' ..  FormatageString(COULEURS.section) .. '}' ..
-        '\\colorlet{couleursubsection}{' ..  FormatageString(COULEURS.subsection) .. '}' ..
-        '\\colorlet{couleursubsubsection}{' ..  FormatageString(COULEURS.subsubsection) .. '}' ..
-        '\\colorlet{couleurcarreau}{' ..  FormatageString(COULEURS.carreau) .. '}' ..
-        '\\colorlet{couleursurlignelignea}{' ..  FormatageString(COULEURS.surlignelignea) .. '}' ..
-        '\\colorlet{couleursurligneligneb}{' ..  FormatageString(COULEURS.surligneligneb) .. '}' ..
-        '\\colorlet{couleurboitecours}{' ..  FormatageString(COULEURS.boitecours) .. '}' ..
-        '\\colorlet{couleurbackground}{' ..  FormatageString(COULEURS.background) .. '}' ..
-        '\\colorlet{couleurapplication}{' ..  FormatageString(COULEURS.application) .. '}' ..
-        '\\colorlet{couleurdefinition}{' ..  FormatageString(COULEURS.definition) .. '}' ..
-        '\\colorlet{couleurconvention}{' ..  FormatageString(COULEURS.convention) .. '}' ..
-        '\\colorlet{couleurexercice}{' ..  FormatageString(COULEURS.exercice) .. '}' ..
-        '\\colorlet{couleurexemple}{' ..  FormatageString(COULEURS.exemple) .. '}' ..
-        '\\colorlet{couleurmethode}{' ..  FormatageString(COULEURS.methode) .. '}' ..
-        '\\colorlet{couleurpreuve}{' ..  FormatageString(COULEURS.preuve) .. '}' ..
-        '\\colorlet{couleurpropriete}{' ..  FormatageString(COULEURS.propriete) .. '}' ..
-        '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
-        '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
-        '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
-        '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
-        '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
-        '\\colorlet{vert}{' ..  FormatageString(COULEURS.vert) .. '}' ..
-        '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}'
-      )
+    tex.sprint('\\sethlcolor{couleursurligne}')
 
-      tex.sprint('\\sethlcolor{couleursurligne}')
-
-    end
   end 
 \end{luacode}
 
@@ -684,7 +708,6 @@ end
 
 \begin{luacode}
   function TitresDocument()
-    -- local TITRETOC = PARAMETRES.titretoc
     local TYPE = PARAMETRES.type
     local PREMIER = PARAMETRES.premier
 
@@ -693,8 +716,6 @@ end
     else
       tex.sprint('\\titretoctrue')
     end
-
-    -- tex.sprint('\\titretoctrue')
 
     if TYPE == 'activite' then
       tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocactivite) ..'}')
@@ -722,7 +743,6 @@ end
  
   end
 \end{luacode}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
@@ -803,39 +823,24 @@ end
   end
 \end{luacode*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% CRÉATION DU TITRE SELON LE HEADER %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{luacode}
-%   function TitreDocument(PARAMETRES)
-%     local HEADER = PARAMETRES.header
-
-%     -- tex.sprint('\\AtBeginDocument{\\titreactif}')
-%     if HEADER then
-%     -- tex.sprint('\\AddToHook{shipout/after}{TEST}')
-%     end
-%   end
-% \end{luacode}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % \NewEnviron{lignes}{\BODY}
 % \NewEnviron{lignes*}{\BODY}
-\newcommand{\rivcorrection}[2]{\ifvisible #1 \else #2 \fi}
+\newcommand{\rivcorrection}[2]{\ifvisible~#1 \else #2 \fi}
 \newcommand{\rivimportant}[1]{\important{#1}}
 \newcommand{\ajoutlignes}[1]{}
 \providecommand{\adjustbox}[2]{#2}
 \newcommand{\parametres}[1]{}
-
+\newcommand{\sautdeligne}{\sautligne}
+\newcommand{\niveau}{\definirniveau}
 
 %%%
 
 \begin{luacode*}
-  function Newpage()
+  function NewpageLua()
     local PREMIER = PARAMETRES.premier
     if not PREMIER then
 
@@ -872,6 +877,57 @@ end
   end 
 \end{luacode*}
 
+\begin{luacode*}
+  function mesParametres(str)
+
+    if str == 'activite' then
+      Type = 'activite'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'basique' then
+
+    elseif str == 'bilan' then
+      Type = 'bilan'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'corrige' then
+
+    elseif str == 'cours' then
+      Type = 'cours'
+    elseif str == 'DM' then
+      Type = 'DM'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'DS' then
+      Type = 'DS'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'flash' then
+
+    elseif str == 'interro' then
+      Type = 'interro'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'TD' then
+      Type = 'TD'
+      Header = true
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    end
+  end
+\end{luacode*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDE PARAMETRAGE PERMETTANT DE MODIFIER LES OPTIONS %%%
@@ -924,6 +980,12 @@ end
     PARAMETRES.visible = Visible
     end 
 
+    if Bareme == nil then
+    PARAMETRES.bareme = false
+    else
+    PARAMETRES.bareme = Bareme
+    end 
+
     if Competence == nil then
     PARAMETRES.competence = false
     else
@@ -974,8 +1036,21 @@ end
     TitresDocument()
     EnvironnementsUtilisateur()
     EnvironnementsDocument()
+
+    Type = nil
+    Impression = nil
+    Header = nil
+    Taille = nil
+    Correction = nil
+    Enonce = nil
+    Visible = nil
+    Competence = nil
+    Bareme = nil
+    Difficulte = nil
+    Source = nil
+    Theme = nil
+    Stretch = nil
   end
 \end{luacode*}
 
-
-\newcommand{\parametrage}{\directlua{Newpage()ParametrageDocument()}\FormatPage\directlua{Titre()}}
+\newcommand{\parametrage}{\directlua{NewpageLua()ParametrageDocument()}\FormatPage\directlua{Titre()}}
