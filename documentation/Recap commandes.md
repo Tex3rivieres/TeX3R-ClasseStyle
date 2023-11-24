@@ -76,19 +76,17 @@ Theme = true -- false
 
 Au choix : 
 ----------------
-\begin{visible*}
+\begin{visible}
   Visible si Visible = true
-\end{visible*}
+\end{visible}
 
-\begin{visible*}[true]
+\begin{visible}[true]
   Visible si Visible = true
-\end{visible*}
+\end{visible}
 -----------------
-\begin{visible*}[false]
+\begin{visible}[false]
   Visible si Visible = false
-\end{visible*}
-
-\visible{Visible si Visible = true}{Visible si Visible = false}
+\end{visible}
 
 \begin{application}[Titre de remplacement ou nil]
   Contenu
@@ -126,11 +124,11 @@ Au choix :
   Contenu
 \end{remarque}
 
-\begin{enonce}
+\begin{enonce}[Titre de remplacement ou nil (si courstrue)]
   Contenu
 \end{enonce}
 
-\begin{correction}
+\begin{correction}[Titre de remplacement ou nil (si courstrue)]
   Contenu
 \end{correction}
 ```

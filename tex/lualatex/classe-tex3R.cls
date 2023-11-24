@@ -463,7 +463,6 @@ end
   \partetoilefalse
   \part{#1}
   \renewcommand{\contenuchapitre}{#1}
-  \setcounter{compteurexercice}{0}
 }
 
 \newcommand{\chapitreetoile}[1]{
@@ -471,7 +470,6 @@ end
   \part*{#1}
   \phantomsection\addcontentsline{toc}{part}{#1}
   \renewcommand{\contenuchapitre}{#1}
-  \setcounter{compteurexercice}{0}
 }
 
 \makeatletter
@@ -576,13 +574,15 @@ end
       '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
       '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
       '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
-      '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
+      '\\colorlet{couleursurlignevisible}{' ..  FormatageString(COULEURS.surlignevisible) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}' ..
       '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
       '\\colorlet{vert}{' ..  FormatageString(COULEURS.vert) .. '}' ..
       '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}'
     )
 
     tex.sprint('\\sethlcolor{couleursurligne}')
+    tex.sprint('\\pagecolor{' .. COULEURS.background ..'}')
 
   end 
 \end{luacode}
@@ -764,20 +764,37 @@ end
 
 \end{luacode}
 
-
-\NewEnviron{visible*}[1][true]{%
+\NewEnviron{visible}[1][true]{%
   \directlua{VerificationVisible('#1')}
   \ifvisible
-    \BODY
+    \begin{tcolorbox}[
+      colback=couleursurlignevisible, 
+      colframe=couleurbackground, 
+      boxrule=0pt, 
+      left=0pt, 
+      top=0pt, 
+      bottom=0pt, 
+      right=0pt,
+      before skip =0pt,
+      after skip = 0.3em,
+      left skip =0pt,
+      right skip = 0pt, 
+      boxsep=0pt,
+      enhanced, 
+      shield externalize=true,
+      breakable
+      ]
+      \BODY
+      \end{tcolorbox}
   \fi
 }
 
-\newcommand{\visible}[2][true]{%
-  \directlua{VerificationVisible('#1')}
-  \ifvisible
-    #2
-  \fi
-}
+% \newcommand{\visible*}[2][true]{%
+%   \directlua{VerificationVisible('#1')}
+%   \ifvisible
+%     #2
+%   \fi
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENTS DE COURS ET EXERCICES %%%
@@ -788,7 +805,7 @@ end
 \NewEnviron{application}[1][]{\BODY}
 \NewEnviron{definition}[1][]{\BODY}
 \NewEnviron{convention}[1][]{\BODY}
-\NewEnviron{exercice}[1][]{\BODY}
+% \NewEnviron{exercice}[1][]{\BODY}
 \NewEnviron{exemple}[1][]{\BODY}
 \NewEnviron{methode}[1][]{\BODY}
 \NewEnviron{preuve}[1][]{\BODY}
@@ -806,14 +823,13 @@ end
     if PREMIER then
 
       tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'..  FormatageString(ENVIRONNEMENTS.formatcours) ..'}')
-      tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
+      tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\fi\\ifenonce\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
 
-      tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
+      tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
 
       tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
       tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
       tex.sprint([[\RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}}]])
-      tex.sprint([[\RenewEnviron{exercice}[1][Exercice]{\formatEnvCours[#1]{couleurexercice}}]])
       tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
       tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
       tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
@@ -836,6 +852,7 @@ end
 \newcommand{\parametres}[1]{}
 \newcommand{\sautdeligne}{\sautligne}
 \newcommand{\niveau}{\definirniveau}
+\NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
 
 %%%
 
@@ -1053,4 +1070,4 @@ end
   end
 \end{luacode*}
 
-\newcommand{\parametrage}{\directlua{NewpageLua()ParametrageDocument()}\FormatPage\directlua{Titre()}}
+\newcommand{\parametrage}{\directlua{NewpageLua()ParametrageDocument()}\FormatPage\directlua{Titre()}\setcounter{compteurexercice}{0}}

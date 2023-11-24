@@ -186,6 +186,7 @@
         COULEURS.enonce = 'black'
         COULEURS.correction = 'black'
         COULEURS.surligne = 'black!5'
+        COULEURS.surlignevisible = 'black!10'
 
         COULEURS.rouge = 'black'
         COULEURS.bleu = 'black'
@@ -214,7 +215,8 @@
         COULEURS.remarque = 'black'
         COULEURS.enonce = 'black'
         COULEURS.correction = 'black'
-        COULEURS.surligne = 'yellow!100'
+        COULEURS.surligne = 'yellow'
+        COULEURS.surlignevisible = 'black!10'
 
         COULEURS.rouge = 'Red'
         COULEURS.bleu = 'Blue'
@@ -378,29 +380,37 @@ function EnvironnementsUtilisateur()
       ]]
 
     ENVIRONNEMENTS.enonce = [[
-      \iftheme
-        \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
-      \fi
-      \colorbox{couleurenonce}{\textcolor{white}{
-        {
-        \Large\textbf{\thecompteurexercice}}
-        \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
-        }
-      }
-      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\par
-        \medskip
-        \BODY
-        \ifsource\par
-          \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+      \ifcours
+        \formatEnvCours[Exercice]{couleurenonce}
+      \else
+        \iftheme
+          \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
         \fi
+        \colorbox{couleurenonce}{\textcolor{white}{
+          {
+          \Large\textbf{\thecompteurexercice}}
+          \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+          }
+        }
+        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\par
+          \medskip
+          \BODY
+          \ifsource\par
+            \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+          \fi
+      \fi
     ]]
 
     ENVIRONNEMENTS.correction = [[
-      \colorbox{couleurcorrection}{\textcolor{white}{
-        \normalfont\Large\textbf{\thecompteurexercice} | Correction}
-      }\par
-    \medskip
-    \BODY
+      \ifcours
+        \formatEnvCours[Correction]{couleurcorrection}
+      \else
+        \colorbox{couleurcorrection}{\textcolor{white}{
+          \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+        }\par
+        \medskip
+        \BODY
+      \fi
     ]]
 
     ENVIRONNEMENTS.tocexercice = 'Exercice'

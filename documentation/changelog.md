@@ -1,5 +1,16 @@
 # Changelog
 
+## 24/11/2023
+
+Fusion des environnements ```exercice``` et ```enonce```, réglages dans la TOC, différenciation selon cours et selon le reste.
+
+-----------------
+
+Ajout d'un dossier templates pour mettre des templates d'idées au cas où.
+
+-----------
+Modification de gitignore pour ignorer les fichier .synctex
+
 ## 23/11/2023
 
 Réglages pour la ```\part*```
@@ -13,6 +24,10 @@ Réparation de ```difficulte```
 .md groupés dans documentation
 
 -----------------
+
+Inversion de * entre l'environnement et la commande ```visible``` et ajout de l'arrière plan du contenu de visible ainsi que de sa couleur correspondante.
+
+--------------------
 
 Bugfix divers.
 
