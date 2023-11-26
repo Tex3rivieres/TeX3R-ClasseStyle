@@ -13,12 +13,16 @@ Au choix :
 \documentclass[diapo]{classe-tex3R}
 \documentclass{classe-tex3R}
 -----------------
-
 \usepackage{style-tex3R}
+
+-----------------
+
+  //////////////
+ // DOCUMENT //
+//////////////
 
 \definirniveau{texte}
 \definirchapitre{nombre ou nil}{nom}
-
 
 Au choix :
 -----------------
@@ -46,11 +50,7 @@ Theme = true -- false
 
 \end{luacode}
 \parametrage
------------------
 
-  //////////////
- // DOCUMENT //
-//////////////
 
 \important{texte}
 

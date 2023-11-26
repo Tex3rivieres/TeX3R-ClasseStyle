@@ -396,7 +396,7 @@ end
 
 %Commandes de mise en page
 
-\begin{luacode}
+\begin{luacode*}
   function TailleTexteLua(nombre)
     if nombre == -4 then
       tex.sprint('\\tiny')
@@ -409,19 +409,19 @@ end
     elseif nombre == 1 then
       tex.sprint('\\large')
     elseif nombre == 2 then
-    tex.sprint('\\Large')
+      tex.sprint('\\Large')
     elseif nombre == 3 then
-    tex.sprint('\\LARGE')
+      tex.sprint('\\LARGE')
     elseif nombre == 4 then
-    tex.sprint('\\huge') 
+      tex.sprint('\\huge') 
     else
       tex.sprint('\\normalsize')
     end
   end
-\end{luacode}
+\end{luacode*}
 
 \newcommand{\tailletexte}[1]{
-  \directlua{TailleTexteLua{#1}}
+  \directlua{TailleTexteLua(#1)}
 }
 
 \newcommand{\important}[1]{}
@@ -503,15 +503,15 @@ end
 
 \begin{luacode}
 
-function Lignes(arg,nombre)
+function LignesLua(arg,nombre)
 
   if nombre == nil then
     nombre = 1
   end
 
-  if arg == 'carreaux' or arg == 'carreau' then
+  if str == 'carreaux' or str == 'carreau' then
     tex.sprint('\\tracecarreaux{' ..nombre ..'}')
-  elseif arg == 'surligne' then
+  elseif str == 'surligne' then
     tex.sprint('\\tracesurligne{' ..nombre ..'}')
   else
     tex.sprint('\\tracelignes{' ..nombre ..'}')
@@ -521,7 +521,7 @@ end
 
 \end{luacode}
 
-\newcommand{\lignes}[2]{\directlua{Lignes(#1,#2)}}
+\newcommand{\lignes}[2]{\directlua{LignesLua("#1",#2)}}
 
 
 \newcommand{\tracelignes}[1]{

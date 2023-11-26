@@ -2,6 +2,12 @@
 
 ## Conflits de package
 
+### Bugs connus
+
+Fonctions lua ne prennent pas en compte les arguments (lignes)
+Visible : commande lua n'affecte pas le booléen correctement
+
+
 ### Adjustbox/pstricks
 
 Redéfinir ```\clipbox``` dans ```pstricks``` plutôt que de la supprimer, en s'aidant des hooks, si cela est nécessaire. A priori pas nécessaire, mais à voir en fonction.

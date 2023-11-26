@@ -267,9 +267,9 @@
       STYLESTITRES.espacement = '0.5cm'
       STYLESTITRES.titre = [[ {\bfseries\LARGE\logoactif~ \underLine{#1}\par} ]]
       STYLESTITRES['sans'] = [[  ]]
-      STYLESTITRES['un'] = [[ \titre{#1\hfill\mdseries\large\contenuniveau$^\text{ème}$} ]]
-      STYLESTITRES['deux'] = [[ \titre{#1~\mdseries|~\contenuchapitre\hfill\large\contenuniveau$^\text{ème}$} ]]
-      STYLESTITRES['trois'] = [[ \titre{#1~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau$^\text{ème}$} ]]
+      STYLESTITRES['un'] = [[ \titre{#1\hfill\mdseries\large\contenuniveau} ]]
+      STYLESTITRES['deux'] = [[ \titre{#1~\mdseries|~\contenuchapitre\hfill\large\contenuniveau} ]]
+      STYLESTITRES['trois'] = [[ \titre{#1~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau} ]]
 
       if FORMAT == "fiche" then    
 
@@ -392,7 +392,7 @@ function EnvironnementsUtilisateur()
           \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
           }
         }
-        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\par
+        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme pts}\fi\par
           \medskip
           \BODY
           \ifsource\par
@@ -429,7 +429,7 @@ end
       Competence = true
       Enonce = true
       Stretch = true
-    elseif str == 'basique' then
+    elseif str == 'basique' or str == 'Basique' then
 
     elseif str == 'bilan' or str == 'Bilan' then
       Type = 'bilan'
