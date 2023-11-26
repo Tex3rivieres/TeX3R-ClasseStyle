@@ -18,13 +18,26 @@ Colonne X déjà définie pour le tableur créé avec ```nicematrix```.
 
 ## Implémentations à venir
 
+### TOC
+
+TOC à mettre en forme (suppression des numéros des subsubsections ou transformation en 1/A)
+
+### Subfiles
+
+Tester les exercices en subfile pour les fiches de TD. (Réfléchir à comment ignorer l'environnement luacode dans un document ? Dans documentation utiliser ifSubfile ?)
+
+```latex
+\ifSubfilesClassLoaded{% then branch
+. . . commands executed when the subfile is typeset . . .
+}{% else branch
+. . . commands executed when the main file is typeset . . .
+}
+```
+
+
 ### Rétrocompatibilité
 
 Supprimer les commandes obsolètes de la classe.
-
-### Megadocument
-
-- Tester avec ```subfile``` (option de classe dans subfile ?)
 
 ### Templates
 

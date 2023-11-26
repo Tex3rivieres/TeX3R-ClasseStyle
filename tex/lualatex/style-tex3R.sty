@@ -70,17 +70,17 @@
 
       end
 
-      if HEADER == true then
-        PAGE.top = '1cm'
-        PAGE.bottom = '1cm'
-        PAGE.right = '1cm'
-        PAGE.left = '1cm'
-        PAGE.marginparsep = '0cm'
-        PAGE.marginparwidth = '0cm'
-        PAGE.headheight = '1cm'
-        PAGE.headsep = '0.5cm'
-        PAGE.footskip = '0cm'
-      else
+      -- if HEADER == true then
+        PAGE.headertop = '1cm'
+        PAGE.headerbottom = '1cm'
+        PAGE.headerright = '1cm'
+        PAGE.headerleft = '1cm'
+        PAGE.headermarginparsep = '0cm'
+        PAGE.headermarginparwidth = '0cm'
+        PAGE.headerheadheight = '1cm'
+        PAGE.headerheadsep = '0.5cm'
+        PAGE.headerfootskip = '0cm'
+      -- else
         PAGE.top = '1cm'
         PAGE.bottom = '1cm'
         PAGE.right = '1cm'
@@ -90,7 +90,7 @@
         PAGE.headheight = '0cm'
         PAGE.headsep = '0cm'
         PAGE.footskip = '0cm'
-      end
+      -- end
 
     elseif FORMAT == "diapo" then
 
@@ -103,17 +103,17 @@
 
       end
 
-      if HEADER == true then
-        PAGE.top = '0.5cm'
-        PAGE.bottom = '3cm'
-        PAGE.right = '1cm'
-        PAGE.left = '1cm'
-        PAGE.marginparsep = '0cm'
-        PAGE.marginparwidth = '0cm'
-        PAGE.headheight = '1.5cm'
-        PAGE.headsep = '0.5cm'
-        PAGE.footskip = '0cm'
-      else
+      -- if HEADER == true then
+        PAGE.headertop = '0.5cm'
+        PAGE.headerbottom = '3cm'
+        PAGE.headerright = '1cm'
+        PAGE.headerleft = '1cm'
+        PAGE.headermarginparsep = '0cm'
+        PAGE.headermarginparwidth = '0cm'
+        PAGE.headerheadheight = '1.5cm'
+        PAGE.headerheadsep = '0.5cm'
+        PAGE.headerfootskip = '0cm'
+      -- else
         PAGE.top = '0.5cm'
         PAGE.bottom = '3cm'
         PAGE.right = '1cm'
@@ -123,7 +123,7 @@
         PAGE.headheight = '0cm'
         PAGE.headsep = '0cm'
         PAGE.footskip = '0cm'
-      end
+      -- end
 
     end
 
@@ -420,5 +420,56 @@ function EnvironnementsUtilisateur()
 end
 \end{luacode*}
 
+\begin{luacode*}
+  function mesParametres(str)
+
+    if str == 'activite' or str == 'Activite' then
+      Type = 'activite'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'basique' then
+
+    elseif str == 'bilan' or str == 'Bilan' then
+      Type = 'bilan'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'corrige' or str == 'Corrige' then
+
+    elseif str == 'cours' or str == 'Cours' then
+      Type = 'cours'
+    elseif str == 'DM' then
+      Type = 'DM'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'DS' then
+      Type = 'DS'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'flash' or str == 'Flash' then
+
+    elseif str == 'interro' or str == 'Interro' then
+      Type = 'interro'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'TD' then
+      Type = 'TD'
+      Header = true
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    end
+  end
+\end{luacode*}
+
 \parametrage
-\mygeometry

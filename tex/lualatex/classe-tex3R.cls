@@ -124,6 +124,8 @@
 \newif\ifheader
 \newif\ifprint
 
+\newcommand{\FormatPage}
+
 \begin{luacode*}
 
   function FormatageString(string)
@@ -180,40 +182,16 @@
       end
     end
 
-    if HEADER then
-      tex.sprint('\\headertrue')
-      tex.sprint(
-      '\\setkomafont{pagehead}{\\normalfont}' ..
-      '\\ihead{\\vspace*{-1em}{\\titreactif}}' ..
-        '\\ohead{}' ..
-        '\\chead{}' ..        
-        '\\ofoot{}' .. 
-        '\\cfoot{}' ..         
-        '\\ifoot{}'
-      )
-    else
-      tex.sprint(
-        '\\setkomafont{pagehead}{\\normalfont}' ..
-        '\\ihead{}' ..
-        '\\ohead{}' ..
-        '\\chead{}' ..        
-        '\\ofoot{}' .. 
-        '\\cfoot{}' ..         
-        '\\ifoot{}' 
-      )
-    end
-
     if PRINT then
       tex.sprint('\\printtrue')
     end
 
     if PREMIER then
-      tex.sprint('\\gdef\\mygeometry{\\geometry{paperwidth=' ..  FormatageString(PAGE.width) .. ',paperheight=' ..  FormatageString(PAGE.height) ..'}}')
+      tex.sprint('\\geometry{paperwidth=' ..  FormatageString(PAGE.width) .. ',paperheight=' ..  FormatageString(PAGE.height) ..'}')
     end
 
     tex.sprint(
-      '\\gdef\\FormatPage{' ..
-        '\\newgeometry{' ..
+          '\\newgeometry{' ..
           'top=' ..  FormatageString(PAGE.top) ..
           ',bottom=' ..  FormatageString(PAGE.bottom) ..
           ',right=' ..  FormatageString(PAGE.right) ..
@@ -226,8 +204,50 @@
           ',headsep=' ..  FormatageString(PAGE.headsep) ..
           ',footskip=' ..  FormatageString(PAGE.footskip) ..
         '}' ..
-      '}'
+        '\\savegeometry{Normal}'
     )
+
+    tex.sprint(
+      '\\newgeometry{' ..
+      'top=' ..  FormatageString(PAGE.headertop) ..
+      ',bottom=' ..  FormatageString(PAGE.headerbottom) ..
+      ',right=' ..  FormatageString(PAGE.headerright) ..
+      ',left=' ..  FormatageString(PAGE.headerleft) ..
+      ',includehead' ..
+      ',includefoot' ..
+      ',marginparsep=' ..  FormatageString(PAGE.headermarginparsep) ..
+      ',marginparwidth=' ..  FormatageString(PAGE.headermarginparwidth) ..
+      ',headheight=' ..  FormatageString(PAGE.headerheadheight) ..
+      ',headsep=' ..  FormatageString(PAGE.headerheadsep) ..
+      ',footskip=' ..  FormatageString(PAGE.headerfootskip) ..
+    '}' ..
+    '\\savegeometry{Header}'
+    )
+
+    if HEADER then
+      tex.sprint('\\headertrue\\loadgeometry{Header}')
+      tex.sprint(
+      '\\setkomafont{pagehead}{\\normalfont}' ..
+      '\\ihead{\\vspace*{-1em}{\\titreactif}}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}'
+      )
+    else
+      tex.sprint('\\loadgeometry{Normal}')
+      tex.sprint(
+        '\\setkomafont{pagehead}{\\normalfont}' ..
+        '\\ihead{}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}' 
+      )
+    end
+
   end
 \end{luacode*}
 
@@ -574,6 +594,7 @@ end
       '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
       '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
       '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
+      '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
       '\\colorlet{couleursurlignevisible}{' ..  FormatageString(COULEURS.surlignevisible) .. '}' ..
       '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}' ..
       '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
@@ -857,15 +878,8 @@ end
 %%%
 
 \begin{luacode*}
-  function NewpageLua()
-    local PREMIER = PARAMETRES.premier
-    if not PREMIER then
 
-    tex.sprint('\\newpage')
-    end
-  end
-
-  function Titre()
+  function TitreLua()
     local HEADER = PARAMETRES.header
     local PREMIER = PARAMETRES.premier
     local TYPE = PARAMETRES.type
@@ -886,7 +900,7 @@ end
       if not HEADER then
         tex.sprint('\\titreactif')
       end
-        tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
+    tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
 
     end
 
@@ -896,53 +910,6 @@ end
 
 \begin{luacode*}
   function mesParametres(str)
-
-    if str == 'activite' then
-      Type = 'activite'
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    elseif str == 'basique' then
-
-    elseif str == 'bilan' then
-      Type = 'bilan'
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    elseif str == 'corrige' then
-
-    elseif str == 'cours' then
-      Type = 'cours'
-    elseif str == 'DM' then
-      Type = 'DM'
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    elseif str == 'DS' then
-      Type = 'DS'
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    elseif str == 'flash' then
-
-    elseif str == 'interro' then
-      Type = 'interro'
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    elseif str == 'TD' then
-      Type = 'TD'
-      Header = true
-      Impression = true
-      Competence = true
-      Enonce = true
-      Stretch = true
-    end
   end
 \end{luacode*}
 
@@ -1053,6 +1020,7 @@ end
     TitresDocument()
     EnvironnementsUtilisateur()
     EnvironnementsDocument()
+    TitreLua()
 
     Type = nil
     Impression = nil
@@ -1070,4 +1038,4 @@ end
   end
 \end{luacode*}
 
-\newcommand{\parametrage}{\directlua{NewpageLua()ParametrageDocument()}\FormatPage\directlua{Titre()}\setcounter{compteurexercice}{0}}
+\newcommand{\parametrage}{\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}}

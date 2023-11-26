@@ -1,0 +1,46 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+
+\begin{document}
+
+\tableofcontents
+
+
+
+
+
+\begin{luacode*}
+
+--Cette fonction LUA parcourt le dossier cible. Les dossiers de niveau 1 sont interprétés comme les noms des chapitres. Les fichiers.tex dans les sous-dossiers de chaque chapitre sont récupérés automatiquement et insérés par \subfileinclude
+local lfs = require("lfs")
+
+local function parcourirDossier(dossier, dossierRacine, dossierParent)
+    if dossierParent == dossierRacine then
+        local _, _, nomDossier = string.find(dossier, "([^/]+)$")
+        nomDossier = string.gsub(nomDossier or dossier, "^%d*%s*", "")      
+        tex.sprint('\\chapitre{' .. nomDossier .. '}')
+    end
+
+    for fichier in lfs.dir(dossier) do
+        if fichier ~= "." and fichier ~= ".." then
+            local chemin = dossier .. "/" .. fichier
+            local attributs = lfs.attributes(chemin)
+
+            if attributs.mode == "file" then
+                if string.match(fichier, "%.tex$") then
+                    tex.sprint('\\subfileinclude{' .. chemin .. '}')
+                end
+            elseif attributs.mode == "directory" then
+                parcourirDossier(chemin, dossierRacine, dossier)
+            end
+        end
+    end
+end
+
+
+local dossierRacine = "./Année complète"
+
+parcourirDossier(dossierRacine, dossierRacine, nil)
+
+\end{luacode*}
+\end{document}

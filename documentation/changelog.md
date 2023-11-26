@@ -1,5 +1,15 @@
 # Changelog
 
+## 26/11/2023
+
+Changements dans la fonction ```parametrage``` de la classe. Utilisation de ```loadgeometry``` et clean global du code de ```parametrage```.
+
+-----------------
+
+Dossier template : Exemple de subfile pour créer un mega-document, création d'un fichier de parcours en luatex.
+
+
+
 ## 24/11/2023
 
 Fusion des environnements ```exercice``` et ```enonce```, réglages dans la TOC, différenciation selon cours et selon le reste.
@@ -10,6 +20,9 @@ Ajout d'un dossier templates pour mettre des templates d'idées au cas où.
 
 -----------
 Modification de gitignore pour ignorer les fichier .synctex
+
+---------
+Ajout de la couleur d'arrière plan dans le style.
 
 ## 23/11/2023
 
