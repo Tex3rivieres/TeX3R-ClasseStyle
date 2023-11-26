@@ -6,6 +6,8 @@
 
 Fonctions lua ne prennent pas en compte les arguments (lignes)
 Visible : commande lua n'affecte pas le booléen correctement
+Enonce : ne prend pas l'argument pour être renommé en mode cours
+Diapo cassé
 
 
 ### Adjustbox/pstricks
@@ -19,7 +21,6 @@ Colonne X déjà définie pour le tableur créé avec ```nicematrix```.
 ## Extension VS Code / VS Codium
 
 - Définir les commandes à ajouter/supprimer dans le panel > voir Recap commandes.md
-- Modifier les svg des icônes
 - Modifier les snippets
 
 ## Implémentations à venir
@@ -48,7 +49,6 @@ Supprimer les commandes obsolètes de la classe.
 ### Templates
 
 * Template de brevet
-* Template Evaluation basique
 * Template Evaluation + remédiation
 
 ### Documentation
