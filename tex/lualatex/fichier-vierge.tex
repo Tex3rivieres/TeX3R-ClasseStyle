@@ -1,39 +1,50 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Au choix :
+--------------
 \documentclass{classe-tex3R}
+--------------
+\documentclass[diapo]{classe-tex3R}
+--------------
+\documentclass[fiche]{classe-tex3R}
+--------------
+
 \usepackage{style-tex3R}
 
+\definirchapitre{nombre}{nom}
+\definirniveau{nom}
+
+\begin{document}
+
+
+
+Au choix :
+--------------
 \begin{luacode}
 
-  -- Paramètres généraux du document
-  Format = 'fiche'
   Type = 'cours'
-  Impression = false
+  Impression = true
   Header = true
-  Taille = nil
+  Taille = '14pt'
+  Stretch = true
 
-  -- Paramètres des environnements
   Correction = true
   Enonce = true
   Visible = true
   
+  Bareme = true
   Competence = true
-  Difficulte = false
+  Difficulte = true
   Source = true
   Theme = true
 
 \end{luacode}
-
-% Application des options
 \parametrage
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\chapitre{}{}
-\niveau{}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{document}
+--------------
+\begin{luacode}
+mesParametres('TD')
+\end{luacode}
+\parametrage
+--------------
 
 % Contenu du document
 
