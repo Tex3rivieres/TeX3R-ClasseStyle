@@ -157,3 +157,52 @@ $\notin$
 Remplacer x° : ^\circ par ° ou le supprimer carrément ?
 Enlever les \mathrm ? Les utilise-t-on systématiquement ?  Les remplacer par \text ?
 ```
+
+## Liste des booléens LaTeX 
+
+```latex
+
+%Booléens définis et initialisés par le parametrage LUA
+\ifdiapo
+\iffiche
+\ifheader
+\ifprint
+
+\ifactivite
+\ifbasique
+\ifbilan
+\ifcorrige
+\ifcours
+\ifTD
+\ifflash
+\ifDM
+\ifDS
+\ifinterro
+
+\ifcorrection
+\ifenonce
+\ifvisible
+
+\ifbareme
+\ifdifficulte
+\ifcompetence
+\ifsource
+\iftheme
+
+\ifstretch
+
+%Booléen pour appeler des exercices en subfile (pour empêcher le formatage de l'exercice et le saut de page)
+
+\ifsubfile
+
+%Booléens pour des réglages internes à la classe
+\ifpartetoile
+\ifmontre
+\iftitretoc
+
+
+
+
+
+
+```
