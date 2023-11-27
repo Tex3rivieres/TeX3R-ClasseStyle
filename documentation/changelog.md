@@ -22,7 +22,14 @@ Template Subfiles - TD créé (légère modification de la classe avec ajout d'u
 
 -------------------
 
-Template Paysage créé
+Template Paysage créé + template Brevet
+
+------------
+
+Ajout de la fonction ```NiveauUtilisateur()``` dans le style
+
+---------------
+Tests divers. Versions stable.
 
 ## 26/11/2023
 
