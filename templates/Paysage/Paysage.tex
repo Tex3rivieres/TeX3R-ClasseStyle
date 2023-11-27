@@ -1,0 +1,51 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+\usepackage{lipsum}
+
+%L'environnement landscape permet de mettre une page en format paysage au milieu du document.
+
+%L'environnement ne fonctionne correctement que pour un paramétrage (Header = true) ou un paramétrage (Header = false, Type = 'basique')
+
+
+\begin{document}
+
+\begin{luacode}
+  mesParametres('cours')
+\end{luacode}
+\parametrage
+
+  \lipsum[1-10]
+
+\begin{luacode}
+  mesParametres('TD')
+\end{luacode}
+\parametrage
+
+\begin{landscape}
+  \lipsum[1-10]
+\end{landscape}
+
+\begin{luacode}
+  mesParametres('activite')
+\end{luacode}
+\parametrage
+
+\lipsum[21-30]
+
+\begin{luacode}
+  Type = 'basique'
+\end{luacode}
+\parametrage
+
+\begin{landscape}
+  \lipsum[21-30]
+\end{landscape}
+
+\begin{luacode}
+  mesParametres('TD')
+\end{luacode}
+\parametrage
+
+\lipsum[21-30]
+
+\end{document}

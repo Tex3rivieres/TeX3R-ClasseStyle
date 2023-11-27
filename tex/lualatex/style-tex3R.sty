@@ -72,24 +72,24 @@
 
       -- if HEADER == true then
         PAGE.headertop = '1cm'
-        PAGE.headerbottom = '1cm'
+        PAGE.headerbottom = '0.5cm'
         PAGE.headerright = '1cm'
         PAGE.headerleft = '1cm'
         PAGE.headermarginparsep = '0cm'
         PAGE.headermarginparwidth = '0cm'
         PAGE.headerheadheight = '1cm'
         PAGE.headerheadsep = '0.5cm'
-        PAGE.headerfootskip = '0cm'
+        PAGE.headerfootskip = '0.5cm'
       -- else
         PAGE.top = '1cm'
-        PAGE.bottom = '1cm'
+        PAGE.bottom = '0.5cm'
         PAGE.right = '1cm'
         PAGE.left = '1cm'
         PAGE.marginparsep = '0cm'
         PAGE.marginparwidth = '0cm'
         PAGE.headheight = '0cm'
         PAGE.headsep = '0cm'
-        PAGE.footskip = '0cm'
+        PAGE.footskip = '0.5cm'
       -- end
 
     elseif FORMAT == "diapo" then
@@ -105,24 +105,24 @@
 
       -- if HEADER == true then
         PAGE.headertop = '0.5cm'
-        PAGE.headerbottom = '3cm'
+        PAGE.headerbottom = '2cm'
         PAGE.headerright = '1cm'
         PAGE.headerleft = '1cm'
         PAGE.headermarginparsep = '0cm'
         PAGE.headermarginparwidth = '0cm'
         PAGE.headerheadheight = '1.5cm'
         PAGE.headerheadsep = '0.5cm'
-        PAGE.headerfootskip = '0cm'
+        PAGE.headerfootskip = '1cm'
       -- else
         PAGE.top = '0.5cm'
-        PAGE.bottom = '3cm'
+        PAGE.bottom = '2cm'
         PAGE.right = '1cm'
         PAGE.left = '1cm'
         PAGE.marginparsep = '0cm'
         PAGE.marginparwidth = '0cm'
         PAGE.headheight = '0cm'
         PAGE.headsep = '0cm'
-        PAGE.footskip = '0cm'
+        PAGE.footskip = '1cm'
       -- end
 
     end
@@ -380,37 +380,29 @@ function EnvironnementsUtilisateur()
       ]]
 
     ENVIRONNEMENTS.enonce = [[
-      \ifcours
-        \formatEnvCours[Exercice]{couleurenonce}
-      \else
-        \iftheme
-          \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
-        \fi
-        \colorbox{couleurenonce}{\textcolor{white}{
-          {
-          \Large\textbf{\thecompteurexercice}}
-          \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
-          }
-        }
-        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme pts}\fi\par
-          \medskip
-          \BODY
-          \ifsource\par
-            \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
-          \fi
+      \iftheme
+        \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
       \fi
+      \colorbox{couleurenonce}{\textcolor{white}{
+        {
+        \Large\textbf{\thecompteurexercice}}
+        \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+        }
+      }
+      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme~pts}\fi\par
+        \medskip
+        \BODY
+        \ifsource\par
+          \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+        \fi
     ]]
 
     ENVIRONNEMENTS.correction = [[
-      \ifcours
-        \formatEnvCours[Correction]{couleurcorrection}
-      \else
-        \colorbox{couleurcorrection}{\textcolor{white}{
-          \normalfont\Large\textbf{\thecompteurexercice} | Correction}
-        }\par
-        \medskip
-        \BODY
-      \fi
+      \colorbox{couleurcorrection}{\textcolor{white}{
+        \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+      }\par
+      \medskip
+      \BODY
     ]]
 
     ENVIRONNEMENTS.tocexercice = 'Exercice'
@@ -441,6 +433,9 @@ end
 
     elseif str == 'cours' or str == 'Cours' then
       Type = 'cours'
+      Enonce = true
+      Correction = true
+      Stretch = false
     elseif str == 'DM' then
       Type = 'DM'
       Impression = true
@@ -470,6 +465,21 @@ end
       Stretch = true
     end
   end
+
+  function NiveauLua(str)
+    if str == '6' then
+      tex.sprint('\\renewcommand{\\contenuniveau}{6$^\\text{ème}$}')
+    elseif str == '5' then 
+      tex.sprint('\\renewcommand{\\contenuniveau}{5$^\\text{ème}$}')
+    elseif str == '4' then
+      tex.sprint('\\renewcommand{\\contenuniveau}{4$^\\text{ème}$}')
+    elseif str == '3' then 
+      tex.sprint('\\renewcommand{\\contenuniveau}{3$^\\text{ème}$}')
+    else
+      tex.sprint('\\renewcommand{\\contenuniveau}{' .. str .. '}')
+    end
+  end
 \end{luacode*}
 
 \parametrage
+\mygeometry

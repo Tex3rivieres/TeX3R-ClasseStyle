@@ -1,5 +1,37 @@
 # Changelog
 
+## 27/11/2023
+
+Diapo réparé
+
+---------------------
+
+Commande ```lignes``` réparée.
+
+-----------------
+
+Environnement ```visible``` réparé
+
+-----------------------
+
+L'environnement ```enonce``` avec un paramètre fonctionne désormais correctement en type cours et en type autre.
+
+------------------
+
+Template Subfiles - TD créé (légère modification de la classe avec ajout d'un booléen LaTeX \ifsubfile)
+
+-------------------
+
+Template Paysage créé
+
+----------------
+
+Fonction NiveauLua implémentée dans le style.
+
+-----------
+
+Changement des marges dans le style pour laisser un espace pour le pied de page (notamment la numérotation)
+
 ## 26/11/2023
 
 Changements dans la fonction ```parametrage``` de la classe. Utilisation de ```loadgeometry``` et clean global du code de ```parametrage```.
