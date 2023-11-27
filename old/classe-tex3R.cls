@@ -428,30 +428,30 @@
 %   \space\number\year
 % }
 
-\newwrite\myauxbrevet
-\newcommand{\rivbareme}{}
-\newcommand{\bareme}[1]{
-  \renewcommand{\rivbareme}{#1 points}
-  \ifbrevet
-    \stepcounter{compteurbareme}
-    \immediate\write\myauxbrevet{\string\hline}\relax
-    \immediate\write\myauxbrevet{Exercice\thecompteurbareme\string & \rivbareme\string\\}\relax
-  \fi
-}
+% \newwrite\myauxbrevet
+% \newcommand{\rivbareme}{}
+% \newcommand{\bareme}[1]{
+%   \renewcommand{\rivbareme}{#1 points}
+%   \ifbrevet
+%     \stepcounter{compteurbareme}
+%     \immediate\write\myauxbrevet{\string\hline}\relax
+%     \immediate\write\myauxbrevet{Exercice\thecompteurbareme\string & \rivbareme\string\\}\relax
+%   \fi
+% }
 
 
-\AtEndDocument{
-  \ifbrevet
-    \immediate\write\myauxbrevet{\string\hline}\relax
-    \immediate\write\myauxbrevet{\string\end{tabular}}\relax
-    \immediate\closeout\myauxbrevet
-  \fi
-}
+% \AtEndDocument{
+%   \ifbrevet
+%     \immediate\write\myauxbrevet{\string\hline}\relax
+%     \immediate\write\myauxbrevet{\string\end{tabular}}\relax
+%     \immediate\closeout\myauxbrevet
+%   \fi
+% }
 
-\newcommand{\rivtextebrevet}{}
-\newcommand{\textebrevet}[1]{\renewcommand{\rivtextebrevet}{#1}}
-\newcommand{\rivseriebrevet}{Générale}
-\newcommand{\seriebrevet}[1]{\renewcommand{\rivseriebrevet}{#1}}
+% \newcommand{\rivtextebrevet}{}
+% \newcommand{\textebrevet}[1]{\renewcommand{\rivtextebrevet}{#1}}
+% \newcommand{\rivseriebrevet}{Générale}
+% \newcommand{\seriebrevet}[1]{\renewcommand{\rivseriebrevet}{#1}}
 
 % \newcommand{\titrebrevet}{
 %   \begin{center}
