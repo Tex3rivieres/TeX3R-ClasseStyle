@@ -380,37 +380,29 @@ function EnvironnementsUtilisateur()
       ]]
 
     ENVIRONNEMENTS.enonce = [[
-      \ifcours
-        \formatEnvCours[Exercice]{couleurenonce}
-      \else
-        \iftheme
-          \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
-        \fi
-        \colorbox{couleurenonce}{\textcolor{white}{
-          {
-          \Large\textbf{\thecompteurexercice}}
-          \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
-          }
-        }
-        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme pts}\fi\par
-          \medskip
-          \BODY
-          \ifsource\par
-            \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
-          \fi
+      \iftheme
+        \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
       \fi
+      \colorbox{couleurenonce}{\textcolor{white}{
+        {
+        \Large\textbf{\thecompteurexercice}}
+        \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+        }
+      }
+      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme~pts}\fi\par
+        \medskip
+        \BODY
+        \ifsource\par
+          \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+        \fi
     ]]
 
     ENVIRONNEMENTS.correction = [[
-      \ifcours
-        \formatEnvCours[Correction]{couleurcorrection}
-      \else
-        \colorbox{couleurcorrection}{\textcolor{white}{
-          \normalfont\Large\textbf{\thecompteurexercice} | Correction}
-        }\par
-        \medskip
-        \BODY
-      \fi
+      \colorbox{couleurcorrection}{\textcolor{white}{
+        \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+      }\par
+      \medskip
+      \BODY
     ]]
 
     ENVIRONNEMENTS.tocexercice = 'Exercice'

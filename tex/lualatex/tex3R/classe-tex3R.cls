@@ -123,6 +123,7 @@
 \newif\iffiche
 \newif\ifheader
 \newif\ifprint
+\newif\ifsubfile
 
 \newcommand{\FormatPage}
 
@@ -825,13 +826,6 @@ end
   \fi
 }
 
-% \newcommand{\visible*}[2][true]{%
-%   \directlua{VerificationVisible('#1')}
-%   \ifvisible
-%     #2
-%   \fi
-% }
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENTS DE COURS ET EXERCICES %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -855,13 +849,11 @@ end
   function EnvironnementsDocument()
 
     local PREMIER = PARAMETRES.premier
+    local TYPE = PARAMETRES.type
 
     if PREMIER then
 
       tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'..  FormatageString(ENVIRONNEMENTS.formatcours) ..'}')
-      tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\fi\\ifenonce\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
-
-      tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
 
       tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
       tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
@@ -872,6 +864,20 @@ end
       tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
       tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
     end
+
+    if TYPE == 'cours' then
+
+        tex.sprint([[\RenewEnviron{enonce}[1][Énoncé]{\formatEnvCours[#1]{couleurenonce}}]])
+
+        tex.sprint([[\RenewEnviron{correction}[1][Correction]{\formatEnvCours[#1]{couleurcorrection}}]])
+
+      else
+
+        tex.sprint('\\RenewEnviron{enonce}[1][]{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
+
+        tex.sprint('\\RenewEnviron{correction}[1][]{\\ifcorrection\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
+
+      end
   end
 \end{luacode*}
 
@@ -1053,4 +1059,4 @@ end
   end
 \end{luacode*}
 
-\newcommand{\parametrage}{\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}}
+\newcommand{\parametrage}{\ifsubfile\else\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}\fi}
