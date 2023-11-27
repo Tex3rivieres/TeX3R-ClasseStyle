@@ -252,6 +252,7 @@
   end
 \end{luacode*}
 
+\AtBeginDocument{\loadgeometry{Normal}}
 
 %%%%%%%%%%%%%%%%%%%
 % AUTRES BOOLÉENS %
@@ -458,11 +459,15 @@ end
       tex.sprint('\\setcounter{part}{' .. nombre ..'}')
     end
   end
+
+  function NiveauDocument(str)
+  tex.sprint('\\renewcommand{\\contenuniveau}{' .. str ..'}')
+  end
 \end{luacode}
 
 
 \newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
-\newcommand{\definirniveau}[1]{\renewcommand{\contenuniveau}{#1}}
+\newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur("#1")}}
 
 \newcommand{\bareme}[1]{\renewcommand{\contenubareme}{#1}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
