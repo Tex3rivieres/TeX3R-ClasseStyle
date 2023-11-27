@@ -1,0 +1,1163 @@
+\documentclass[graine=2]{classe-rivieres}
+
+\hyphenpenalty=0
+
+\usepackage{dirtree}
+\usepackage[frame]{highlightlatex}
+\sethlcolor{MediumAquamarine}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% STYLE DES LISTINGS %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \lstset{
+%     % language={[latex]TeX},
+%     %escapeinside={\%*}{*)},
+%     %numbers=left,
+%     %numberstyle=\scriptsize\ttfamily,
+%     %stepnumber=1,
+%     %numbersep=0.3cm,
+%     % basicstyle=\small\ttfamily, % print whole listing small
+%     % texcsstyle=*\color{Blue},
+%     % morekeywords={draw,text,st,part,subsection,subsubsection,og,fg,setpapersize,setmarginsrb,includegraphics,theoremstyle,newtheoremstyle,url,href,domaine,interro,setlength,euro,np,setlist,textcolor,color,singlespacing,source,theme,difficulte,competence,runlualatex,ifmonbooleen,ifmonoption,parametres},
+%     % keywordstyle=\color{Blue},
+%     % identifierstyle=\color{MediumAquamarine},
+%     % commentstyle=\color{LightSlateGrey},
+%     % stringstyle=\ttfamily, % typewriter type for strings
+%     showstringspaces=false, % no special string spaces
+%     backgroundcolor=\color{GhostWhite},
+%     breaklines=true,
+%     frame=lines,
+%     aboveskip=0.8cm,
+%     belowskip=0.8cm,
+%     % framesep=0.5cm,
+%     % %framexleftmargin=0.7cm,
+%     % xleftmargin=0cm,
+%     extendedchars=true,
+%     literate={à}{{\`a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {è}{{\`e}}1
+%   }
+
+\colorlet{curlyBrackets}{red!50!blue}
+\colorlet{squareBrackets}{red!50!blue}
+\colorlet{codeBackground}{gray!15!white}
+\colorlet{comment}{green!40!black}
+
+\title{\bfseries classe-rivieres\par \large style-rivieres}
+\author{Vincent Crombez \& Frédéric Léothaud}
+\date{}
+
+\documentationtrue
+
+\setcounter{tocdepth}{3}
+
+\renewcommand{\subsectionformat}{\large\textbf{\thesubsection~}}
+\setkomafont{subsection}{\normalfont\large\color{Black}\bfseries}
+
+\renewcommand{\subsubsectionformat}{\normalsize\textbf{\thesubsubsection~}}
+\setkomafont{subsubsection}{\normalfont\normalsize\color{Black}\bfseries}
+
+\setlength{\parskip}{\baselineskip}
+
+\begin{document}
+
+\newgeometry{
+			top=2cm,
+			bottom=2cm,
+			right=2cm,
+			left=2cm,
+			marginparsep=0cm,
+			marginparwidth=0cm,
+			headheight=1cm,
+			headsep=0cm,
+			footskip=1cm
+		}%
+
+\maketitle
+
+
+\newpage
+
+
+\tableofcontents
+
+\newpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+
+La \texttt{classe-rivieres} est un travail collaboratif mené par deux professeurs de mathématiques. Le but a été dans un premier temps de rendre compatibles un certain nombre d'outils, notamment le très riche package \href{https://ctan.org/pkg/profcollege}{\texttt{\textbf{\textbackslash ProfCollege}}} ou encore les exercices aléatoires générés sur \href{https://coopmaths.fr/}{\textbf{Coopmaths}} tout comme le travail sur les exercices de Brevet réalisé par l'\href{https://www.apmep.fr/Annales-du-Brevet-des-colleges}{\textbf{APMEP}}.
+
+La \texttt{classe-rivieres} se veut comme une classe clé en main, que les puristes jugeront sans doute beaucoup trop lourde au vu du nombre de packages inclus. Elle a cependant le mérite d'être robuste, et de ne nécessiter le chargement d'aucun package supplémentaire pour la plupart des usages courants et d'élaboration de documents à destination des élèves.
+
+La \texttt{classe-rivieres} a été conçue afin de pouvoir créer des documents modulaires à partir de différentes options, permettant d'afficher ou masquer certains environnements ou commandes, pour finalement arriver à générer plusieurs documents lors d'une seule compilation.
+
+Enfin, ce document, qui se veut à la fois comme un guide d'utilisation et d'installation de LaTeX, a été élaboré afin de permettre aux personnes n'étant pas familières de LaTeX de pouvoir se lancer et de profiter des différents outils qu'elles pourront trouver ici.
+
+
+\section{L'exemple du professeur Euclide}
+
+\subsection{Introduction}
+
+Le professeur Euclide souhaite créer une fiche de TD pour ses élèves de 4ème, sur les équations. En ce samedi pluvieux, il se dit qu'il est temps de se lancer sur LaTeX, et décide de suivre la documentation de \texttt{classe-rivieres}. Étant d'un naturel aguerri en ce qui concerne l'informatique, il installe sans encombre son éditeur et sa distribution, en suivant le guide d'installation. Le voici dans VS Code, il créé son nouveau fichier qu'il intitule \texttt{Equations.tex} (il a bien noté l'importance de préciser l'extension du fichier dans VS Code), et se retrouve dans sa nouvelle page, qu'il construit comme indiqué dans la documentation :
+
+\begin{lstlisting}
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+\end{document}
+\end{lstlisting}
+
+Il lance alors la compilation de son document, afin de vérifier que cette structure de base est correcte, mais son éditeur lui renvoie une erreur. Après de multiples recherches sur la documentation et sur Internet, il  se rend compte que son document étant actuellement vide, il est normal qu'une erreur apparaisse. Il recommence alors avec cette structure :
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+!\hl{Test}!
+\end{document}
+\end{lstlisting}
+
+Et la magie opérant, le fichier se compile à merveille. Il est alors temps pour le professeur Euclide de se retrousser les manches et de se mettre sérieusement au travail.
+
+\subsection{Paramètres de la fiche}
+
+N'ayant pas encore très bien compris ces histoires de graines, il se lance dans la construction de son document en utilisant la commande \texttt{\textbackslash parametres}.
+
+Il a déjà sélectionné un certain nombre d'exercices qui tiendront vraisemblablement sur plusieurs pages, et il souhaiterait avoir une en-tête de fiche de TD sur chacune de ses feuilles. Il complète donc son fichier de la manière suivante :
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+!\hl{\textbackslash parametres\{type=TD,enonce\}}!
+
+!\hl{\textbackslash begin\{enonce\}}!
+	!\hl{Résoudre les équations suivantes :}!
+    
+    !\hl{\textbackslash begin\{enumerate\}}!
+		!\hl{\textbackslash item \$4x+5=8x-3\$}!
+        !\hl{\textbackslash item \$8x-3=2x+5\$}!
+	!\hl{\textbackslash end\{enumerate\}}!
+!\hl{\textbackslash end\{enonce\}}!
+
+\end{document}
+\end{lstlisting}
+
+Après compilation, il est satisfait du résultat, et décide d'ajouter les compétences travaillées et le niveau de difficulté de l'exercice.
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+\parametres{type=TD,enonce!\hl{,difficulte,competence}!}
+
+!\hl{\textbackslash difficulte\{1\}}!
+!\hl{\textbackslash competence\{Calculer\}}!
+
+\begin{enonce}
+    Résoudre les équations suivantes :
+    
+    \begin{enumerate}
+        \item $4x+5=8x-3$
+        \item $8x-3=2x+5$
+    \end{enumerate}
+\end{enonce}
+
+\end{document}
+\end{lstlisting}
+
+Après lecture de la documentation de l'excellent package \texttt{ProfCollege}, il remarque qu'il peut générer de manière quasi-automatique la correction de son exercice, ce qu'il fait :
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+\parametres{type=TD,enonce,difficulte,competence}
+
+\difficulte{1}
+\competence{Calculer}
+
+\begin{enonce}
+    Résoudre les équations suivantes :
+    
+    \begin{enumerate}
+        \item $4x+5=8x-3$
+        \item $-5x-3=2x+5$
+    \end{enumerate}
+\end{enonce}
+
+!\hl{\textbackslash begin\{correction\}}!
+	!\hl{\textbackslash begin\{enumerate\}}!
+		!\hl{\textbackslash item \textbackslash ResolEquation\{4\}\{5\}\{8\}\{-3\}}!
+		!\hl{\textbackslash item \textbackslash ResolEquation\{-5\}\{-3\}\{2\}\{5\}}!
+	!\hl{\textbackslash end\{enumerate\}}!
+!\hl{\textbackslash end\{correction\}}!
+
+\end{document}
+\end{lstlisting}
+
+Pour l'instant la correction n'est pas affichée sur la fiche, mais il se dit que si plus tard il en a besoin, elle sera disponible.
+
+Étant décidé à peaufiner son exercice, avant de passer au suivant, il décide de rajouter la source et le thème, même si par goût personnel il préfère ne pas les afficher.
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+\parametres{type=TD,enonce,difficulte,competence}
+
+\difficulte{1}
+\competence{Calculer}
+!\hl{\textbackslash source\{Professeur Euclide\}}!
+!\hl{\textbackslash theme\{Équations\}}!
+
+\begin{enonce}
+    Résoudre les équations suivantes :
+    
+    \begin{enumerate}
+        \item $4x+5=8x-3$
+        \item $-5x-3=2x+5$
+    \end{enumerate}
+\end{enonce}
+
+\begin{correction}
+    \begin{enumerate}
+        \item \ResolEquation{4}{5}{8}{-3}
+        \item \ResolEquation{-5}{-3}{2}{5}
+    \end{enumerate}
+\end{correction}
+
+\end{document}
+\end{lstlisting}
+
+Enfin, après réflexion, il décide de rajouter le chapitre et le niveau concerné, afin que ceux-ci apparaissent dans le titre de sa fiche :
+
+\begin{lstlisting}[escapechar=!]
+\documentclass{classe-rivieres}
+
+\begin{document}
+
+!\hl{\textbackslash chapitre\{5\}\{Équations\}}!
+!\hl{\textbackslash niveau\{4\}}!
+
+\parametres{type=TD,enonce,difficulte,competence}
+
+\difficulte{1}
+\competence{Calculer}
+\source{Professeur Euclide}
+\theme{Équations}
+
+\begin{enonce}
+    Résoudre les équations suivantes :
+    
+    \begin{enumerate}
+        \item $4x+5=8x-3$
+        \item $-5x-3=2x+5$
+    \end{enumerate}
+\end{enonce}
+
+\begin{correction}
+    \begin{enumerate}
+        \item \ResolEquation{4}{5}{8}{-3}
+        \item \ResolEquation{-5}{-3}{2}{5}
+    \end{enumerate}
+\end{correction}
+
+\end{document}
+\end{lstlisting}
+
+Le professeur Euclide, fort satisfait de son travail écrit plusieurs autres exercices dans son document, et obtient exactement ce qu'il voulait, à savoir plusieurs fiches de TD, à entête numérotée.
+
+\subsection{Utilisation de \texttt{multiTD}}
+
+Le professeur Euclide ayant désormais terminé sa fiche de TD, il s'intéresse à l'option \texttt{multiTD} qui lui semble alléchante. Après lecture, il décide de s'en tenir aux réglages de base, et modifie simplement son préambule de document comme suit :
+
+\begin{lstlisting}[escapechar=!]
+	\documentclass!\hl{[multiTD]}!{classe-rivieres}
+
+\end{lstlisting}
+
+La compilation se termine sans problèmes, même si le professeur Euclide la trouve un peu longue. C'est alors qu'il comprend que son éditeur n'a pas généré un mais bien cinq documents \texttt{.pdf} ! Les cinq documents ont un nom différent de son fichier de départ, pour pouvoir être identifiés facilement. Il y retrouve sa fiche de TD classique, son corrigé, une fiche avec les énoncés et les corrigés, un diaporama avec l'ensemble des exercices et un deuxième diaporama comprenant les exercices et leur correction. Le professeur Euclide réfléchit au temps qu'il aurait mis à créer tous ces documents par lui-même, et finit par pardonner à son éditeur la lenteur de la compilation.
+
+\subsection{Utilisation de \texttt{subfiles}}
+
+Alors que la fiche de TD du professeur Euclide est terminée, ce dernier réalise en relisant la documentation qu'il pourrait stocker chacun de ses exercices dans un fichier à part, et les inclure ensuite dans la fiche de TD. Il commence à en percevoir l'intérêt pour deux raisons. La première est que son document de TD est tout de même peu lisible, car ses exercices sont nombreux. La seconde est que si ses exercices étaient stockés de manière externe, ils seraient beaucoup plus faciles à manipuler, à corriger et à réutiliser dans d'autres types de documents, dans un DS par exemple. Le professeur Euclide se lance donc bravement dans le découpage de sa fiche de TD. Il utilise l'arborescence recommandée dans la documentation, récupère le fichier \texttt{Sommaire.tex} et créé un certain nombre de fichiers \texttt{.tex} dont voici l'arborescence :
+
+\dirtree{%
+.1 Chapitre 5 - Équations.
+.2 TD.
+.3 {Equations.tex}.
+.2 Exercices.
+.3 Images.
+.3 {equations-basiques.tex} .
+.3 {equations-niveau2.tex} .
+.3 {probleme-aire.tex}.
+.3 {probleme-vitesse.tex}.
+.2 {Sommaire.tex}.
+.2 {main-exercices.tex}.
+}
+
+Le professeur Euclide n'a pas voulu prendre le risque de mettre des espaces dans les noms de ses fichiers, mais cette précaution n'est (normalement) pas nécessaire.
+
+Le professeur Euclide ayant habilement découpé ses exercices en subfiles, voici à quoi ressemblent désormais ses différents fichiers :
+
+\begin{lstlisting}
+%Le fichier Equations.tex (la fiche de TD)
+\documentclass{classe -rivieres}
+
+\graphicspath{{../Exercices/Images/}}
+
+\begin{document}
+
+\chapitre{5}{Équations}
+\niveau{4}
+
+\parametres{type=TD,enonce ,difficulte ,competence}
+
+\subfile{../Exercices/equations-basiques.tex}
+
+\subfile{../Exercices/equations-niveau2.tex}
+
+\subfile{../Exercices/probleme-aire.tex}
+
+\subfile{../Exercices/probleme-vitesse.tex}
+
+\end{document}
+\end{lstlisting}
+
+\begin{lstlisting}
+%Le fichier equations-basiques.tex (un fichier d'exercices)
+\documentclass[../main-exercices.tex]{subfiles}
+
+\difficulte{1}
+\competence{Calculer}
+\source{Professeur Euclide}
+\theme{Équations}
+
+\begin{enonce}
+    Résoudre les équations suivantes :
+    
+    \begin{enumerate}
+        \item $4x+5=8x-3$
+        \item $-5x-3=2x+5$
+    \end{enumerate}
+\end{enonce}
+
+\begin{correction}
+    \begin{enumerate}
+        \item \ResolEquation{4}{5}{8}{-3}
+        \item \ResolEquation{-5}{-3}{2}{5}
+    \end{enumerate}
+\end{correction}
+
+\end{lstlisting}
+
+\begin{lstlisting}
+%Le fichier main-exercices.tex 
+%(le fichier 'principal' pour les exercices)
+\documentclass[graine=3233230]{classe-rivieres}
+\graphicspath{{./Images/}}
+\begin{document}
+
+\end{document}
+\end{lstlisting}
+
+Au départ, le professeur Euclide ne voyait pas trop comment rentre l'adresse de ses exercices individuels dans sa fiche de TD, mais il s'est alors rendu compte que le fichier \texttt{Sommaire.tex} lui permettait de les obtenir directement, en plus de la visualisation de leur rendu. Comme certains de ses exercices nécessitent des images, il a créé un dossier \texttt{Images} dans son dossier \texttt{Exercices}, et il a précisé dans deux de ses fichiers le chemin d'accès pour pouvoir s'y rendre.
+
+Le professeur Euclide est désormais comblé, il vérifie tout de même que l'option \texttt{multiTD} fonctionne toujours, ce qui est bien le cas. Il décide de s'octroyer une petite pause car c'est l'heure du goûter. Il se lancera plus tard dans la rédaction d'une fiche de cours, car il a vu des fonctionnalités intéressantes, notamment l'environnement \texttt{lignes}.
+
+\section{Installation de LaTeX et de la classe}
+
+Pour les utilisateurs aguerris, disposant déjà d'une installation LaTeX fonctionnelle, la seule chose à noter est que la compilation des documents générés via la \texttt{classe-rivieres} doit être en \texttt{shell-escape}, et utiliser \texttt{lualatexmk} (ou deux compilations en \texttt{lualatex}).
+
+Pour la suite de cette section nous allons détailler une installation possible, en utilisant MikTeX et VS Code, même si d'autres possibilités existent (TeXLive pour la distribution et Vim pour l'éditeur par exemple).
+
+Pour les personnes ne souhaitant pas s'embêter avec l'ensemble des étapes d'installation ou souhaitant un environnement nomade, la version portable de la classe, ainsi que tout le code source est disponible sur \href{https://github.com/Tex3rivieres/Tex3R}{\textbf{Github}}.
+
+\subsection{Installation de MikTeX}
+
+LaTeX est un langage permettant de faire appel à des commandes. Les commandes sont créées et appelées via des packages, qui doivent être installés sur l'ordinateur lorsque l'on fait appel à eux. MikTeX est une distribution permettant de faire ceci.
+
+Pour installer MikTeX, se rendre sur : \url{https://miktex.org/download} et télécharger l'installateur correspondant à la version du système d'exploitation. Ensuite, lancer l'installateur et suivre les étapes d'installation. Il est recommandé de sélectionner l'installation des packages 'on the fly' afin que ces derniers s'installent automatiquement lorsque c'est nécessaire.
+
+\subsection{Installation de Visual Studio Code}
+Pour écrire nos fichiers LaTeX (en \texttt{.tex})
+, il faut un éditeur de texte, par exemple Visual Studio Code (VS Code). Pour installer VS Code, se rendre sur : \url{https://code.visualstudio.com/} et télécharger l'installateur correspondant à la version du système d'exploitation. Ensuite, lancer l'installateur et suivre les étapes d'installation.
+
+% \subsection{Installation de PERL (Windows)}
+
+% Sur un système UNIX (Linux, Mac), cette section n'est pas nécessaire.
+
+% Pour pouvoir compiler avec \texttt{lualatexmk}, ce qui est conseillé avec la \texttt{classe-rivieres}, il faut installer le langage PERL sur le système d'exploitation. Se rendre sur : \url{https://strawberryperl.com/} et télécharger l'installateur correspondant à la version du système d'exploitation. Ensuite, lancer l'installateur et suivre les étapes d'installation.
+
+\subsection{Configuration de VS Code}
+
+\subsubsection{Extensions}
+
+VS Code est un logiciel qui nécessite quelques extensions afin de fonctionner correctement pour notre usage.
+
+Sur le volet gauche, sélectionner Extensions, et rechercher et installer les deux plugins suivants :
+
+\begin{itemize}
+    \item French Language Pack for Visual Studio Code
+    \item Tex 3 Rivières
+\end{itemize}
+
+\subsubsection{Paramètres}
+
+Dans VS Code :
+
+\begin{enumerate}
+    \item Aller dans Fichier>Préférences>Paramètres
+    \item Dans la barre de recherche, écrire : \texttt{latex-workshop.tools}
+    \item Ouvrir le \texttt{.json}
+    \item Remplacer le contenu du \texttt{.json} ainsi ouvert par le contenu du fichier \texttt{settings.json} disponible sur \href{https://github.com/Tex3rivieres/Tex3R}\textbf{{Github}}
+\end{enumerate}
+
+\subsection{Installation de la classe}
+
+Créer un dossier présentant cette arborescence, dans un dossier de l'ordinateur possible à retrouver, et y copier les fichiers \texttt{classe-rivieres.cls} et \texttt{style-rivieres.sty} aux endroits indiqués.
+
+\dirtree{%
+.1 texmf.
+.2 tex.
+.3 bin.
+.3 lualatex.
+.4 classe-rivieres.
+.5 {classe-rivieres.cls}.
+.4 style-rivieres.
+.5 {style-rivieres.sty}.
+}
+
+\medskip
+
+Ensuite, ouvrir MikTeX Console et aller dans Settings>Directories>+(Add) et localiser le dossier texmf. Enfin, cliquer sur Tasks>Refresh file name database
+\begin{enumerate}
+    \item Localiser le dossier \texttt{texmf}
+    \item Refresh 
+\end{enumerate}
+
+\subsection{Installation des polices}
+
+Par goût personnel, il est possible de télécharger des polices différentes, notamment pour les formules mathématiques et pour les lettres calligraphiées.
+
+Les liens vers les polices proposées se retrouvent dans le dossier \texttt{Polices} sur \href{https://github.com/Tex3rivieres/Tex3R}{\textbf{Github}}.
+
+\subsection{Installation de Sumatra (optionnel)}
+
+S'il est possible d'utiliser le visualiseur \texttt{.pdf} intégré de l'extension LaTeX Workshop, il est parfois pratique de regarder ses documents dans son lecteur de \texttt{.pdf} habituel. Adobe Reader a le problème principal d'ouvrir les fichiers \texttt{.pdf} en lecture seule, ce qui interdit la compilation des fichiers dans l'éditeur LaTeX, tant que le fichier \texttt{.pdf} n'a pas été fermé. Sumatra a contrario, permet l'écriture sur un fichier déjà ouvert dans son lecteur, et l'affichage des modifications à chaque nouvelle compilation.
+
+Pour installer Sumatra, se rendre sur : 
+
+\url{https://www.sumatrapdfreader.org/download-free-pdf-viewer} 
+
+et télécharger l'installateur correspondant à la version du système d'exploitation. Ensuite, lancer l'installateur et suivre les étapes d'installation.
+
+Il est possible dans Sumatra de configurer la recherche inversée, c'est à dire qu'en double-cliquant sur du texte du \texttt{.pdf}, cela ouvre l'éditeur LaTeX à ligne correspondante, dans le fichier \texttt{.tex} concerné. Pour VS Code, le fichier .json précédemment copié prend déjà en charge la fonctionnalité, qui se nomme synctex. Dans Sumatra, il faut configurer le lecteur de la manière suivante :
+
+Préférences>Options>Configurer la recherche avancée :
+
+\texttt{"C:\textbackslash Users\textbackslash User\textbackslash AppData\textbackslash Local\textbackslash Programs\textbackslash Microsoft VS Code\textbackslash Code.exe" -g "\%f":"\%l"}
+
+
+Le chemin ici proposé est celui par défaut de l'emplacement de VS Code sous Windows, en remplaçant simplement User par le nom du dossier utilisateur.
+
+\section{Utilisation basique de la classe}
+
+Dans cette section, nous allons présenter l'ensemble des commandes et environnements à utiliser lors de la création d'un nouveau document. Chaque commande sera proposée avec un rendu, afin de mieux le visualiser. Le rendu de chaque environnement ou commande est entièrement personnalisable dans \texttt{style-rivieres}.
+
+\subsection{Choix de l'affichage des options}
+
+L'idée principale de la classe étant de pouvoir générer plusieurs types de document à l'aide du même fichier \texttt{.tex}, les contenus du fichier sont écrits dans différents environnements qui sont affichés ou non en fonction des options.
+
+\subsubsection{Avec une graine, dans les options de classe}
+
+Lors de l'utilisation de la classe, il est tout à fait possible de spécifier quel format est souhaité, pour l'ensemble du document. Les options retenues par ce format sont  définies par une << graine >> dont le fonctionnement sera détaillé ci-après :\par
+
+\renewcommand{\arraystretch}{1.2}
+
+\rowcolors{1}{gray!20}{white}
+\begin{tabular}{c|l}
+\textbf{Valeur d'option} & \textbf{Description}\\
+\hline
+2 & format du document en A4 pour les fiches imprimables\\
+\hline
+3 & format du document en 16:10 pour les diaporamas projetables\\
+\hline
+5 & l'environnement \texttt{enonce} est affiché\\
+\hline
+7 & l'environnement \texttt{correction} est affiché\\
+\hline
+11 & le contenu de la commande \texttt{\textbackslash theme} est affichée\\
+\hline
+13 & le contenu de la commande \texttt{\textbackslash difficulte} est affichée\\
+\hline
+17 & le contenu de la commande \texttt{\textbackslash competence} est affichée\\
+\hline
+19 & le contenu de la commande \texttt{\textbackslash source} est affichée\\
+\hline
+107 & le contenu de la commande \texttt{\textbackslash bareme} est affichée\\
+\hline
+23 & l'environnement \texttt{\textbackslash lignes} est activé\\
+\hline
+73 & l'environnement \texttt{\textbackslash lignes*} est activé\\
+\hline
+83 & l'environnement \texttt{\textbackslash lignes} affiche des petits carreaux\\
+\hline
+101 & le style de  \texttt{\textbackslash lignes} surligne une ligne sur deux\\
+\hline
+89 & l'environnement \texttt{\textbackslash lignes*} affiche des petits carreaux\\
+\hline
+103 & le style de  \texttt{\textbackslash lignes*} surligne une ligne sur deux\\
+\hline
+31 & le titre en début de page est celui de  \texttt{\textbackslash titreactivite} (Activités)\\
+\hline
+41 & le titre en début de page est celui de  \texttt{\textbackslash titrecorrige} (Corrigés)\\
+\hline
+43 & le titre en début de page est celui de  \texttt{\textbackslash titrecours} (Cours)\\
+\hline
+59 & le titre en début de page est celui de  \texttt{\textbackslash titreTD} (Exercices)\\
+\hline
+61 & le titre en début de page est celui de  \texttt{\textbackslash titreDM} (Devoirs Maison)\\
+\hline
+67 & le titre en début de page est celui de  \texttt{\textbackslash titreDS} (Devoirs Surveillés)\\
+\hline
+71 & le titre en début de page est celui de  \texttt{\textbackslash titreinterro} (Interrogations)\\
+\hline
+97 & le titre en début de page est celui de  \texttt{\textbackslash titreflash} (Questions Flash)\\
+\hline
+109 & le style du document est celui d'une épreuve de DNB\\
+\hline
+37 & pas de titre en début de page\\
+\hline
+29 & le titre prédéfini s'imprime au début de chaque nouvelle page\\
+\hline
+79 & affiche la table des matières du document\\
+\end{tabular}\par%
+
+Parmi ces valeurs d'option, la 2 et la 3 sont incompatibles entre elles (il faut se décider sur un format de document), tout comme les valeurs d'option 31, 41, 43, 59, 61, 67, 71, 97 et 37 qui définissent le style du titre.
+
+Une fois les valeurs d'options choisies, il suffit de les multiplier entre elles pour obtenir la graine du document, qui pourra être mise en option de classe.
+
+Par exemple, pour un document de format fiche (2), pour lequel on souhaite avoir le titre d'une feuille de corrigés (41), qui se mette automatiquement sur chaque nouvelle page (29), avec les énoncés visibles (5) tout comme les corrections (7), on obtient la graine suivante :
+
+$$2\times 41 \times 29 \times 5 \times 7 = 83230$$
+
+Il ne reste alors plus qu'à construire le document de la manière suivante :
+
+\begin{lstlisting}
+\documentclass[graine=83230]{classe-rivieres}
+
+\begin{document}
+...
+\end{document}
+\end{lstlisting}
+
+En l'absence de l'option \texttt{graine}, ou en précisant simplement l'option \texttt{fiche} la graine du document par défaut est 2 (fiche A4 classique). En précisant l'option \texttt{diapo}, la graine du document est initialisée à 3.
+
+Cette notion de graine sera utilisée pour la génération de documents multiples, dans la partie dédiée.
+
+\subsubsection{Avec les commandes \texttt{\textbackslash parametres} et \texttt{\textbackslash parametres*}}
+
+Les commandes \texttt{\textbackslash parametres} et \texttt{\textbackslash parametres*} permettent de gérer l'affichage des différents environnements et commandes de la classe.
+
+
+La commande \texttt{\textbackslash parametres\{<clé1=valeur1,clé2=valeur,\dots>\}} permet dans un document de sauter une page, et de continuer avec d'autres options pour la suite du document. Toutes les options doivent être spécifiées, car toute la configuration précédente est écrasée lors de l'emploi de la commande \texttt{\textbackslash parametres}.
+
+Le tableau suivant précise les clés et valeurs possibles, pour la commande \texttt{\textbackslash parametres} :
+
+
+\begin{tabular}{l|p{0.3\linewidth}|l}
+\textbf{Clé} & \textbf{Valeurs possibles}  & \textbf{Description}\\
+\hline
+enonce & true/false & affichage de l'environnement \texttt{enonce}\\
+\hline
+correction & true/false & affichage de l'environnement \texttt{correction}\\
+\hline
+theme & true/false & affichage du contenu de \texttt{\textbackslash theme}\\
+\hline
+difficulte & true/false & affichage du contenu de \texttt{\textbackslash difficulte}\\
+\hline
+competence & true/false & affichage du contenu de \texttt{\textbackslash competence}\\
+\hline
+source & true/false & affichage du contenu de \texttt{\textbackslash source}\\
+\hline
+bareme & true/false & affichage du contenu de \texttt{\textbackslash bareme}\\
+\hline
+lignes & true/false/seyes/carreaux & activation de l'environnement \texttt{lignes}\\
+\hline
+lignes* & true/false/seyes/carreaux & activation de l'environnement \texttt{lignes*}\\
+\hline
+type & activite/basique/corrige/cours/TD/DM/DS/interro/brevet & type du titre\\
+\hline
+titre & true/false & affichage du titre sur chaque page\\
+\end{tabular}
+
+Pour toutes les clés acceptant \texttt{true} comme valeur, il n'est pas nécessaire de préciser \texttt{=true} dans la définition de la clé, afin de faciliter la lecture et la syntaxe. Par ailleurs, si rien n'est précisé pour les clés \texttt{lignes} ou \texttt{lignes*}, le style par défaut des lignes sera alors \texttt{seyes}.
+
+La commande \texttt{\textbackslash parametres} permet de remplacer le principe de graine vue précédemment, à la préférence de l'utilisateur. Ainsi, les deux syntaxes de début de document sont strictement équivalentes.
+
+\begin{lstlisting}
+\documentclass[graine=83230]{classe-rivieres}
+
+\begin{document}
+...
+\end{document}
+\end{lstlisting}
+
+\begin{lstlisting}
+\documentclass[fiche]{classe-rivieres}
+
+\begin{document}
+\parametres{type=corrige,titre,enonce,correction}
+...
+\end{document}
+\end{lstlisting}
+
+
+Il est important de noter que la commande \texttt{\textbackslash parametres} doit nécessairement se trouver dans l'environnement \texttt{document} et non avant, pour pouvoir fonctionner correctement.
+
+La commande \texttt{\textbackslash parametres*} fonctionne sous la même forme que la commande \texttt{\textbackslash parametres}, à la différence près qu'elle n'écrase pas les anciennes options, elle ne redéfinit que celles pour lesquelles on lui précise des modifications. Par ailleurs les clés \texttt{type} et \texttt{titre} ne sont pas utilisables dans la commande.
+
+
+
+\subsection{Commandes et environnements}
+
+\subsubsection{Pour les exercices}
+
+La structure minimale d'un exercice devrait toujours être comme suit :
+
+\parametres*{source,theme,difficulte,competence,enonce,correction}
+
+\begin{minipage}{0.48\textwidth}
+\begin{lstlisting}
+\source{Source}
+\theme{Thème}
+\competence{Compétences}
+\difficulte{1}
+
+\begin{enonce}
+	Le contenu de l'énoncé.
+\end{enonce}
+
+\begin{correction}
+	Le contenu de la correction.
+\end{correction}
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+	\source{Source}
+\theme{Thème}
+\competence{Compétences}
+\difficulte{1}
+
+\begin{enonce}
+	Le contenu de l'énoncé.
+\end{enonce}
+
+\begin{correction}
+	Le contenu de la correction.
+\end{correction}
+\end{minipage}%
+
+Même si les commandes et environnements sont relativement explicites, voici le détail de leur utilisation :
+\begin{itemize}[leftmargin=3cm]
+	\item[\texttt{\textbackslash source}] Permet de spécifier la source d'où est tiré l'exercice
+	\item[\texttt{\textbackslash theme}] Permet de spécifier les thèmes de l'exercice
+	\item[\texttt{\textbackslash competence}] Permet de spécifier les compétences principales travaillées dans l'exercice
+	\item[\texttt{\textbackslash difficulte}] Permet de spécifier le niveau de difficulté de l'exercice (de 1 à votre convenance)
+	\item[\texttt{enonce}] Environnement où écrire le texte pour l'énoncé de l'exercice
+	\item[\texttt{correction}] Environnement où écrire le texte pour la correction de l'exercice
+\end{itemize}
+
+\subsubsection{Pour le cours}
+
+Le texte du cours peut être dans les environnements suivants : \texttt{definition}, \texttt{propriete}, \texttt{methode}, \texttt{application}, \texttt{exercice}, \texttt{exemple}, \texttt{remarque}, \texttt{basique}, ce qui donne le rendu suivant :
+
+
+\begin{minipage}{0.48\textwidth}
+\begin{lstlisting}
+\begin{definition}
+	La définition.
+\end{definition}
+
+\begin{propriete}
+	La propriété.
+\end{propriete}
+
+\begin{methode}
+	La méthode.
+\end{methode}
+
+\begin{application}
+	L'application.
+\end{application}
+
+\begin{exercice}
+	L'exercice.
+\end{exercice}
+
+\begin{exemple}
+	L'exemple.
+\end{exemple}
+
+\begin{remarque}
+	La remarque.
+\end{remarque}
+
+\begin{basique}
+	Le texte basique.
+\end{basique}
+
+\end{lstlisting}
+	\end{minipage}\hfill
+	\begin{minipage}{0.48\textwidth}
+	
+		\begin{definition}
+			La définition.
+		\end{definition}
+		
+		\begin{propriete}
+			La propriété.
+		\end{propriete}
+		
+		\begin{methode}
+			La méthode.
+		\end{methode}
+		
+		\begin{application}
+			L'application.
+		\end{application}
+		
+		\begin{exercice}
+			L'exercice.
+		\end{exercice}
+		
+		\begin{exemple}
+			L'exemple.
+		\end{exemple}
+		
+		\begin{remarque}
+			La remarque.
+		\end{remarque}
+
+		\begin{preuve}
+			La preuve.
+		\end{preuve}
+		
+		\begin{basique}
+			Le texte basique.
+		\end{basique}
+
+	\end{minipage}
+
+	L'environnement basique n'est pas nécessaire, il est actuellement défini comme vide, mais si jamais l'on souhaite récupérer le texte écrit dans un environnement basique pour lui apporter une mise en forme ultérieurement, il peut être judicieux d'avoir utilisé cet environnement au préalable.
+
+Si l'on souhaite modifier localement un environnement, il est tout à fait possible de le faire, avec l'option de l'environnement :
+
+\adjustbox{valign=t}{\begin{minipage}{0.6\textwidth}%
+	 \begin{lstlisting}
+\begin{propriete}[Propriété (admise) :]
+	La propriété.
+\end{propriete}
+	 \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.36\textwidth}%
+	\begin{propriete}[Propriété (admise)]
+		La propriété.
+	\end{propriete}
+\end{minipage}}%
+
+\subsubsection{Les environnements \texttt{lignes} et \texttt{lignes*}}
+
+Ces deux environnements permettent d'entourer du texte, pour qu'il puisse être remplacé à la demande par des lignes de format seyes, des lignes à petits carreaux, ou de surligner une ligne sur deux pour faciliter la lecture (en fonction des options présélectionnées). Les deux environnements sont strictement équivalents, mais ils apportent de la souplesse dans le document, en permettant de choisir des paramètres différents d'affichage pour chacun d'entre eux.
+
+
+
+\begin{minipage}{0.48\textwidth}
+	\begin{lstlisting}
+\parametres*{lignes,lignes*=false}
+
+Du texte au dessus.
+
+\begin{lignes}
+Du texte.
+
+Encore du texte.
+\end{lignes}%
+\begin{lignes*}
+Toujours plus de texte.
+\end{lignes*}%
+
+Du texte après.
+
+	
+	\end{lstlisting}
+		\end{minipage}\hfill
+		\begin{minipage}{0.48\textwidth}
+
+			\parametres*{lignes,lignes*=false}
+
+			Du texte au dessus.
+
+			\begin{lignes}
+			Du texte.
+			
+			Encore du texte.
+			\end{lignes}%
+			\begin{lignes*}
+			Toujours plus de texte.
+			\end{lignes*}%
+
+			Du texte après.
+
+	
+		\end{minipage}%
+
+\begin{minipage}{0.48\textwidth}
+\begin{lstlisting}
+\parametres*{lignes=carreaux,
+	lignes*=seyes}
+
+Du texte au dessus.
+
+\begin{lignes}
+Du texte.
+
+Encore du texte.
+\end{lignes}%
+\begin{lignes*}
+Toujours plus de texte.
+\end{lignes*}%
+Du texte après.
+
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+		
+\parametres*{lignes=carreaux,lignes*=seyes}
+
+Du texte au dessus.
+
+\begin{lignes}
+Du texte.
+
+Encore du texte.
+\end{lignes}%
+\begin{lignes*}
+Toujours plus de texte.
+\end{lignes*}%
+Du texte après.
+		
+			
+\end{minipage}%
+
+\begin{minipage}{0.48\textwidth}
+	\begin{lstlisting}
+\parametres*{lignes=surligne}
+
+\begin{lignes}
+	Lorem ipsum dolor [...] pariatur.
+\end{lignes}%	
+\end{lstlisting}
+	\end{minipage}\hfill
+	\begin{minipage}{0.48\textwidth}
+			
+		\parametres*{lignes=surligne}
+	
+		\begin{lignes}
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+		\end{lignes}%	
+			
+				
+	\end{minipage}%
+
+\subsubsection{Commandes générales}
+
+\begin{itemize}[leftmargin=5.cm]
+	\item[\texttt{\textbackslash tracelignes\{<nombre>\}}] Permet de tracer <nombre> lignes seyes, occupant toute la largeur de ligne actuelle.
+	\item[\texttt{\textbackslash tracecarreaux\{<nombre>\}}] Permet de tracer <nombre> lignes à petits carreaux (une ligne faisant deux petits carreaux de hauteur), occupant toute la largeur de ligne actuelle.
+	\item[\texttt{\textbackslash ajoutlignes\{<nombre>\}}] Permet d'ajouter manuellement un nombre de lignes au prochain environnement \texttt{lignes} ou \texttt{lignes*} rencontré.
+	\item[\texttt{\textbackslash tailletexte\{<nombre>\}}] Permet de remplacer les commandes \texttt{\textbackslash tiny}, \texttt{\textbackslash scriptsize}, \texttt{\textbackslash footnotesize}, \texttt{\textbackslash small}, \texttt{\textbackslash normalsize},  \texttt{\textbackslash large}, \texttt{\textbackslash Large}, \texttt{\textbackslash LARGE} et \texttt{\textbackslash huge}, en choisissant un nombre de $-4$ à 4, 0 étant la taille normale du texte.
+	\item[\texttt{\textbackslash chapitre\{<nombre>\}\{<nom>\}}] Permet de changer manuellement la valeur de \texttt{\textbackslash thepart} et le nom de \texttt{\textbackslash choixchapitre} pour personnaliser les titres.
+	\item[\texttt{\textbackslash niveau\{<nombre>\}}] Permet de changer manuellement la valeur (6, 5, 4 ou 3) de \texttt{\textbackslash choixniveau} pour personnaliser les titres.
+	\item[\texttt{\textbackslash titreactivite}]  Impriment manuellement un titre à l'endroit de la commande
+	\item[\texttt{\textbackslash titrecorrige}]
+	\item[\texttt{\textbackslash titrecours}]  
+	\item[\texttt{\textbackslash titreTD}] 
+	\item[\texttt{\textbackslash titreflash}] 
+	\item[\texttt{\textbackslash titreDM}] 
+	\item[\texttt{\textbackslash titreDS}] 
+	\item[\texttt{\textbackslash titreinterro}] 
+\end{itemize}
+
+
+
+\section{Compilation de multiples documents}
+
+Une fois le document bien balisé grâce aux différents environnements, il est désormais possible d'en générer plusieurs versions, en une seule compilation. Il est nécessaire d'avoir correctement configuré son éditeur afin d'autoriser l'exécution de script externes en \texttt{--shell-escape}.
+
+\subsection{En utilisant les options par défaut de la classe}
+
+Quatre options de classe sont définies par défaut : \texttt{multiTD}, \texttt{multicours}, \texttt{multiflash} et \texttt{multiDS}.
+
+\subsubsection{L'option \texttt{multiTD}}
+
+Cette option permet de générer cinq documents \texttt{.pdf} à partir du fichier \texttt{.tex} compilé. Les graines utilisées, le principe du fichier ainsi que le nom du \texttt{.pdf} de sortie sont récapitulés dans le tableau suivant : 
+
+\begin{tabular}{c|p{0.45\linewidth}|l}
+	\textbf{Graine} & \textbf{Fichier correspondant} & \textbf{Nom du fichier}\\
+	\hline
+	590 & Fiche de TD à distribuer aux élèves & TD-fiche-enonce\\
+	\hline
+	826 & Fiche de correction & TD-fiche-correction\\
+	\hline
+	4130 & Fiche avec les énoncés suivis des corrections & TD-fiche-enonce-correction\\
+	\hline 
+	25665 & TD complet à projeter & TD-diapo-enonce\\
+	\hline
+	4132065 & TD à projeter, avec la correction, et les lignes activées & TD-diapo-enonce-correction-lignes\\
+\end{tabular}
+
+\subsubsection{L'option \texttt{multicours}}
+
+Cette option permet de générer quatre documents \texttt{.pdf} à partir du fichier \texttt{.tex} compilé. Les graines utilisées, le principe du fichier ainsi que le nom du \texttt{.pdf} de sortie sont récapitulés dans le tableau suivant : 
+
+\begin{tabular}{c|l|l}
+	\textbf{Graine} & \textbf{Fichier correspondant} & \textbf{Nom du fichier}\\
+	\hline
+	86 & Fiche de cours complète & cours-fiche\\
+	\hline
+	144394 & Trame de cours avec les lignes & cours-fiche-trame\\
+	\hline
+	3741 & Cours complet à projeter & cours-diapo\\
+	\hline 
+	86043 & Cours à projeter et à compléter avec les lignes & cours-diapo-trame\\
+\end{tabular}
+
+\subsubsection{L'option \texttt{multiflash}}
+
+Cette option permet de générer cinq documents \texttt{.pdf} à partir du fichier \texttt{.tex} compilé. Les graines utilisées, le principe du fichier ainsi que le nom du \texttt{.pdf} de sortie sont récapitulés dans le tableau suivant : 
+
+\begin{tabular}{c|l|l}
+	\textbf{Graine} & \textbf{Fichier correspondant} & \textbf{Nom du fichier}\\
+	\hline
+	28130 & Flash à distribuer & flash-fiche-enonce\\
+	\hline
+	4528930 & Corrigé du flash & flash-fiche-correction\\
+	\hline
+	196910 & Fiche flash avec énoncé et correction & flash-fiche-enonce-correction\\
+	\hline 
+	42195 & Diapo flash à projeter & flash-diapo-enonce\\
+	\hline
+	295365 & Diapo flash avec l'énoncé suivi de la correction & flash-diapo-enonce-correction\\
+\end{tabular}
+
+\subsection{En personnalisant les options de la classe}
+
+Avant de rentrer dans le détail de cette section il est primordial d'avoir bien saisi le concept de graine d'un document. Il faut alors dans un premier temps réfléchir aux valeurs des graines de chacun des documents que l'on souhaite générer à partir du même document de départ.
+
+Une fois les graines choisies, la personnalisation des options nécessite la modification du \texttt{classe-rivieres}, il est donc recommandé d'en faire une copie au préalable.
+
+Voici les différentes étapes à suivre :
+
+\begin{enumerate}
+	\item Création d'un nouveau booléen : \texttt{\textbackslash newif\textbackslash ifmonoption}
+	\item Initialisation du booléen : \texttt{\textbackslash monoptionfalse}
+	\item Création de l'option : \texttt{\textbackslash DeclareOption\{monoption\}{\textbackslash monoptiontrue\textbackslash multitrue}}
+\end{enumerate}
+
+Ces différentes commandes étant à écrire dans le fichier, il est conseillé de mettre chacune des commandes à la suite de celles du même type, dans un souci de clarté.
+
+Il s'agit ensuite d'écrire la condition suivante, juste avant la commande :
+
+\texttt{\textbackslash def\textbackslash conditionmacro\{2\}} :
+
+\begin{lstlisting}
+\ifcoursmultiple%pour l'option multicours
+	\runlualatex{<nom-fichier-1>}{<graine1>}
+	\runlualatex{<nom-fichier-2}{<graine2>}
+	...
+	\runlualatex{<nom-fichier-5>}{<graine5>}
+	\expandafter\stop
+\fi
+\end{lstlisting}
+
+\section{Création de mega-documents}
+
+Afin de créer des mega-documents, il est recommandé d'utiliser une arborescence de dossiers comme suit :
+
+\dirtree{%
+.1 Mes cours.
+    .2 6eme.
+        .3 {6eme.tex}.
+        .3 Activités transversales.
+            .4 {Activité1.tex}.
+            .4 \ldots{} .
+            .4 {Activité17.tex}.
+        .3 Chapitre 1 .
+            .4 Activités.
+                .5 {Activité1.tex}.
+                .5 \ldots{}.
+                .5 {Activité7.tex}.
+            .4 Cours.
+                .5 {Chapitre1-Cours.tex} .
+            .4 Exercices.
+                .5 {Exercice1.tex}.
+                .5 \ldots{}.
+                .5 {Exercice18.tex}.
+            .4 Interrogations.
+                .5 {Interrogation1.tex}.
+                .5 \ldots{}.
+                .5 {Interrogation5.tex}.
+            .4 TD.
+                .5 {Chapitre1-TD.tex}.
+        .3 Chapitre 2.
+        .3 \ldots{} .
+        .3 Chapitre 10.
+        .3 Devoirs maison.
+            .4 {DM1.tex}.
+            .4 \ldots{} .
+            .4 {DM10.tex}.
+        .3 Devoirs surveillés.
+            .4 {DS1.tex}.
+            .4 \ldots{} .
+            .4 {DS14.tex}.
+    .2 5eme.
+    .2 4eme.
+    .2 3eme.
+    .2 Questions Flash.
+        .3 {Sommaire-flash.tex}.
+        .3 Thème1.
+            .4 Sous-thème1.
+                .5 {Exercice1.tex}.
+                .5 \ldots{}.
+                .5 {Exercice27.tex}.
+            .4 Sous-thème2.
+            .4 \ldots{}.
+            .4 Sous-thème12.
+        .3 Thème2.
+        .3 \ldots{}.
+        .3 Thème 23.
+}
+
+Un exemple est disponible sur \href{https://github.com/Tex3rivieres/Tex3R}{Github} dans le dossier dédié à cet effet.
+
+\section{Personnalisation de \texttt{style-rivieres.sty}}
+
+Le fichier \texttt{style-rivieres} peut être modifié pour personnaliser complètement l'ensemble des environnements.
+
+\subsection{Polices du document}
+
+La compilation en LuaLaTeX permet d'utiliser directement toutes les polices installées sur l'ordinateur. Trois personnalisations de police sont proposées, une pour le texte standard, une pour le texte en math-mode, et une autre pour les caractères de calligraphie obtenus en math-mode à l'aide de la commande \texttt{\textbackslash mathcal}. Pour ces deux dernières, il est préférable de rechercher des polices prévues pour le math-mode de LaTeX, afin que tous les symboles mathématiques soient définis dans la police choisie.
+
+\subsection{Marges du document}
+
+Les marges sont changées dans la classe, mais la définition des longueurs associées se fait via le package de style. Il est ainsi possible de procéder à tous les ajustements nécessaires depuis le fichier de style.
+
+\subsection{Taille de police du document}
+
+De manière classique, la taille de police du document est définie globalement. Les différents éléments pourront voir leur taille ajustée soit via les commandes natives de LaTeX de mise en page du texte (\texttt{\textbackslash tiny}, \texttt{\textbackslash scriptsize}, \ldots ) ou via la commande personnelle \texttt{\textbackslash tailletexte}.
+
+\subsection{Environnements}
+
+Les environnements pouvant être modifiés sont : \texttt{enonce}, \texttt{correction}, \texttt{definition}, \texttt{propriete}, \texttt{methode}, \texttt{application}, \texttt{exercice}, \texttt{exemple}, \texttt{remarque} et \texttt{basique}.
+
+Pour ce faire, un certain nombre de commandes peuvent-être utilisées :
+
+\subsubsection{Les commandes personnelles}
+
+\begin{itemize}[leftmargin=5cm]
+	\item[\texttt{\textbackslash rivniveau}] Affiche le niveau sélectionné par la commande \texttt{\textbackslash niveau}
+	\item[\texttt{\textbackslash rivchapitre}] Affiche le chapitre sélectionné par le deuxième argument de la commande \texttt{\textbackslash chapitre}
+	\item[\texttt{\textbackslash rivsource}] Affiche la source sélectionnée par la commande \texttt{\textbackslash source}
+	\item[\texttt{\textbackslash rivtheme}] Affiche le thème sélectionné par la commande \texttt{\textbackslash theme}
+	\item[\texttt{\textbackslash rivdifficulte}] Affiche la difficulté sélectionnée par la commande \texttt{\textbackslash difficulte}
+	\item[\texttt{\textbackslash rivcompetence}] Affiche les compétences sélectionnées par la commande \texttt{\textbackslash competence}
+	\item[\texttt{\textbackslash rivbareme}] Affiche le barème sélectionné par la commande \texttt{\textbackslash bareme}
+	\item[\texttt{\textbackslash titre\{<logo>\}\{<contenu>\}}] Affiche un titre ayant une apparence similaire aux titres prédéfinis.
+	\item[\texttt{\textbackslash logoactivite}] Affiche le logo du type précisé.
+	\item[\texttt{\textbackslash logocorrige}]
+	\item[\texttt{\textbackslash logocours}]
+	\item[\texttt{\textbackslash logoTD}]
+	\item[\texttt{\textbackslash logoflash}]
+	\item[\texttt{\textbackslash logoDM}]
+	\item[\texttt{\textbackslash logoDS}]
+	\item[\texttt{\textbackslash logointerro}]
+\end{itemize}
+
+\subsubsection{Les compteurs}
+
+\begin{itemize}[leftmargin=3cm]
+	\item[\texttt{\textbackslash part}] Valeur de la \texttt{\textbackslash part} en cours, également modifiable par le premier argument de la commande \texttt{\textbackslash chapitre}.
+	\item[\texttt{\textbackslash compteurexo}] Pour les environnements \texttt{enonce} et \texttt{correction}.
+	\item[\texttt{\textbackslash compteurDM}] Pour \texttt{\textbackslash titreDM}.
+	\item[\texttt{\textbackslash compteurDS}] Pour \texttt{\textbackslash titreDS}.
+	\item[\texttt{\textbackslash compteurfeuille}] Pour \texttt{\textbackslash titreTD}. La valeur est réinitialisée à 1 lors de l'utilisation de \texttt{\textbackslash parametres}.
+	\item[\texttt{\textbackslash page}] Numéro de la page en cours.
+	\item[\texttt{\textbackslash enumi}] Valeur de la liste (\texttt{enumerate}) en cours.
+\end{itemize}
+
+On rappelle ci-dessous quelques commandes générales permettant de manipuler les compteurs :
+
+\begin{itemize}[leftmargin=7cm]
+\item[\texttt{\textbackslash setcounter\{<nom>\}\{<nombre>\}}] Réinitialise la valeur du compteur <nom> à <nombre>.
+\item[\texttt{\textbackslash stepcounter\{<nom>\}}] Incrémente le compteur <nom> de 1.
+\item[\texttt{\textbackslash the<nom>}] Accède à la valeur du compteur, par exemple \texttt{\textbackslash thepage} ou \texttt{\textbackslash thepart}
+\end{itemize}
+
+\subsubsection{Les booléens}
+
+Chaque paramètre défini dans la graine ou dans les commandes \texttt{\textbackslash parametres} est utilisable dans les environnements afin de décider de l'affichage ou non du contenu en fonction du paramètre choisi. Par défaut, les booléens sont initialisés à \texttt{\textbackslash true} au début du document, uniquement s'ils ont été sélectionnés dans la graine de départ. Comme expliqué dans la section dédiée [REF], la commande \texttt{\textbackslash parametres} permet de réinitialiser les principaux booléens, tandis que la commande \texttt{\textbackslash parametres*} conserve leur état. Les clés et valeur choisies dans les commandes \texttt{\textbackslash parametres} permettent de changer l'état des booléens de \texttt{\textbackslash true} à \texttt{\textbackslash false} ou inversement afin de modifier l'affichage des commandes et environnements.
+
+On rappelle qu'en LaTeX, la structure classique d'utilisation d'un booléen est :
+
+\begin{lstlisting}
+\ifmonboolen
+	%Contenu si monboolen est true
+\else
+	%Contenu si monbooleen est false
+\fi
+\end{lstlisting}
+
+Voici deux booléens qui ne sont pas modifiables en cours de document :
+
+\begin{itemize}[leftmargin=2cm]
+	\item[\texttt{\textbackslash iffiche}] Teste si le document est en format \texttt{fiche}.
+	\item[\texttt{\textbackslash ifdiapo}] Teste si le document est en format \texttt{diapo}.
+\end{itemize}
+
+Voici les booléens pouvant être modifiés uniquement par la commande \texttt{\textbackslash parametres} :
+
+\begin{itemize}[leftmargin=2.5cm]
+	\item[\texttt{\textbackslash ifheader}] Teste si le titre est affiché automatiquement au début de chaque page.
+	\item[\texttt{\textbackslash ifactivite}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreactivite}.
+	\item[\texttt{\textbackslash ifcorrige}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titrecorrige}.
+	\item[\texttt{\textbackslash ifcours}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titrecours}.
+	\item[\texttt{\textbackslash ifTD}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreTD}.
+	\item[\texttt{\textbackslash ifflash}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreflash}.
+	\item[\texttt{\textbackslash ifDM}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreDM}.
+	\item[\texttt{\textbackslash ifDS}] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreDS}.
+	\item[\texttt{\textbackslash ifinterro }] Teste si le type de titre choisi est celui de \texttt{\textbackslash titreinterro}.
+	\item[\texttt{\textbackslash ifbasique}] Teste si aucun type de titre n'est choisi.
+\end{itemize}
+
+Voici les autres booléens pouvant être modifiés par les commandes \texttt{\textbackslash }parametres et \texttt{\textbackslash parametres*} :
+
+\begin{itemize}[leftmargin=3cm]
+	\item[\texttt{\textbackslash ifenonce}] Teste si l'option \texttt{\textbackslash enonce} est sélectionnée.
+	\item[\texttt{\textbackslash ifcorrection}] Teste si l'option \texttt{\textbackslash correction} est sélectionnée.
+	\item[\texttt{\textbackslash iftheme}] Teste si l'option \texttt{\textbackslash theme} est sélectionnée.
+	\item[\texttt{\textbackslash ifdifficulte}] Teste si l'option \texttt{\textbackslash difficulte} est sélectionnée.
+	\item[\texttt{\textbackslash ifcompetence}] Teste si l'option \texttt{\textbackslash competence} est sélectionnée.
+	\item[\texttt{\textbackslash ifsource}] Teste si l'option \texttt{\textbackslash source} est sélectionnée.
+\end{itemize}
+
+\end{document}
