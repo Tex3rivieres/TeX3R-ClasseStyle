@@ -1,465 +1,479 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
-\ProvidesPackage{style-tex3R} %Package de style à personnaliser pour la classe-tex3R
+\ProvidesPackage{style-tex3R}
+%VERSION 2.0 du Package
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% PERSONNALISATION DES POLICES DU DOCUMENT %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORMAT DE LA PAGE %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\IfFontExistsTF{Calibri}{%Police générale du document
-    \setmainfont{Calibri}
-}{% Sinon, utiliser la police par défaut LaTeX
-}
+%#1 = couleur ; #2 = type de section
+\renewcommand{\stylesections}[3]{\colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}}}
 
-\IfFontExistsTF{STIX Two Math}{% Police pour les maths
-    \setmathfont{STIX Two Math}
-}{% Sinon, utiliser la police mathématique par défaut de LaTeX
-}
+\begin{luacode*}
+  function FormatUtilisateur()
 
-\IfFontExistsTF{Libertinus Math Regular}{% Police pour les lettres de mathcal
-    \setmathfont{Libertinus Math Regular}[range=cal]
-}{% Sinon, utiliser la police calligraphique par défaut de LaTeX
-}
+    local FORMAT = PARAMETRES.format
+    local HEADER = PARAMETRES.header
+    local PREMIER = PARAMETRES.premier
 
+    if PREMIER then
 
-\newfontfamily\myfontScratch{FreeSans}%Nécessaire de la définir pour les blocs Scratch de ProfCollege
+      PAGE.enumi = [[ \textbf{\arabic*.~} ]]
+      PAGE.enumii = [[ \textbf{\alph*.~} ]]
+      PAGE.itemi = [[ \textbullet ]]
+      PAGE.itemii = [[ $\circ$ ]]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% FORMAT DE LA PAGE A4 STANDARD ET DU DIAPORAMA %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      PAGE.sectionname = [[ \LARGE\bfseries\textcolor{couleursection} ]]
+      PAGE.subsectionname = [[ \Large\bfseries\textcolor{couleursubsection} ]]
+      PAGE.subsubsectionname = [[ \normalfont\large\bfseries\textcolor{couleursubsubsection} ]]
 
-%Marges de la fiche
-\setlength{\fichehaut}{1cm}
-\setlength{\fichebas}{1cm}
-\setlength{\fichedroite}{1cm}
-\setlength{\fichegauche}{1cm}
-\setlength{\fichetitre}{1cm}
-\setlength{\ficheseparationtitre}{0.5cm}
-\setlength{\fichepied}{0cm}
+      PAGE.sectionnumber = [[ \stylesections{couleursection}{\LARGE}{~\Roman{section}~}\, ]]
+      PAGE.subsectionnumber = [[ \stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\, ]]
+      PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\, ]]
 
-%Marges du diapo
-\setlength{\diapohaut}{0.5cm}
-\setlength{\diapobas}{3cm}
-\setlength{\diapodroite}{1cm}
-\setlength{\diapogauche}{1cm}
-\setlength{\diapotitre}{2.5cm}
-\setlength{\diaposeparationtitre}{0.5cm}
+      PAGE.sectionsformat = [[ #3 \underLine{#4}\par\vspace{0.5em} ]]
+      PAGE.chapitrenormalformat = [[ \huge\bfseries Chapitre \thepart ]]
+      PAGE.chapitreetoileformat = [[]]
+      PAGE.partformat = [[
+        \newpage
+        \hfill
+        \vfill
+        \begin{tcolorbox}[
+          colframe = black, 
+          colback=white,
+          coltitle=white,
+          sharp corners,
+          valign=center,
+          top=2cm,
+          bottom=2cm,
+          left=0.5cm,
+          enhanced,
+          before skip=0cm,
+        ]
+        \formatchapitre
+        \tcblower
+        {\huge\bfseries #3}
+        \end{tcolorbox}
+        \hfill
+        \vfill
+      ]]
+    end
 
-\setlength{\parindent}{0pt}  %Non-indentation au début d'un paragraphe
-\setlength{\parskip}{0pt}    %Espace entre deux paragraphes
+    if FORMAT == "fiche" then
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% TAILLE DE POLICE DU DOCUMENT %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      if PREMIER then
 
-%\hyphenpenalty 10000 %mots insécables
+        PAGE.width = '21cm'
+        PAGE.height = '29.7cm'
+        PAGE.parindent = '0pt'
+        PAGE.parskip = '0pt'
 
-\iffiche
-\KOMAoption{fontsize}{12pt}%Taille de police de la feuille A4
-\fi
-\ifdiapo
-\KOMAoption{fontsize}{20pt}%Taille de police de la feuille A4
-\fi
+      end
+
+      -- if HEADER == true then
+        PAGE.headertop = '1cm'
+        PAGE.headerbottom = '1cm'
+        PAGE.headerright = '1cm'
+        PAGE.headerleft = '1cm'
+        PAGE.headermarginparsep = '0cm'
+        PAGE.headermarginparwidth = '0cm'
+        PAGE.headerheadheight = '1cm'
+        PAGE.headerheadsep = '0.5cm'
+        PAGE.headerfootskip = '0cm'
+      -- else
+        PAGE.top = '1cm'
+        PAGE.bottom = '1cm'
+        PAGE.right = '1cm'
+        PAGE.left = '1cm'
+        PAGE.marginparsep = '0cm'
+        PAGE.marginparwidth = '0cm'
+        PAGE.headheight = '0cm'
+        PAGE.headsep = '0cm'
+        PAGE.footskip = '0cm'
+      -- end
+
+    elseif FORMAT == "diapo" then
+
+      if PREMIER then
+
+        PAGE.width = '28.8cm'
+        PAGE.height = '18cm'
+        PAGE.parindent = '0pt'
+        PAGE.parskip = '0pt'
+
+      end
+
+      -- if HEADER == true then
+        PAGE.headertop = '0.5cm'
+        PAGE.headerbottom = '3cm'
+        PAGE.headerright = '1cm'
+        PAGE.headerleft = '1cm'
+        PAGE.headermarginparsep = '0cm'
+        PAGE.headermarginparwidth = '0cm'
+        PAGE.headerheadheight = '1.5cm'
+        PAGE.headerheadsep = '0.5cm'
+        PAGE.headerfootskip = '0cm'
+      -- else
+        PAGE.top = '0.5cm'
+        PAGE.bottom = '3cm'
+        PAGE.right = '1cm'
+        PAGE.left = '1cm'
+        PAGE.marginparsep = '0cm'
+        PAGE.marginparwidth = '0cm'
+        PAGE.headheight = '0cm'
+        PAGE.headsep = '0cm'
+        PAGE.footskip = '0cm'
+      -- end
+
+    end
+
+  end
+\end{luacode*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORMATAGES DIVERS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode*}
+  function PoliceUtilisateur()
+
+    local PREMIER = PARAMETRES.premier
+
+    if PREMIER then
+
+      POLICE.taillefiche = '12pt'
+      POLICE.taillediapo = '20pt'
+      POLICE.texte = 'Calibri'
+      POLICE.math = 'STIX Two Math'
+      POLICE.mathcal = 'Libertinus Math Regular'
+      POLICE.important = [[ \hl{#1} ]]
+
+    end
+  end
+\end{luacode*}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% PUCES ET ÉNUMÉRATIONS %%%%
+%%% DÉFINITION DES COULEURS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\frenchbsetup{ItemLabeli=\textbullet} %Changement des puces de 1er niveau
-\frenchbsetup{ItemLabelii=$\diamond$} %Changement des puces de 2e niveau
-
-\setlist[enumerate,1]{label=\textbf{\arabic*. }}
-\setlist[enumerate,2]{label=\textbf{\alph*. }}
-
-%Apparence de l'enumerate de tasks
-\DeclareInstance{tasks}{enumerate}{default}
-  {
-    label=\bfseries\arabic*.,
-    label-width=16pt
-  }
-
-\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Nouvelle colonne de tableau
-\renewcommand{\arraystretch}{1.2}%Espacement des cellules de tableau.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% ENVIRONNEMENTS POUR LES DIFFÉRENTS BALISAGES %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%Définition des couleurs pour les environnements
-\colorlet{couleursubsectioncours}{Red}
-\colorlet{couleursubsubsectioncours}{Green}
-\colorlet{couleurdefinition}{Green}
-\colorlet{couleurpropriete}{Red}
-\colorlet{couleurmethode}{Black}
-\colorlet{couleurapplication}{Black}
-\colorlet{couleurexercice}{Black}
-\colorlet{couleurexemple}{Blue}
-\colorlet{couleurpreuve}{Black}
-\colorlet{couleurremarque}{Black}
-\colorlet{couleurtitreTD}{Black}
-\colorlet{couleurtitreflash}{Black}
-\colorlet{couleursurligne}{lightgray}
-\colorlet{couleurcorrection}{Green}
-\colorlet{couleurconvention}{Black}
-
-\newcommand{\rivimportant}[1]{\hl{#1}}
-
-%Définition des environnements
-% Ajout 12/10/23
-
-
-\NewEnviron{enonce}{%
-\ifenonce
-    \stepcounter{compteurexercice}
-    \ifdocumentation
-    \else
-        \phantomsection
-        \addcontentsline{toc}{subsection}{Exercice \thecompteurexercice}
-    \fi
-    \iftheme 
-        \hfill\textsc{\rivtheme} 
-
-        \vspace{0.3cm}
-
-        \iffiche
-            \vspace{-0.9cm}
-            \ifdiapo
-                \vspace{-1.5cm}
-            \fi
-        \fi
-    \fi
-    \ifflash
-        \begin{tcolorbox}[
-            colback=white,
-            colframe=black,
-            fonttitle=\large\bfseries,
-            colbacktitle=black!40!white,
-            top=1em,
-            left=0.5em,
-            right=0.5em,
-            bottom=0.5em,
-            enhanced,
-            shield externalize=true,
-            attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-            title=Question \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
-            ]
-            {\BODY}
-        \end{tcolorbox}
-    \else
-        \ifbrevet
-            \textbf{Exercice \thecompteurexercice}\hfill \textbf{\rivbareme}\par
-
-            \BODY
-        \else%Pour les diapos et les fiches hors flash et hors brevet
-
-        % \vfill
-
-        \colorbox{black!100!white}{%
-    \textcolor{white}{{\normalfont\Large\textbf{\thecompteurexercice}}\ifdifficulte{\raisebox{0.2em}{\scriptsize\rivdifficulte}}\fi}}\ifcompetence\hspace{0.3em}\uline{\rivcompetence}\fi\par%
-
-    \medskip
-
-    \BODY
-    % \hrule
-
-    \medskip
-            % \begin{tcolorbox}[
-            %     colback=white,
-            %     colframe=black,
-            %     fonttitle=\large\bfseries,
-            %     colbacktitle=black!40!white,
-            %     top=1em,
-            %     left=0.5em,
-            %     right=0.5em,
-            %     bottom=0.5em,
-            %     enhanced,
-            %     shield externalize=true,
-            %     attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-            %     title=Exercice \thecompteurexercice\ifdifficulte\raisebox{0.2ex}{\hspace{1ex}\scriptsize\rivdifficulte}\fi\ifcompetence \hspace{0.5ex}\raisebox{0.1ex}{\small |\rivcompetence}\fi,
-            %     ]
-            %     {\BODY}
-            % \end{tcolorbox}
-           
-        \fi
-    \fi
-
-    \ifsource 
-    
-    \vspace{-0.2cm}
-
-    \hfill \rivsource\par
-    \fi
-\fi
-}%
-
-\newcommand{\rivcorrection}[2]{\ifcorrection{\color{Green} #2}\else #1\fi}
-
-\NewEnviron{correction}{%
-\ifenonce
-\else
-\phantomsection
-\stepcounter{compteurexercice}
-\addcontentsline{toc}{subsection}{Exercice \thecompteurexercice - Correction}
-\fi
-\ifcorrection
-    \ifflash
-        \begin{tcolorbox}[
-            colback=white,
-            colframe=black,
-            fonttitle=\large\bfseries,
-            colbacktitle=black!40!white,
-            top=1em,
-            left=0.5em,
-            right=0.5em,
-            bottom=0.5em,
-            enhanced,
-            shield externalize=true,
-            attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-            title=Réponse \thecompteurexercice,
-            ]
-            {\BODY}
-        \end{tcolorbox}
-        \else
-        % \begin{tcolorbox}[
-        %     colback=white,
-        %     colframe=black,
-        %     fonttitle=\large\bfseries,
-        %     colbacktitle=black!75!white,
-        %     top=1em,
-        %     left=0.5em,
-        %     right=0.5em,
-        %     bottom=0.5em,
-        %     enhanced,
-        %     shield externalize=true,
-        %     attach boxed title to top left={xshift=3mm,yshift=-3.5mm},
-        %     title=Exercice \thecompteurexercice~- Correction,
-        %     ]
-        %     {\BODY}
-        % \end{tcolorbox}
-
-        % chgt 08/10/23
-
-        {\textbf{Exercice \thecompteurexercice~- Correction} }  
-
-        \BODY
-    \fi
-\fi
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DÉFINITION DES ENVIRONNEMENTS DE COURS %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\newcommand{\formatEnvCours}[2]{% tcolorbox : #1=couleur de la ligne à gauche, #2=Nom affiché
-\begin{tcolorbox}[
-    colback=white!95!black,      
-    colframe=white,    
-    boxrule=0pt,      
-    left=0.5em,
-    top=0pt,
-    bottom=0pt,
-    right=0pt,       
-    title=,          
-    enhanced,
-    shield externalize=true, 
-    %leftrule=2mm,        
-    borderline west={4pt}{0pt}{#1}
-    ]
-    #2
-\end{tcolorbox}
-}
-
-\NewEnviron{definition}[1][Définition]{
-    \formatEnvCours{couleurdefinition}{\textcolor{couleurdefinition}{\large\underline{#1} :}
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{propriete}[1][Propriété]{
-    \formatEnvCours{couleurpropriete}{\textcolor{couleurpropriete}{\large\underline{#1} :} 
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{methode}[1][Méthode]{
-    \formatEnvCours{couleurmethode}{\textcolor{couleurmethode}{\large\underline{#1} :}
-
-    \medskip 
-    \BODY}
-
-}
-
-\NewEnviron{application}[1][Application]{
-    \formatEnvCours{couleurapplication}{\textcolor{couleurapplication}{\large\underline{#1} :} 
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{exercice}[1][Exercice]{
-    \formatEnvCours{couleurexercice}{\textcolor{couleurexercice}{\large\underline{#1} :} 
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{exemple}[1][Exemple]{
-    \formatEnvCours{couleurexemple}{\textcolor{couleurexemple}{\large\underline{#1} :} 
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{remarque}[1][Remarque]{
-    \formatEnvCours{couleurremarque}{\textcolor{couleurremarque}{\large\underline{#1} :}  
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{preuve}[1][Preuve]{
-    \formatEnvCours{couleurpreuve}{\textcolor{couleurpreuve}{\large\underline{#1} :}  
-
-    \medskip 
-    \BODY\hfill$\blacksquare$}
-}
-
-\NewEnviron{convention}[1][Convention]{
-    \formatEnvCours{couleurconvention}{\textcolor{couleurconvention}{\large\underline{#1} :}  
-
-    \medskip 
-    \BODY}
-}
-
-\NewEnviron{basique}{
-    \BODY
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% FORMATAGE DES DIFFÉRENTS TITRES %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\setul{0.5em}{1pt}
-
-%Définition du style de titre générique définissant les autres titres
-\newcommand{\titre}[2]{%#1= logo (fontawesome5 par exemple), #2=Titre
-    {
-    \bfseries\LARGE #1  \uline{#2}
-    }
-}
-%Définition des logos de chaque type de titre
-\def\logoactivite{\reflectbox{\faPencil*}}
-\def\logocorrige{\faEdit[regular]}
-\def\logocours{\faBook}
-\def\logoTD{\faEdit[regular]}
-\def\logoflash{\faUserSecret}
-\def\logoDM{\faHome}
-\def\logoDS{\faFile*[regular] }
-\def\logointerro{\faFile*[regular]}
-
-%Définition des titres de chaque type
-\newcommand{\titreactivite}{
-    \titre{\logoactivite}{Activité\hfill \mdseries\large \rivniveau}
-}
-
-\newcommand{\titrecorrige}{
-    \titre{\logocorrige}{Correction | \mdseries\rivchapitre \hfill \large \rivniveau}
-}
-
-\newcommand{\titrecours}{
-    \titre{\logocours}{Chapitre \thepart~{\mdseries|} \mdseries\rivchapitre\hfill\large\rivniveau}
-}
-
-\newcommand{\titreTD}{
-    \titre{\logoTD}{TD | \mdseries\rivchapitre \hfill \large \rivniveau}
-}
-
-\ifdiapo
-    \newcommand{\titreflash}{
-        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hfill}
-    }
-\else
-    \newcommand{\titreflash}{
-        \titre{\logoflash}{Questions Flash n°\thecompteurFlash\hspace{1.5cm}{\large\mdseries NOM :}\hfill{\large\mdseries PRENOM :}\hfill}
-    }
-\fi
-\newcommand{\titreDM}{%
-    \titre{\logoDM}{DM n$^\circ$\stepcounter{compteurDM}\thecompteurDM\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}%
-}%
-
-\newcommand{\titreDS}{
-    \titre{\logoDS}{DS n$^\circ$\stepcounter{compteurDS}\thecompteurDS\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
-}
-
-\newcommand{\titreinterro}{
-    \titre{\logointerro}{Interrogation n$^\circ$\stepcounter{compteurinterro}\thecompteurinterro\hspace{1.5cm}{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\rivniveau}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% PERSONNALISATION DES PARTIES, SOUS-SECTIONS ET SOUS-SOUS-SECTIONS %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%Dans le document, une section est un titre de page, déjà appelé automatiquement en début de page, selon les réglages.
-
-
-%Sections
-
- \renewcommand*{\sectionformat}{%
-        \colorbox{black!100!white}{%
-        \textcolor{white}{\normalfont\LARGE\textbf{{\Roman{section}}}}%
-        }%
-}
-\setkomafont{section}{\LARGE\bfseries\textcolor{black}}
-
-%Subsections
-
- \renewcommand*{\subsectionformat}{%
-    \colorbox{red!100!white}{%
-    \textcolor{white}{\normalfont\Large\textbf{{\arabic{subsection}}}}%
-    }%
- }
-\setkomafont{subsection}{\Large\bfseries\textcolor{Red}}
-
-%Subsubssections
-
- \renewcommand*{\subsubsectionformat}{%
-        \colorbox{Green!100!white}{%
-        \textcolor{white}{\normalfont\large\textbf{{\Alph{subsubsection}}}}%
-        }%
-}
-\setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{Green}}
-
-%Formatage global
-
-\renewcommand*{\sectionlinesformat}[4]{%
-    #3 \uline{#4}\par\vspace{0.5em}%
-}
-
-%Partie (collection regroupant tout un chapitre, dans un megadocument)
-\renewcommand*\partlineswithprefixformat[3]{%
-\thispagestyle{empty}
-\hfill
-\vfill
-  \begin{tcolorbox}[
-    colframe = black, 
-    colback=black!0,
-    coltitle=white,
-    sharp corners,
-    valign=center,
-    top=2cm,
-    bottom=2cm,
-    left=0.5cm,
-    enhanced,
-    before skip=0cm,
-  ]
-  \makeatletter
-  \@ifstar{}{\Large Chapitre \Roman{part}}
-  \makeatother
+\begin{luacode}
+  function CouleursUtilisateur()
+    local PRINT = PARAMETRES.print
+    local PREMIER = PARAMETRES.premier
+
+      if PRINT then
+        COULEURS.ligne = 'black'
+        COULEURS.interligne = 'black!30'
+        COULEURS.section = 'black'
+        COULEURS.subsection = 'black!70'
+        COULEURS.subsubsection = 'black!40'
+        COULEURS.carreau = 'black!30'
+        COULEURS.surlignelignea = 'black!20'
+        COULEURS.surligneligneb = 'white'
+        COULEURS.boitecours = 'white'
+        COULEURS.background = 'white'
+
+        COULEURS.application = 'black'
+        COULEURS.definition = 'black'
+        COULEURS.convention = 'black'
+        COULEURS.exercice = 'black'
+        COULEURS.exemple = 'black'
+        COULEURS.methode = 'black'
+        COULEURS.preuve = 'black'
+        COULEURS.propriete = 'black'
+        COULEURS.remarque = 'black'
+        COULEURS.enonce = 'black'
+        COULEURS.correction = 'black'
+        COULEURS.surligne = 'black!5'
+        COULEURS.surlignevisible = 'black!10'
+
+        COULEURS.rouge = 'black'
+        COULEURS.bleu = 'black'
+        COULEURS.vert = 'black'
+
+      else
+        COULEURS.ligne = 'SlateBlue'
+        COULEURS.interligne = 'LightSteelBlue'
+        COULEURS.section = 'black'
+        COULEURS.subsection = 'Red'
+        COULEURS.subsubsection = 'Green'
+        COULEURS.carreau = 'blue!25'
+        COULEURS.surlignelignea = 'blue!20'
+        COULEURS.surligneligneb = 'yellow!20'
+        COULEURS.boitecours = 'black!5'
+        COULEURS.background = 'white'
+
+        COULEURS.application = 'black'
+        COULEURS.definition = 'Green'
+        COULEURS.convention = 'black'
+        COULEURS.exercice = 'Blue'
+        COULEURS.exemple = 'Blue'
+        COULEURS.methode = 'black'
+        COULEURS.preuve = 'black'
+        COULEURS.propriete = 'Red'
+        COULEURS.remarque = 'black'
+        COULEURS.enonce = 'black'
+        COULEURS.correction = 'black'
+        COULEURS.surligne = 'yellow'
+        COULEURS.surlignevisible = 'black!10'
+
+        COULEURS.rouge = 'Red'
+        COULEURS.bleu = 'Blue'
+        COULEURS.vert = 'Green'
+      end
+  end 
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% CHOIX DES LOGOS %%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode*}
+  function LogosUtilisateur()
+
+    local PREMIER = PARAMETRES.premier
+
+    if PREMIER then
+
+      LOGOS.activite = [[ \reflectbox{\faPencil*} ]]
+      LOGOS.basique = ''
+      LOGOS.bilan = [[ \faEdit[regular] ]]
+      LOGOS.corrige = [[ \faEdit[regular] ]]
+      LOGOS.cours = [[ \faBook ]]
+      LOGOS.DM = [[ \faHome ]]
+      LOGOS.DS = [[ \faFile*[regular] ]]
+      LOGOS.flash = [[ \faUserSecret ]]
+      LOGOS.interro = [[ \faFile*[regular] ]]
+      LOGOS.TD = [[ \faEdit[regular] ]]
+
+    end
+
+  end
+\end{luacode*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% REDÉFINITION DES TITRES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode*}
+  function StylesTitresUtilisateur()
+
+    local FORMAT = PARAMETRES.format
+    local PREMIER = PARAMETRES.premier
+
+    if PREMIER then
+
+      STYLESTITRES.espacement = '0.5cm'
+      STYLESTITRES.titre = [[ {\bfseries\LARGE\logoactif~ \underLine{#1}\par} ]]
+      STYLESTITRES['sans'] = [[  ]]
+      STYLESTITRES['un'] = [[ \titre{#1\hfill\mdseries\large\contenuniveau} ]]
+      STYLESTITRES['deux'] = [[ \titre{#1~\mdseries|~\contenuchapitre\hfill\large\contenuniveau} ]]
+      STYLESTITRES['trois'] = [[ \titre{#1~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau} ]]
+
+      if FORMAT == "fiche" then    
+
+      STYLESTITRES.activite = STYLESTITRES['un']
+      STYLESTITRES.basique = STYLESTITRES['sans']
+      STYLESTITRES.bilan = STYLESTITRES['un']
+      STYLESTITRES.corrige = STYLESTITRES['deux']
+      STYLESTITRES.cours = STYLESTITRES['deux']
+      STYLESTITRES.DM = STYLESTITRES['trois']
+      STYLESTITRES.DS = STYLESTITRES['trois']
+      STYLESTITRES.flash = STYLESTITRES['un']
+      STYLESTITRES.interro = STYLESTITRES['trois']
+      STYLESTITRES.TD = STYLESTITRES['deux']
+
+      elseif FORMAT == "diapo" then
+
+      STYLESTITRES.activite = STYLESTITRES['un']
+      STYLESTITRES.basique = STYLESTITRES['sans']
+      STYLESTITRES.bilan = STYLESTITRES['un']
+      STYLESTITRES.corrige = STYLESTITRES['deux']
+      STYLESTITRES.cours = STYLESTITRES['deux']
+      STYLESTITRES.DM = STYLESTITRES['trois']
+      STYLESTITRES.DS = STYLESTITRES['trois']
+      STYLESTITRES.flash = STYLESTITRES['un']
+      STYLESTITRES.interro = STYLESTITRES['trois']
+      STYLESTITRES.TD = STYLESTITRES['deux']
+
+      end
+
+    end
+
+  end
+
+  function TitresUtilisateur()
+
+    local FORMAT = PARAMETRES.format
+    local TYPE = PARAMETRES.type
+    local PREMIER = PARAMETRES.premier
+
+    if TYPE == "activite" then
+      TITRES.format = [[ Activité ]]
+    elseif TYPE == "basique" then
+      TITRES.format = [[ ]]
+    elseif TYPE == "bilan" then
+      TITRES.format = [[ Bilan ]]
+    elseif TYPE == "corrige" then
+      TITRES.format = [[ Corrigé ]]
+    elseif TYPE == "cours" then
+      TITRES.format = [[ Chapitre~\thepart ]]
+    elseif TYPE == "DM" then
+      TITRES.format = [[ DM n°\stepcounter{compteurDM}\thecompteurDM ]]
+    elseif TYPE == "DS" then
+      TITRES.format = [[ DS n°\stepcounter{compteurDS}\thecompteurDS ]]
+    elseif TYPE == "flash" then
+      TITRES.format = [[ Questions Flash n°\stepcounter{compteurflash}\thecompteurflash ]]
+    elseif TYPE == "interro" then
+      TITRES.format = [[ Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro ]]
+    elseif TYPE == "TD" then
+      TITRES.format = [[ TD ]]
+    end
+
+    if PREMIER then
+
+      TITRES.tocactivite = 'Activité'
+      TITRES.tocbasique = 'Sans titre'
+      TITRES.tocbilan = 'Bilan'
+      TITRES.toccorrige = 'Corrigé'
+      TITRES.toccours = 'Cours'
+      TITRES.tocDM = 'DM'
+      TITRES.tocDS = 'DS'
+      TITRES.tocflash = 'Flash'
+      TITRES.tocinterro = 'Interrogation'
+      TITRES.tocTD = 'TD'
+
+    end
+
+  end
+\end{luacode*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENTS DE COURS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  \tcblower
-  #3%
-  \end{tcolorbox}
-  \vfill
-  \hfill
-}
+\begin{luacode*}
+function EnvironnementsUtilisateur()
+
+  local PREMIER = PARAMETRES.premier
+  --#1 = nom modifiable (optionnel) ; #2 = couleur
+
+  if PREMIER then
+    ENVIRONNEMENTS.formatcours = [[
+      \begin{tcolorbox}[
+        colback=couleurboitecours, 
+        colframe=couleurbackground, 
+        boxrule=0pt, 
+        left=0.5em, 
+        top=0pt, 
+        bottom=0pt, 
+        right=0pt, 
+        enhanced, 
+        shield externalize=true, 
+        borderline west={4pt}{0pt}{#2}
+        ]
+        \textcolor{#2}{\large\underLine{#1} :}\par
+        \medskip 
+        \BODY 
+      \end{tcolorbox}
+      ]]
+
+    ENVIRONNEMENTS.enonce = [[
+      \ifcours
+        \formatEnvCours[Exercice]{couleurenonce}
+      \else
+        \iftheme
+          \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
+        \fi
+        \colorbox{couleurenonce}{\textcolor{white}{
+          {
+          \Large\textbf{\thecompteurexercice}}
+          \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+          }
+        }
+        \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme pts}\fi\par
+          \medskip
+          \BODY
+          \ifsource\par
+            \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+          \fi
+      \fi
+    ]]
+
+    ENVIRONNEMENTS.correction = [[
+      \ifcours
+        \formatEnvCours[Correction]{couleurcorrection}
+      \else
+        \colorbox{couleurcorrection}{\textcolor{white}{
+          \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+        }\par
+        \medskip
+        \BODY
+      \fi
+    ]]
+
+    ENVIRONNEMENTS.tocexercice = 'Exercice'
+    ENVIRONNEMENTS.tocenonce = 'Énoncé'
+    ENVIRONNEMENTS.toccorrection = 'Correction'
+  end
+end
+\end{luacode*}
+
+\begin{luacode*}
+  function mesParametres(str)
+
+    if str == 'activite' or str == 'Activite' then
+      Type = 'activite'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'basique' or str == 'Basique' then
+
+    elseif str == 'bilan' or str == 'Bilan' then
+      Type = 'bilan'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'corrige' or str == 'Corrige' then
+
+    elseif str == 'cours' or str == 'Cours' then
+      Type = 'cours'
+      Enonce = true
+      Correction = true
+      Stretch = false
+    elseif str == 'DM' then
+      Type = 'DM'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'DS' then
+      Type = 'DS'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'flash' or str == 'Flash' then
+
+    elseif str == 'interro' or str == 'Interro' then
+      Type = 'interro'
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    elseif str == 'TD' then
+      Type = 'TD'
+      Header = true
+      Impression = true
+      Competence = true
+      Enonce = true
+      Stretch = true
+    end
+  end
+\end{luacode*}
+
+\parametrage
+\mygeometry

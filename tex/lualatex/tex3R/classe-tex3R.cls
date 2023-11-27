@@ -1,132 +1,74 @@
-\NeedsTeXFormat{LaTeX2e}[12-11-2023]
+\NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R}[12/11/2023|Classe tex3R|Voir la documentation pour plus d'informations]
+\ProvidesClass{classe-tex3R}[19/11/2023 - Version 2.0 de la classe-tex3R]
 
-\RequirePackage{silence}
-  \WarningFilter{latex}{Label}%Désactive les Warning dûs à subfiles
-  \WarningFilter{latex}{Unused global option}%Désactive les Warning dûs à l'emploi de l'option globale graine
-  \WarningFilter{lastpage}{Rerun to get}%Désactive les Warning dûs à lastpage
-
-\LoadClass{scrartcl}
+\LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% VÉRIFICATION DE LA COMPILATION EN LUALATEX %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage{iftex}
 \ifluatex
-\RequirePackage{luacode}
+  \RequirePackage{luacode}
 \else
-\ClassError{Lualatex only}{Ce document doit êtres compilé en LuaLaTeX}{}\stop
+  \ClassError{Lualatex only}{Ce document doit êtres compilé en LuaLaTeX}{}\stop
 \fi
 
-\RequirePackage{shellesc}
-\RequirePackage{etoolbox}
+\begin{luacode*}
+  PARAMETRES = {}
+  PAGE = {}
+  POLICE = {}
+  COULEURS = {}
+  LOGOS = {}
+  STYLESTITRES = {}
+  TITRES = {}
+  ENVIRONNEMENTS = {}
+  PARAMETRES.premier = true
+\end{luacode*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% OPTIONS DE CLASSE PERMETTANT DE FAIRE UNE COMPILATION SIMPLE A PARTIR D'UNE GRAINE %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \newif\ifTDmultiple
-% \newif\ifcoursmultiple
-% \newif\ifflashmultiple
-% \newif\ifDSmultiple
-% \newif\ifmulti
-
-% \TDmultiplefalse
-% \coursmultiplefalse
-% \flashmultiplefalse
-% \DSmultiplefalse
-% \multifalse
-
-\RequirePackage{xkeyval}
-
-% \DeclareOptionX{graine}{\newcommand{\conditionmacro}[0]{#1}}
-% \ProcessOptionsX\relax
-
-\DeclareOption{diapo}{\newcommand{\conditionmacro}[0]{3}}
-\DeclareOption{fiche}{\newcommand{\conditionmacro}[0]{2}}
-% \DeclareOption{multiTD}{\TDmultipletrue\multitrue}
-% \DeclareOption{multicours}{\coursmultipletrue\multitrue}
-% \DeclareOption{multiflash}{\flashmultipletrue\multitrue}
-% \DeclareOption{multiDS}{\DSmultipletrue\multitrue}
+\DeclareOption{fiche}{\directlua{PARAMETRES.format = "fiche"}}
+\DeclareOption{diapo}{\directlua{PARAMETRES.format = "diapo"}}
 \ProcessOptions\relax
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DÉFINITION DE LA COMMANDE RUNLUALATEX QUI PERMET DE LANCER UNE INVITE DE COMMANDE POUR EXECUTER UNE INSTANCE DE COMPILATION %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{luacode*}
+  Format = PARAMETRES.format
+\end{luacode*}
 
-% \ifx\conditionmacro\undefined
-% \newcommand{\runlualatex}[2]{%#1=nom du fichier ; #2=graine
-% \ShellEscape{%
-%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-% }%
-% \ShellEscape{%
-%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-% }%
-% \ShellEscape{%
-%   lualatex --interaction=nonstopmode --halt-on-error --shell-escape --jobname="\jobname-#1"
-%   "\gdef\string\conditionmacro{#2}\string\input\space\jobname"
-% }%
-% }%
-% \fi
+%Formatage de la page et du texte
+\RequirePackage{geometry}
+\RequirePackage{silence}
+\RequirePackage[np]{numprint}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% EXÉCUTION DE PLUSIEURS COMPILATIONS EN FONCTION DE L'OPTION DE CLASSE %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\ifx\conditionmacro\undefined%pour l'option multiTD
-%   \ifTDmultiple
-%     \runlualatex{TD-fiche-enonce}{41594410}
-%     \runlualatex{TD-fiche-correction}{58232174}
-%     \runlualatex{TD-fiche-enonce-correction}{291160870}
-%     \runlualatex{TD-diapo-enonce}{62391615}
-%     \runlualatex{TD-diapo-enonce-correction-lignes}{436741305}
-%     \expandafter\stop
-%   \fi
-%   \ifcoursmultiple%pour l'option multicours
-%       \runlualatex{cours-fiche}{86}
-%       \runlualatex{cours-fiche-trame}{144394}
-%       \runlualatex{cours-diapo}{3741}
-%       \runlualatex{cours-diapo-trame}{86043}
-%       \expandafter\stop
-%   \fi
-%   \ifflashmultiple%pour l'option multiflash
-%     \runlualatex{flash-fiche-enonce}{28130}
-%     \runlualatex{flash-fiche-correction}{4528930}
-%     \runlualatex{flash-fiche-enonce-correction}{196910}
-%     \runlualatex{flash-diapo-enonce}{42195}
-%     \runlualatex{flash-diapo-enonce-correction}{295365}
-%     \expandafter\stop
-%   \fi
-%   \ifDSmultiple
-%   \runlualatex{DS-fiche-enonce}{4294030}
-%   \runlualatex{DS-fiche-correction}{938}
-%   \expandafter\stop
-% \fi
-  \def\conditionmacro{2}%si aucune option n'a été sélectionnée, type=fiche
-\fi
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% CHARGEMENT DES PRINCIPAUX PACKAGES, POUR CHACUNE DES COMPILATIONS %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{pstricks}
 \RequirePackage{pst-plot}
 \RequirePackage{pst-eucl}
-\let\clipbox\relax
-\RequirePackage[no-math]{fontspec}%
+\let\clipbox\undefined
+%La commande clipbox de pstricks n'est plus définie : attention à son utilisation
+\RequirePackage[export]{adjustbox}
+
+\RequirePackage{xcolor}
+\RequirePackage{fontspec}
 \RequirePackage{anyfontsize}
 \RequirePackage[french]{babel}
 \RequirePackage{enumitem}
-\RequirePackage[np]{numprint}
-\RequirePackage{subfiles}
-\RequirePackage{environ}
+\RequirePackage{tasks}
 
+%Formatages divers
+\RequirePackage{fontawesome5}
+\RequirePackage[minimal]{lua-ul}
+\RequirePackage{soul}
+% \RequirePackage{tcolorbox}
+
+\RequirePackage{environ}
+\RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
+\RequirePackage{bookmark}
+
+\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\RequirePackage{subfiles}
 
 \RequirePackage{ProfCollege}
-% \usetikzlibrary{positioning}
+  \tcbuselibrary{skins,breakable}
+\RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \let\oldusetikzlibrary\usetikzlibrary
 \renewcommand{\usetikzlibrary}[1]{%
   \ifstrequal{#1}{bending}{}{\oldusetikzlibrary{#1}}%
@@ -135,243 +77,189 @@
 \catcode`\_11
 \renewcommand{\turn_arrow}[1]{%
 \tikz[baseline=.25ex,x=6.5ex,y=6.5ex,#1]
-\draw[-{Triangle[angle=110:0.4ex 0.2ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=190,radius=1ex];%
+\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=190,radius=1ex];%
 }
 \scr_restorecatcode
-\RequirePackage[export]{adjustbox}
+
 \RequirePackage{pgf}
 \RequirePackage{pgfplots}
   \pgfplotsset{compat=1.13}
-\tcbuselibrary{skins,breakable}
   \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,shapes.arrows,shapes.callouts, shapes.multipart, shapes.gates.logic.US,shapes.gates.logic.IEC, er, automata,backgrounds,chains,topaths,trees,petri,mindmap,matrix, calendar, folding,fadings,through,positioning,scopes,decorations.fractals,decorations.shapes,decorations.text,decorations.pathmorphing,decorations.pathreplacing,decorations.footprints,decorations.markings,shadows,babel}%Charge toutes les librairies de Tikz
  
-
-
-\RequirePackage{bookmark}
 \RequirePackage{pdflscape}
 \RequirePackage{tabularx}
 \RequirePackage{listings}
-\RequirePackage{calc}
 
 \RequirePackage{tkz-fct,tkz-tab}
 \RequirePackage{tkz-euclide}
+
 \RequirePackage{amsmath}
 \RequirePackage{amsfonts}
 \RequirePackage{mathrsfs}	
 \RequirePackage{bbding}						
 \RequirePackage[misc]{ifsym}
-\RequirePackage{soul}	
-\RequirePackage{ulem}	
 \RequirePackage{cancel}
-\RequirePackage{url} 	
-  \urlstyle{sf}         
-\RequirePackage{fancybox}			
-\RequirePackage{colortbl} 	
-\RequirePackage{setspace}				
-\RequirePackage{multirow}			
-\RequirePackage{import}			
+\RequirePackage{url} 	      
+\RequirePackage{fancybox}	
+\RequirePackage{colortbl}
+\RequirePackage{setspace}	
+\RequirePackage{multirow}	
+\RequirePackage{import}
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
-\RequirePackage{tasks}
-\RequirePackage{lastpage}
-\RequirePackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
-\WarningsOff[scrlayer-scrpage]%Le package refuse d'avoir des en-têtes et pieds pages nuls, désactivation des Warnings du package
-\RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
-\RequirePackage{ccicons}%pour les copyrights
-	
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% COMMANDES ET BOOLÉENS UTILISÉS DANS style-tex3R %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{ccicons}
 
-%Commande modulo permettant d'initialiser les booléens
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SUPPRESSIONS DE WARNINGS ABUSIFS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\WarningsOff[scrlayer-scrpage]
 
-\begin{luacode}
-  function rivmodulo(arg,mod)
-      arg=arg%mod
-      tex.sprint(math.floor(arg))
-  end
-\end{luacode}
-  
-\newcommand{\rivmodulo}[2]{\directlua{rivmodulo("#1","#2")}}
 
-%Booléens
+%%%%%%%%%%%%%%%%%%%%%%
+% BOOLÉENS DU FORMAT %
+%%%%%%%%%%%%%%%%%%%%%%
 
 \newif\ifdiapo
 \newif\iffiche
 \newif\ifheader
+\newif\ifprint
 
-\ifnum\rivmodulo{\conditionmacro}{2}=0 \fichetrue \else \fichefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{3}=0 \diapotrue \else \diapofalse \fi
-\ifnum\rivmodulo{\conditionmacro}{29}=0 \headertrue \else \headerfalse \fi
+\newcommand{\FormatPage}
 
-%Longueurs pour les marges et polices du document
+\begin{luacode*}
 
-%Fiche
-\newlength{\fichehaut}
-\newlength{\fichebas}
-\newlength{\fichedroite}
-\newlength{\fichegauche}
-\newlength{\fichetitre}
-\newlength{\ficheseparationtitre}
-\newlength{\fichepied}
+  function FormatageString(string)
+  -- local newString = ''
+  if string ~= nil then
+    newString = string.gsub(string, "\n", "")
+    newString = string.gsub(newString, "^%s+", "")
+    newString = string.gsub(newString, "%s+$", "")
+  end
+    return newString
+  end
 
-%Diapo
-\newlength{\diapohaut}
-\newlength{\diapobas}
-\newlength{\diapodroite}
-\newlength{\diapogauche}
-\newlength{\diapotitre}
-\newlength{\diaposeparationtitre}
+  function RestoreHeader()
+    if PARAMETRES.header then
+    tex.sprint('\\headertrue')
+    end
+  end
 
-%Format de la page
-\RequirePackage{geometry}
-\iffiche%Pour les formats A4
-    \geometry{
-        paperwidth=21cm,
-        paperheight=29.7cm,
-    }%
-    \newcommand{\formatfichetitre}{
-        \newgeometry{
-        top=\fichehaut,
-        bottom=\fichebas,
-        right=\fichedroite,
-        left=\fichegauche,
-        includehead,
-        includefoot,
-        marginparsep=0cm,
-        marginparwidth=0cm,
-        headheight=\fichetitre,
-        headsep=\ficheseparationtitre,
-        footskip=\fichepied
-        }%
-    }
-    \newcommand{\formatfiche}{
-        \newgeometry{
-            top=\fichehaut,
-            bottom=\fichebas,
-            right=\fichedroite,
-            left=\fichegauche,
-            includehead,
-            includefoot,
-            marginparsep=0cm,
-            marginparwidth=0cm,
-            headheight=0cm,
-            headsep=0cm,
-            footskip=\fichepied
-        }%
-    }
-    \newcommand{\formatdiapo}{}
-    \newcommand{\formatdiapotitre}{}
-    \ifheader
-        \AtBeginDocument{\formatfichetitre}
-    \else
-        \AtBeginDocument{\formatfiche}
-    \fi
-\else
-    \ifdiapo%Pour les diaporamas
-        \geometry{
-            paperwidth=28.8cm,
-            paperheight=18cm
-        }%
-        \newcommand{\formatdiapotitre}{
-            \newgeometry{
-                top=\diapohaut,
-                bottom=\diapobas,
-                right=\diapodroite,
-                left=\diapogauche,
-                includehead,
-                includefoot,
-                marginparsep=0cm,
-                marginparwidth=0cm,
-                headheight=\diapotitre,
-                headsep=\diaposeparationtitre,
-                footskip=0cm
-            }%
-        }
-        \newcommand{\formatdiapo}{
-            \newgeometry{
-                top=\diapohaut,
-                bottom=\diapobas,
-                right=\diapodroite,
-                left=\diapogauche,
-                includehead,
-                includefoot,
-                marginparsep=0cm,
-                marginparwidth=0cm,
-                headheight=0cm,
-                headsep=0cm,
-                footskip=0cm
-            }%
-        }
-        \newcommand{\formatfiche}{}
-        \newcommand{\formatfichetitre}{}
-        \ifheader
-            \AtBeginDocument{\formatdiapotitre}
-        \else
-            \AtBeginDocument{\formatdiapo}
-        \fi
-    \fi
-\fi
+--Formatage de la page d'après les paramètres utilisateurs
+  function FormatDocument()
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DÉFINITION DES DIFFÉRENTES COMMANDES %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    local HEADER = PARAMETRES.header
+    local FORMAT = PARAMETRES.format
+    local PRINT = PARAMETRES.print
+    local PREMIER = PARAMETRES.premier
 
-%Commande tailletexte #1=niveau de taille du texte par rapport à 0 (remplace Large, LARGE, tiny etc)
-\newcommand{\tailletexte}[1]{
-    \ifnum#1=-4
-        \tiny
-    \else
-        \ifnum#1=-3
-            \scriptsize
-        \else
-            \ifnum#1=-2
-            \footnotesize
-            \else
-                \ifnum#1=-1
-                \small
-                \else
-                    \ifnum#1=0
-                    \normalsize
-                    \else
-                        \ifnum#1=1
-                        \large
-                        \else
-                            \ifnum#1=2
-                            \Large
-                            \else
-                                \ifnum#1=3
-                                \LARGE
-                                \else
-                                    \ifnum#1=4
-                                    \huge
-                                    \fi
-                                \fi
-                            \fi
-                        \fi
-                    \fi
-                \fi
-            \fi
-        \fi
-    \fi
-}
+    if PREMIER then
 
-\newcommand{\sautdeligne}{\vspace{\baselineskip}}
-\newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
-\newcommand{\sautfiche}{\iffiche \newpage \fi}
+      tex.sprint(
+        '\\setlength{\\parindent}{' ..  FormatageString(PAGE.parindent) ..'}' ..
+        '\\setlength{\\parskip}{' ..  FormatageString(PAGE.parskip) ..'}' ..
+        '\\frenchbsetup{ItemLabeli=' ..  FormatageString(PAGE.itemi) .. '}' ..
+        '\\frenchbsetup{ItemLabelii=' ..  FormatageString(PAGE.itemii) ..'}' ..
+        '\\setlist[enumerate,1]{label=' ..  FormatageString(PAGE.enumi) .. '}' ..
+        '\\setlist[enumerate,2]{label=' ..  FormatageString(PAGE.enumii) .. '}' ..
+        '\\DeclareInstance{tasks}{enumerate}{default}{label =' ..  FormatageString(PAGE.enumi) .. ',label-width=1.125em}' ..
+        '\\DeclareInstance{tasks}{itemize}{default}{label = ' ..  FormatageString(PAGE.itemi) .. ',label-width=1.125em}' ..
+        '\\renewcommand*{\\sectionformat}{' ..  FormatageString(PAGE.sectionnumber) .. '}' ..
+        '\\renewcommand*{\\subsectionformat}{' ..  FormatageString(PAGE.subsectionnumber) .. '}' ..
+        '\\renewcommand*{\\subsubsectionformat}{' ..  FormatageString(PAGE.subsubsectionnumber) .. '}' ..
+        '\\setkomafont{section}{' ..  FormatageString(PAGE.sectionname) .. '}' ..
+        '\\setkomafont{subsection}{' ..  FormatageString(PAGE.subsectionname) .. '}' ..
+        '\\setkomafont{subsubsection}{' ..  FormatageString(PAGE.subsubsectionname) .. '}' ..
+        '\\renewcommand*{\\sectionlinesformat}[4]{' ..  FormatageString(PAGE.sectionsformat) .. '}' ..
+        '\\renewcommand*\\partlineswithprefixformat[3]{\\thispagestyle{empty}'.. FormatageString(PAGE.partformat) .. '}' ..
+        '\\renewcommand{\\formatchapitrenormal}{' .. FormatageString(PAGE.chapitrenormalformat) .. '}' ..
+        '\\renewcommand{\\formatchapitreetoile}{' .. FormatageString(PAGE.chapitreetoileformat) .. '}'
+      )
 
-%Définition des booléens gérant l'affichage
-\newif\ifenonce
-\newif\ifcorrection
-\newif\iftheme
-\newif\ifdifficulte
-\newif\ifcompetence
-\newif\ifsource
-\newif\ifbareme
-\newif\ifdocumentation
+      if FORMAT =='fiche' then
+        tex.sprint('\\fichetrue')
+      elseif FORMAT == 'diapo' then
+        tex.sprint('\\diapotrue')
+      end
+    end
+
+    if PRINT then
+      tex.sprint('\\printtrue')
+    end
+
+    if PREMIER then
+      tex.sprint('\\newcommand{\\mygeometry}{\\geometry{paperwidth=' ..  FormatageString(PAGE.width) .. ',paperheight=' ..  FormatageString(PAGE.height) ..'}}')
+    end
+
+    tex.sprint(
+          '\\newgeometry{' ..
+          'top=' ..  FormatageString(PAGE.top) ..
+          ',bottom=' ..  FormatageString(PAGE.bottom) ..
+          ',right=' ..  FormatageString(PAGE.right) ..
+          ',left=' ..  FormatageString(PAGE.left) ..
+          ',includehead' ..
+          ',includefoot' ..
+          ',marginparsep=' ..  FormatageString(PAGE.marginparsep) ..
+          ',marginparwidth=' ..  FormatageString(PAGE.marginparwidth) ..
+          ',headheight=' ..  FormatageString(PAGE.headheight) ..
+          ',headsep=' ..  FormatageString(PAGE.headsep) ..
+          ',footskip=' ..  FormatageString(PAGE.footskip) ..
+        '}' ..
+        '\\savegeometry{Normal}'
+    )
+
+    tex.sprint(
+      '\\newgeometry{' ..
+      'top=' ..  FormatageString(PAGE.headertop) ..
+      ',bottom=' ..  FormatageString(PAGE.headerbottom) ..
+      ',right=' ..  FormatageString(PAGE.headerright) ..
+      ',left=' ..  FormatageString(PAGE.headerleft) ..
+      ',includehead' ..
+      ',includefoot' ..
+      ',marginparsep=' ..  FormatageString(PAGE.headermarginparsep) ..
+      ',marginparwidth=' ..  FormatageString(PAGE.headermarginparwidth) ..
+      ',headheight=' ..  FormatageString(PAGE.headerheadheight) ..
+      ',headsep=' ..  FormatageString(PAGE.headerheadsep) ..
+      ',footskip=' ..  FormatageString(PAGE.headerfootskip) ..
+    '}' ..
+    '\\savegeometry{Header}'
+    )
+
+    if HEADER then
+      tex.sprint('\\headertrue\\loadgeometry{Header}')
+      tex.sprint(
+      '\\setkomafont{pagehead}{\\normalfont}' ..
+      '\\ihead{\\vspace*{-1em}{\\titreactif}}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}'
+      )
+    else
+      tex.sprint('\\loadgeometry{Normal}')
+      tex.sprint(
+        '\\setkomafont{pagehead}{\\normalfont}' ..
+        '\\ihead{}' ..
+        '\\ohead{}' ..
+        '\\chead{}' ..        
+        '\\ofoot{}' .. 
+        '\\cfoot{}' ..         
+        '\\ifoot{}' 
+      )
+    end
+
+  end
+\end{luacode*}
+
+
+%%%%%%%%%%%%%%%%%%%
+% AUTRES BOOLÉENS %
+%%%%%%%%%%%%%%%%%%%
+
+%type
 \newif\ifactivite
 \newif\ifbasique
-\newif\ifbrevet
+\newif\ifbilan
 \newif\ifcorrige
 \newif\ifcours
 \newif\ifTD
@@ -380,894 +268,789 @@
 \newif\ifDS
 \newif\ifinterro
 
-%Initialisation des booléens gérant l'affichage
-\ifnum\rivmodulo{\conditionmacro}{5}=0 \enoncetrue \else \enoncefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{7}=0 \correctiontrue \else \correctionfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{11}=0 \themetrue \else \themefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{13}=0 \difficultetrue \else \difficultefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{17}=0 \competencetrue \else \competencefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{19}=0 \sourcetrue \else \sourcefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{107}=0 \baremetrue \else \baremefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{31}=0 \activitetrue \else \activitefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{37}=0 \basiquetrue \else \basiquefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{41}=0 \corrigetrue \else \corrigefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{43}=0 \courstrue \else \coursfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{59}=0 \TDtrue \else \TDfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{61}=0 \DMtrue \else \DMfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{67}=0 \DStrue \else \DSfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{71}=0 \interrotrue \else \interrofalse \fi
-\ifnum\rivmodulo{\conditionmacro}{97}=0 \flashtrue \else \flashfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{109}=0 \brevettrue \else \brevetfalse \fi
-\documentationfalse
+\newif\ifcorrection
+\newif\ifenonce
+\newif\ifvisible
 
-%Définition et initialisation des compteurs
+\newif\ifbareme
+\newif\ifdifficulte
+\newif\ifcompetence
+\newif\ifsource
+\newif\iftheme
+
+\newif\ifstretch
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FONCTION LUA REMPLAÇANT L'ANCIENNE FONCTION TEX PARAMETRE %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode*}
+function BooleensDocument()
+  local bool =[[
+    \activitefalse
+    \basiquefalse
+    \bilanfalse
+    \corrigefalse
+    \coursfalse
+    \flashfalse
+    \TDfalse
+    \DMfalse
+    \DSfalse
+    \interrofalse
+    \flashfalse
+    \baremefalse
+    \correctionfalse
+    \enoncefalse
+    \visiblefalse
+    \competencefalse
+    \difficultefalse
+    \sourcefalse
+    \themefalse
+    \stretchfalse
+  ]]
+  tex.sprint(FormatageString(bool))
+
+  if PARAMETRES.type == 'activite' then
+    tex.sprint('\\activitetrue')
+  elseif PARAMETRES.type == 'basique' then
+    tex.sprint('\\basiquetrue')
+  elseif PARAMETRES.type == 'bilan' then
+    tex.sprint('\\bilantrue')
+  elseif PARAMETRES.type == 'corrige' then
+    tex.sprint('\\corrigetrue')
+  elseif PARAMETRES.type == 'cours' then
+    tex.sprint('\\courstrue')
+  elseif PARAMETRES.type == 'flash' then
+    tex.sprint('\\flashtrue')
+  elseif PARAMETRES.type == 'TD' then
+    tex.sprint('\\TDtrue')
+  elseif PARAMETRES.type == 'DM' then
+    tex.sprint('\\DMtrue')
+      elseif PARAMETRES.type == 'DS' then
+    tex.sprint('\\DStrue')
+  elseif PARAMETRES.type == 'interro' then
+    tex.sprint('\\interrotrue')
+  end
+
+  if PARAMETRES.correction then
+    tex.sprint('\\correctiontrue')
+  end
+  if PARAMETRES.enonce then
+    tex.sprint('\\enoncetrue')
+  end
+    if PARAMETRES.visible then
+    tex.sprint('\\visibletrue')
+  end
+
+  if PARAMETRES.bareme then
+    tex.sprint('\\baremetrue')
+  end
+  if PARAMETRES.competence then
+    tex.sprint('\\competencetrue')
+  end
+  if PARAMETRES.difficulte then
+    tex.sprint('\\difficultetrue')
+  end
+  if PARAMETRES.source then
+    tex.sprint('\\sourcetrue')
+  end
+  if PARAMETRES.theme then
+    tex.sprint('\\themetrue')
+  end
+
+  if PARAMETRES.stretch then
+    tex.sprint('\\stretchtrue')
+  end
+end
+\end{luacode*}
+
+%%%%%%%%%%%%%
+% COMPTEURS %
+%%%%%%%%%%%%%
+
+%Création
 \newcounter{compteurfeuille}
-  \setcounter{compteurfeuille}{1}
-\newcounter{compteurDM}
-  \setcounter{compteurDM}{0}
-\newcounter{compteurDS}
-  \setcounter{compteurDS}{0}
-\newcounter{compteurFlash}
-  \setcounter{compteurFlash}{0}
-\newcounter{compteurinterro}
-  \setcounter{compteurinterro}{0}
+
 \newcounter{compteurexercice}
-  \setcounter{compteurexercice}{0}
-\newcounter{compteurbareme}
-  \setcounter{compteurbareme}{0}
-\newcounter{difficulte}
-  \setcounter{difficulte}{0}
 
-%Définition des commandes utilisées dans les environnements
-\newcommand{\rivtheme}{}
-\newcommand{\rivdifficulte}{\multido{\i=0+1}{\thedifficulte}{\faStar}}%
-\newcommand{\rivcompetence}{}
-\newcommand{\rivsource}{}
-\newcommand{\rivrepere}{}
+\newcounter{compteurinterro}
+\newcounter{compteurflash}
+\newcounter{compteurDM}
+\newcounter{compteurDS}
+\newcounter{compteurTD}
 
-\newcommand{\theme}[1]{\renewcommand{\rivtheme}{#1}}
-\newcommand{\difficulte}[1]{\setcounter{difficulte}{#1}}
-\newcommand{\competence}[1]{\renewcommand{\rivcompetence}{#1}}
-\newcommand{\source}[1]{\renewcommand{\rivsource}{#1}}
-\newcommand{\repere}[1]{\renewcommand{\rivrepere}{#1}}
+%Initialisation
+\setcounter{compteurfeuille}{1}
 
-\newcommand{\rivchapitre}{}
-\newcommand{\chapitre}[2]{\setcounter{part}{#1}\renewcommand{\rivchapitre}{#2}}
-\newcommand{\rivniveau}{}
-\newcommand{\niveau}[1]{\renewcommand{\rivniveau}{#1$^\text{ème}$}}
-\newcommand{\feuille}[1]{\setcounter{compteurfeuille}{#1}}
+\setcounter{compteurexercice}{0}
 
-%Commandes pour la mise en page de brevet
+\setcounter{compteurinterro}{0}
+\setcounter{compteurflash}{0}
+\setcounter{compteurDM}{0}
+\setcounter{compteurDS}{0}
+\setcounter{compteurTD}{0}
 
-\def\monthyear{\ifcase\month\or
-  Janvier\or Février\or Mars\or Avril\or Mai\or Juin\or
-  Juillet\or Août\or Septembre\or Octobre\or Novembre\or Décembre\fi
-  \space\number\year
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMANDES PERSONNELLES %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Commandes de mise en page
+
+\begin{luacode*}
+  function TailleTexteLua(nombre)
+    if nombre == -4 then
+      tex.sprint('\\tiny')
+    elseif nombre == -3 then
+      tex.sprint('\\scriptsize')
+    elseif nombre == -2 then
+      tex.sprint('\\footnotesize')
+    elseif nombre == -1 then
+      tex.sprint('\\small')
+    elseif nombre == 1 then
+      tex.sprint('\\large')
+    elseif nombre == 2 then
+      tex.sprint('\\Large')
+    elseif nombre == 3 then
+      tex.sprint('\\LARGE')
+    elseif nombre == 4 then
+      tex.sprint('\\huge') 
+    else
+      tex.sprint('\\normalsize')
+    end
+  end
+\end{luacode*}
+
+\newcommand{\tailletexte}[1]{
+  \directlua{TailleTexteLua(#1)}
 }
 
-\newwrite\myauxbrevet
-\newcommand{\rivbareme}{}
-\newcommand{\bareme}[1]{
-  \renewcommand{\rivbareme}{#1 points}
-  \ifbrevet
-    \stepcounter{compteurbareme}
-    \immediate\write\myauxbrevet{\string\hline}\relax
-    \immediate\write\myauxbrevet{Exercice\thecompteurbareme\string & \rivbareme\string\\}\relax
-  \fi
+\newcommand{\important}[1]{}
+
+\newcommand{\sautligne}{\vspace{\baselineskip}}
+\newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
+\newcommand{\sautfiche}{\iffiche \newpage \fi}
+
+%Commandes des environnements
+%
+\newcommand{\contenuchapitre}{}
+\newcommand{\contenuniveau}{}
+
+\newcommand{\contenubareme}{}
+\newcommand{\contenucompetence}{}
+\newcommand{\contenudifficulte}{}
+\newcommand{\contenusource}{}
+\newcommand{\contenutheme}{}
+
+%
+\begin{luacode}
+  function DifficulteLua(nombre)
+    if nombre then
+      for i=1,nombre do
+        tex.sprint('\\faStar')
+      end
+    end
+  end
+
+  function ChapitreLua(nombre)
+    if nombre then
+
+      tex.sprint('\\setcounter{part}{' .. nombre ..'}')
+    end
+  end
+\end{luacode}
+
+
+\newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
+\newcommand{\definirniveau}[1]{\renewcommand{\contenuniveau}{#1}}
+
+\newcommand{\bareme}[1]{\renewcommand{\contenubareme}{#1}}
+\newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
+\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{DifficulteLua(#1)}}}
+\newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
+\newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
+
+
+%%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\formatchapitreetoile}{}
+\newcommand{\formatchapitrenormal}{}
+
+\newif\ifpartetoile
+
+\newcommand{\formatchapitre}{\ifpartetoile \formatchapitreetoile \else \formatchapitrenormal \fi}
+
+\newcommand{\chapitrenormal}[1]{
+  \partetoilefalse
+  \part{#1}
+  \renewcommand{\contenuchapitre}{#1}
 }
 
-
-\AtEndDocument{
-  \ifbrevet
-    \immediate\write\myauxbrevet{\string\hline}\relax
-    \immediate\write\myauxbrevet{\string\end{tabular}}\relax
-    \immediate\closeout\myauxbrevet
-  \fi
+\newcommand{\chapitreetoile}[1]{
+  \partetoiletrue
+  \part*{#1}
+  \phantomsection\addcontentsline{toc}{part}{#1}
+  \renewcommand{\contenuchapitre}{#1}
 }
-
-\newcommand{\rivtextebrevet}{}
-\newcommand{\textebrevet}[1]{\renewcommand{\rivtextebrevet}{#1}}
-\newcommand{\rivseriebrevet}{Générale}
-\newcommand{\seriebrevet}[1]{\renewcommand{\rivseriebrevet}{#1}}
-
-\newcommand{\titrebrevet}{
-  \begin{center}
-    \tailletexte{4}\bfseries BREVET BLANC
-    
-    \tailletexte{4}\bfseries \monthyear
-    
-    \sautdeligne
-    
-  \end{center}
-  
-  \begin{tcolorbox}[
-    colframe = black, 
-    colback=black!0,
-    coltitle=white,
-    sharp corners,
-    valign=center,
-    top=2cm,
-    bottom=0.5cm,
-    left=0.5cm,
-    enhanced,
-    before skip=0cm,
-  ]
-  \begin{center}
-    \tailletexte{4}
-    \textbf{ MATHÉMATIQUES}
-    
-    Série \rivseriebrevet
-    
-    \sautdeligne
-    
-    \tailletexte{0}
-    
-    Durée de l'épreuve : 2h00 \hfill 100 points
-  \end{center}
-  \end{tcolorbox}
-  
-  \vfill
-  
-  \begin{center}
-    \tailletexte{0}
-    Dès que le sujet vous est remis, assurez-vous qu’il est complet.
-  
-    %\sautdeligne
-  
-    Il comporte \textbf{\pageref{LastPage}} pages numérotées de la page \textbf{1} sur \textbf{\pageref{LastPage}} à la page \textbf{\pageref{LastPage}} sur \textbf{\pageref{LastPage}}.
-  \end{center}
-  
-  \sautdeligne
-  
-  \begin{center}
-    \tailletexte{0}
-    L'usage de calculatrice avec mode examen actif est autorisé.
-  
-    %\sautdeligne
-    
-    L'usage de calculatrice sans mémoire << type collège >> est autorisé.
-    
-    %\sautdeligne
-  
-    L'usage du dictionnaire est interdit.
-  \end{center}
-
-  \sautdeligne
-
-  \begin{center}
-      \rivtextebrevet
-  \end{center}
-  
-  
-  \begin{center}
-    \tailletexte{0}
-    \tableaubrevet
-  \end{center}
-  
-  \vfill
-  
-  \hfill
-  
-  \newpage
-}
-
-\RequirePackage{style-tex3R}
-
-%Réglage de la persistance ou non du titre
-
-\newcommand{\motcletitretoc}{}%Mot clé du titre pour la TOC
-\newcommand{\renewmotcletitretoc}{%Renomme 
-  \ifactivite
-      \renewcommand{\motcletitretoc}{Activité} 
-  \else
-    \ifcorrige
-      \renewcommand{\motcletitretoc}{Correction} 
-    \else
-      \ifcours
-        \renewcommand{\motcletitretoc}{Cours} 
-      \else
-        \ifTD
-          \renewcommand{\motcletitretoc}{Exercices} 
-        \else
-          \ifflash
-            \renewcommand{\motcletitretoc}{Exercices} 
-          \else
-            \ifDM
-              \renewcommand{\motcletitretoc}{DM} 
-            \else
-              \ifDS
-                \renewcommand{\motcletitretoc}{DS} 
-              \else
-                \ifinterro
-                  \renewcommand{\motcletitretoc}{Interrogation} 
-                \else
-                  \ifbrevet
-                  \renewcommand{\motcletitretoc}{Brevet} 
-                  \fi
-                \fi
-              \fi
-            \fi
-          \fi
-        \fi
-      \fi
-    \fi
-  \fi
-}
-
-\newcommand{\titretoc}{%Choisit le mot clé du titre et ajoute à la toc si c'est la première feuille d'une série ou la première page
-\renewmotcletitretoc
-    \phantomsection
-    \addcontentsline{toc}{section}{\motcletitretoc}
-}
-
-\newcommand{\selectiontitre}{%Imprime le titre
-  \ifactivite
-      \titreactivite
-  \else
-    \ifcorrige
-        \titrecorrige
-    \else
-      \ifcours
-          \titrecours
-      \else
-        \ifTD
-          \titreTD
-        \else
-          \ifflash
-            \titreflash
-          \else
-            \ifDM
-              \titreDM
-            \else
-              \ifDS
-                \titreDS
-              \else
-                \ifinterro
-                  \titreinterro
-                \else
-                  \ifbrevet
-                    \titrebrevet
-                  \fi
-                \fi
-              \fi
-            \fi
-          \fi
-        \fi
-      \fi
-    \fi
-  \fi
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DÉFINITION DES ENVIRONNEMENTS LIGNES/LIGNES* %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\RequirePackage{lineno}
-
-%Booléen \ifFirstCompile permettant de savoir si on est à la première ou deuxième compilation
-
-\newif\ifFirstCompile
-\FirstCompiletrue
 
 \makeatletter
-\ifFirstCompile
-\write\@auxout{\noexpand\global\noexpand\FirstCompilefalse}
-\fi
+\def\chapitre{\@ifstar\chapitreetoile\chapitrenormal}
 \makeatother
 
-% Définition des compteurs
+\newcommand{\partie}[1]{\subsection{#1}}
+\newcommand{\souspartie}[1]{\subsubsection{#1}}
 
-\newcounter{ligneun}
-\newcounter{lignedeux}
-\newcounter{lignediff}
-\newcounter{numerotation}
-\setcounter{numerotation}{0}
+%Commandes de lignes
 
-%Définition des couleurs de lignes seyes
+\begin{luacode}
 
-\colorlet{couleurligne}{SlateBlue}
-\colorlet{couleurinterligne}{LightSteelBlue}
+function LignesLua(str,nombre)
+  
+  if nombre == nil then
+    nombre = 1
+  end
 
-%Définition des booléens et initialisation
+  if str == 'carreaux' or str == 'carreau' then
+    tex.sprint('\\tracecarreaux{' ..nombre ..'}')
+  elseif str == 'surligne' then
+    tex.sprint('\\tracesurligne{' ..nombre ..'}')
+  else
+    tex.sprint('\\tracelignes{' ..nombre ..'}')
+  end
 
-\newif\iflignes
-\newif\ifseyes
-\newif\ifsurligne
-\newif\ifcarreaux
-\newif\iflignesetoile
-\newif\ifseyesetoile
-\newif\ifsurligneetoile
-\newif\ifcarreauxetoile
+end
 
-\ifnum\rivmodulo{\conditionmacro}{23}=0 \lignestrue \else \lignesfalse \fi
-\ifnum\rivmodulo{\conditionmacro}{73}=0 \lignesetoiletrue \else \lignesetoilefalse \fi
+\end{luacode}
 
-\ifnum\rivmodulo{\conditionmacro}{83}=0 \seyestrue\carreauxfalse\surlignefalse \else \seyesfalse\carreauxtrue\surlignefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{101}=0 \seyesfalse\carreauxfalse\surlignetrue \else \seyesfalse\carreauxtrue\surlignefalse \fi
+\newcommand{\lignes}[2]{\directlua{LignesLua("#1",#2)}}
 
-\ifnum\rivmodulo{\conditionmacro}{89}=0 \seyesetoiletrue\carreauxetoilefalse\surligneetoilefalse \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
-\ifnum\rivmodulo{\conditionmacro}{103}=0 \seyesetoilefalse\carreauxetoilefalse\surligneetoiletrue \else \seyesetoilefalse\carreauxetoiletrue\surligneetoilefalse \fi
-
-%Définition de la commande tracelignes #1=nombre de lignes
 
 \newcommand{\tracelignes}[1]{
-    \hfill\begin{tikzpicture}[x=\linewidth-0.8pt,y=0.2cm]
-        \draw[color=couleurligne,line width=0.8pt] (0,4)--(1,4);
-        \foreach \j in {1,...,#1}{
-            \foreach \i in{1,2,3}{
-                \draw[color=couleurinterligne,line width=0.5pt] (0,\i+4*\j)--(1,\i+4*\j);
-            }
-            \draw[color=couleurligne,line width=0.8pt] (0,4*\j+4)--(1,4*\j+4);
+  \hfill\begin{tikzpicture}[x=\linewidth-0.8pt,y=0.2cm]
+    \draw[color=couleurligne,line width=0.8pt] (0,4)--(1,4);
+      \foreach \j in {1,...,#1}{
+        \foreach \i in{1,2,3}{
+          \draw[color=couleurinterligne,line width=0.5pt] (0,\i+4*\j)--(1,\i+4*\j);
         }
-    \end{tikzpicture}\hfill
+      \draw[color=couleurligne,line width=0.8pt] (0,4*\j+4)--(1,4*\j+4);
+    }
+  \end{tikzpicture}\hfill
 }
 
-%Définition de la commande tracecarreaux #1=nombre de lignes (2 carreaux par ligne)
 \newcommand{\tracecarreaux}[1]{
-    \hfill\begin{tikzpicture}
-        \draw[xstep=0.5,ystep=0.5, color=blue!25] (0,0) grid (\linewidth-0.8pt,#1);
-    \end{tikzpicture}\hfill
+  \hfill\begin{tikzpicture}
+    \draw[xstep=0.5,ystep=0.5, color=couleurcarreau] (0,0) grid (\linewidth-0.8pt,#1);
+  \end{tikzpicture}\hfill
 }
 
-\newcommand{\tracesurligne}[1]{
+\newcommand{\tracesurligne}[1]{%
   \begin{tikzpicture}[overlay]
-    \foreach \i in {0,2,...,#1} {
-    \fill [lightgray] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
-    }
+    \foreach \i in {0,2,...,#1} {%
+    \fill [couleursurlignelignea] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+    \fill [couleursurligneligneb] ($(0,-0.15)+(0,-\i*\baselineskip-\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-2\baselineskip)$);
+    }%
 \end{tikzpicture}%
+}%
+
+%Nouveau soulignement pour le titre, utilisant lua-ul
+\newunderlinetype\beginUnderLine{\cleaders\hbox{%
+  \setlength\unitlength{.1ex}%
+  \begin{picture}(4,0)(0,1)
+    \thicklines
+    \put(0,-4){\line(1,0){4}}
+    \put(0,-4.5){\line(1,0){4}}
+  \end{picture}%
+}}
+
+\NewDocumentCommand\underLine{+m}{{\beginUnderLine#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DÉFINITION DES COULEURS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function CouleursDocument()
+
+    local PREMIER = PARAMETRES.premier
+
+    tex.sprint(
+      '\\colorlet{couleurligne}{' ..  FormatageString(COULEURS.ligne) .. '}' ..
+      '\\colorlet{couleurinterligne}{' ..  FormatageString(COULEURS.interligne) .. '}' ..
+      '\\colorlet{couleursection}{' ..  FormatageString(COULEURS.section) .. '}' ..
+      '\\colorlet{couleursubsection}{' ..  FormatageString(COULEURS.subsection) .. '}' ..
+      '\\colorlet{couleursubsubsection}{' ..  FormatageString(COULEURS.subsubsection) .. '}' ..
+      '\\colorlet{couleurcarreau}{' ..  FormatageString(COULEURS.carreau) .. '}' ..
+      '\\colorlet{couleursurlignelignea}{' ..  FormatageString(COULEURS.surlignelignea) .. '}' ..
+      '\\colorlet{couleursurligneligneb}{' ..  FormatageString(COULEURS.surligneligneb) .. '}' ..
+      '\\colorlet{couleurboitecours}{' ..  FormatageString(COULEURS.boitecours) .. '}' ..
+      '\\colorlet{couleurbackground}{' ..  FormatageString(COULEURS.background) .. '}' ..
+      '\\colorlet{couleurapplication}{' ..  FormatageString(COULEURS.application) .. '}' ..
+      '\\colorlet{couleurdefinition}{' ..  FormatageString(COULEURS.definition) .. '}' ..
+      '\\colorlet{couleurconvention}{' ..  FormatageString(COULEURS.convention) .. '}' ..
+      '\\colorlet{couleurexercice}{' ..  FormatageString(COULEURS.exercice) .. '}' ..
+      '\\colorlet{couleurexemple}{' ..  FormatageString(COULEURS.exemple) .. '}' ..
+      '\\colorlet{couleurmethode}{' ..  FormatageString(COULEURS.methode) .. '}' ..
+      '\\colorlet{couleurpreuve}{' ..  FormatageString(COULEURS.preuve) .. '}' ..
+      '\\colorlet{couleurpropriete}{' ..  FormatageString(COULEURS.propriete) .. '}' ..
+      '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
+      '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
+      '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
+      '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
+      '\\colorlet{couleursurlignevisible}{' ..  FormatageString(COULEURS.surlignevisible) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}' ..
+      '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
+      '\\colorlet{vert}{' ..  FormatageString(COULEURS.vert) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}'
+    )
+
+    tex.sprint('\\sethlcolor{couleursurligne}')
+    tex.sprint('\\pagecolor{' .. COULEURS.background ..'}')
+
+  end 
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FORMATAGES DIVERS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{luacode}
+  function PoliceDocument()
+    local TAILLE = PARAMETRES.taille
+    local FORMAT = PARAMETRES.format
+    local PREMIER = PARAMETRES.premier
+
+    if TAILLE == nil then
+      if FORMAT == 'fiche' then
+        tex.sprint('\\KOMAoption{fontsize}{'..  FormatageString(POLICE.taillefiche) ..'}')
+      elseif FORMAT == 'diapo' then
+        tex.sprint('\\KOMAoption{fontsize}{'..  FormatageString(POLICE.taillediapo) ..'}')
+      end
+    else
+      tex.sprint('\\KOMAoption{fontsize}{' .. TAILLE ..'}')
+    end
+
+    if PREMIER then
+      tex.sprint('\\renewcommand{\\important}[1]{'..  FormatageString(POLICE.important) ..'}')
+    end
+
+  tex.sprint(
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.texte) ..'}{\\setmainfont{' ..  FormatageString(POLICE.texte) .. '}}\\n' ..
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.math) .. '}{\\setmathfont{' ..  FormatageString(POLICE.math) .. '}}{}' ..
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.mathcal) .. '}{\\setmathfont{' ..  FormatageString(POLICE.mathcal) .. '}[range=cal]}{}'
+  )
+  end
+\end{luacode}
+
+\newfontfamily\myfontScratch{FreeSans}%Pour les blocs Scratch de ProfCollege
+\AtBeginEnvironment{scratch}{\KOMAoption{fontsize}{12pt}}%Scaling plutôt que taille de police
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CRÉATION DES LOGOS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\logoactif}{}
+
+\begin{luacode}
+  function LogosDocument()
+
+    local TYPE = PARAMETRES.type
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.activite) ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.basique) ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.bilan) ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.corrige) ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.cours) ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.DM) ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.DS) ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.flash) ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.interro) ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.TD) ..'}')
+    end
+  end
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CRÉATION DES TITRES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\titre}[1]{}
+\newcommand{\titreactif}[1]{}
+\newcommand{\styleactif}[1]{}
+\newcommand{\stylesections}[3]{}
+
+\begin{luacode}
+  function StylesTitresDocument()
+
+    local TYPE = PARAMETRES.type
+    local HEADER = PARAMETRES.header
+
+    if HEADER then
+      tex.sprint('\\renewcommand{\\titre}[1]{'..  FormatageString(STYLESTITRES.titre) ..'}')
+    else
+      tex.sprint('\\renewcommand{\\titre}[1]{'..  FormatageString(STYLESTITRES.titre) .. '\\vspace{' ..  FormatageString(STYLESTITRES.espacement) ..'}}')
+    end
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.activite) ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.basique) ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.bilan) ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.corrige) ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.cours) ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.DM) ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.DS) ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.flash) ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.interro) ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.TD) ..'}')
+    end
+  end
+\end{luacode}
+
+\newcommand{\motcletitretoc}{}
+\newif\iftitretoc
+
+
+\begin{luacode}
+  function TitresDocument()
+    local TYPE = PARAMETRES.type
+    local PREMIER = PARAMETRES.premier
+
+    if TYPE == 'basique' then
+      tex.sprint('\\titretocfalse')
+    else
+      tex.sprint('\\titretoctrue')
+    end
+
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocactivite) ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocbasique) ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocbilan) ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.toccorrige) ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.toccours) ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocDM) ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocDS) ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocflash) ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocinterro) ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocTD) ..'}')
+    end
+
+    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' ..  FormatageString(TITRES.format) .. '}}')
+ 
+  end
+\end{luacode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \newif\ifvisible
+\newif\ifmontre
+
+\begin{luacode}
+
+function VerificationVisible(flag)
+  local VISIBLE = PARAMETRES.visible
+  local str = tostring(VISIBLE)
+  local flg = tostring(flag)
+
+  if VISIBLE == true then
+    tex.sprint('\\visibletrue')
+  else
+    tex.sprint('\\visiblefalse')
+  end
+
+  print('MESSAGE')
+  print(str)
+  if flg == str then
+    tex.sprint('\\montretrue')
+  else
+    tex.sprint('\\montrefalse')
+  end
+end
+
+\end{luacode}
+
+\NewEnviron{visible}[1][true]{%
+  \directlua{VerificationVisible(#1)}
+  \ifmontre
+    \ifvisible
+      \begin{tcolorbox}[
+        colback=couleursurlignevisible, 
+        colframe=couleurbackground, 
+        boxrule=5pt, 
+        left=0pt, 
+        top=0pt, 
+        bottom=0pt, 
+        right=0pt,
+        before skip =0pt,
+        after skip = 0.3em,
+        left skip =0pt,
+        right skip = 0pt, 
+        boxsep=0pt,
+        enhanced, 
+        shield externalize=true,
+        breakable
+      ]
+        \BODY
+      \end{tcolorbox}
+    \else
+      \BODY
+    \fi
+  \fi
 }
 
-    %Définition de lignes
-\NewEnviron{lignes}{
-  \iflignes
-      \ifFirstCompile
-      \setcounter{ligneun}{\thelinenumber}
-      \internallinenumbers
-      \BODY\par
-      \setcounter{lignedeux}{\thelinenumber}
-      \setcounter{lignediff}{\thelignedeux-\theligneun+\theajoutlignes}
-      \stepcounter{numerotation}
-      \newcounter{bloc\number\thenumerotation}
-      \setcounter{bloc\number\thenumerotation}{\thelignediff}
-      \newwrite\myauxfile
-          \immediate\openout\myauxfile=lignes\thenumerotation.aux\relax
-          \immediate\write\myauxfile{\string\setcounter{bloc\number\thenumerotation}{\thelignediff}}\relax
-          \immediate\closeout\myauxfile
-      \else
-        \stepcounter{numerotation}
-        \newcounter{bloc\number\thenumerotation}
-        \input{lignes\thenumerotation.aux}
-        \ifsurligne
-          \setcounter{ligneun}{\arabic{bloc\number\thenumerotation}-2}
-          
-         \tracesurligne{\theligneun}
+% \newcommand{\visible*}[2][true]{%
+%   \directlua{VerificationVisible('#1')}
+%   \ifvisible
+%     #2
+%   \fi
+% }
 
-          \vspace{-\baselineskip}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ENVIRONNEMENTS DE COURS ET EXERCICES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-          \BODY
-        \else
-          \ifseyes \tracelignes{\arabic{bloc\number\thenumerotation}} \fi
-          \ifcarreaux \tracecarreaux{\arabic{bloc\number\thenumerotation}} \fi
-        \fi
-      \fi
-  \else
-  \BODY
-  \fi
-  \setcounter{ajoutlignes}{0}
-  }
+\newcommand{\formatEnvCours}[2][]{}
 
-  %Définition de lignes*
-  \NewEnviron{lignes*}{
-    \iflignesetoile
-        \ifFirstCompile
-        \setcounter{ligneun}{\thelinenumber}
-        \internallinenumbers
-        \BODY\par
-        \setcounter{lignedeux}{\thelinenumber}
-        \setcounter{lignediff}{\thelignedeux-\theligneun+\theajoutlignes}
-        \stepcounter{numerotation}
-        \newcounter{bloc\number\thenumerotation}
-        \setcounter{bloc\number\thenumerotation}{\thelignediff}
-        \newwrite\myauxfile
-            \immediate\openout\myauxfile=lignes\thenumerotation.aux\relax
-            \immediate\write\myauxfile{\string\setcounter{bloc\number\thenumerotation}{\thelignediff}}\relax
-            \immediate\closeout\myauxfile
-        \else
-          \stepcounter{numerotation}
-          \newcounter{bloc\number\thenumerotation}
-          \input{lignes\thenumerotation.aux}
-          \ifsurligneetoile
-            \setcounter{ligneun}{\arabic{bloc\number\thenumerotation}-2}
-            
-           \tracesurligne{\theligneun}
-  
-            \vspace{-\baselineskip}
-  
-            \BODY
-          \else
-            \ifseyesetoile \tracelignes{\arabic{bloc\number\thenumerotation}} \fi
-            \ifcarreauxetoile \tracecarreaux{\arabic{bloc\number\thenumerotation}} \fi
-          \fi
-        \fi
-    \else
-    \BODY
-    \fi
-    \setcounter{ajoutlignes}{0}
-    }
+\NewEnviron{application}[1][]{\BODY}
+\NewEnviron{definition}[1][]{\BODY}
+\NewEnviron{convention}[1][]{\BODY}
+% \NewEnviron{exercice}[1][]{\BODY}
+\NewEnviron{exemple}[1][]{\BODY}
+\NewEnviron{methode}[1][]{\BODY}
+\NewEnviron{preuve}[1][]{\BODY}
+\NewEnviron{propriete}[1][]{\BODY}
+\NewEnviron{remarque}[1][]{\BODY}
 
-%Définition de la commande ajoutlignes permettant d'ajuster au besoin le nombre de lignes générées par l'environnement lignes
-\newcounter{ajoutlignes}
-  \setcounter{ajoutlignes}{0}
-\newcommand{\ajoutlignes}[1]{\setcounter{ajoutlignes}{#1}}
+\NewEnviron{correction}[1][]{\BODY}
+\NewEnviron{enonce}[1][]{\BODY}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% DÉFINITION DE LA COMMANDE PARAMÈTRES QUI PERMET DE MODIFIER LES BOOLÉENS D'AFFICHAGE EN COURS DE DOCUMENT %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{luacode*}
+  function EnvironnementsDocument()
 
-%Définition des clés
-\def\cleFaux{false}
-\def\cleVrai{true}
-\def\cleActivite{activite}
-\def\cleBasique{basique}
-\def\cleCorrige{corrige}
-\def\cleCours{cours}
-\def\cleTD{TD}
-\def\cleDM{DM}
-\def\cleDS{DS}
-\def\cleFlash{flash}
-\def\cleInterro{interro}
-\def\cleBrevet{brevet}
-\def\cleSeyes{seyes}
-\def\cleCarreaux{carreaux}
-\def\cleSurligne{surligne}
+    local PREMIER = PARAMETRES.premier
 
-\newif\ifaffichagetitre
-\affichagetitrefalse
+    if PREMIER then
 
-%Définition et initialisation du trousseau
-\makeatletter
-\define@key{parametres}{titre}[true]{\def\choixheader{#1}}
-\define@key{parametres}{enonce}[true]{\def\choixenonce{#1}}
-\define@key{parametres}{bareme}[true]{\def\choixbareme{#1}}
-\define@key{parametres}{correction}[true]{\def\choixcorrection{#1}}
-\define@key{parametres}{theme}[true]{\def\choixtheme{#1}}
-\define@key{parametres}{difficulte}[true]{\def\choixdifficulte{#1}}
-\define@key{parametres}{competence}[true]{\def\choixcompetence{#1}}
-\define@key{parametres}{source}[true]{\def\choixsource{#1}}
-\define@key{parametres}{type}{\def\choixtype{#1}}
-\define@key{parametres}{lignes}[true]{\def\choixlignes{#1}}
-\define@key{parametres}{lignes*}[true]{\def\choixlignesetoile{#1}}
+      tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'..  FormatageString(ENVIRONNEMENTS.formatcours) ..'}')
+      tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\fi\\ifenonce\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
 
-\makeatother
+      tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
 
-\newcommand{\parametresnormal}[1]{%Définition de paramètres, #1=liste de type clé=valeur (ou clé, si par défaut true)
+      tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
+      tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
+      tex.sprint([[\RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}}]])
+      tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
+      tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
+      tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
+      tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
+      tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
+    end
+  end
+\end{luacode*}
 
-  \ifnum\thepage=1
-  \else
-    \newpage
-  \fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  \setcounter{compteurfeuille}{1}
-  \setcounter{compteurexercice}{0}
+% \NewEnviron{lignes}{\BODY}
+% \NewEnviron{lignes*}{\BODY}
+\newcommand{\rivcorrection}[2]{\ifvisible~#1 \else #2 \fi}
+\newcommand{\rivimportant}[1]{\important{#1}}
+\newcommand{\ajoutlignes}[1]{}
+\providecommand{\adjustbox}[2]{#2}
+\newcommand{\parametres}[1]{}
+\newcommand{\sautdeligne}{\sautligne}
+\newcommand{\niveau}{\definirniveau}
+\NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
 
-  \affichagetitrefalse
+%%%
 
-  \enoncefalse
-  \correctionfalse
+\begin{luacode*}
 
-  \themefalse
-  \difficultefalse
-  \competencefalse
-  \sourcefalse
-  \baremefalse
+  function TitreLua()
+    local HEADER = PARAMETRES.header
+    local PREMIER = PARAMETRES.premier
+    local TYPE = PARAMETRES.type
 
-  \activitefalse
-  \basiquefalse
-  \corrigefalse
-  \coursfalse
-  \TDfalse
-  \DMfalse
-  \DSfalse
-  \interrofalse
-  \flashfalse
-  \brevetfalse
+    if PREMIER then
 
-  \lignesfalse
-  \seyesfalse
-  \carreauxfalse
-  \surlignefalse
+      if not HEADER then
+        tex.sprint('\\AtBeginDocument{\\titreactif}')
 
-  \lignesetoilefalse
-  \seyesetoilefalse
-  \carreauxetoilefalse
-  \surligneetoilefalse
+        if TYPE ~= 'basique' then
+          tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
+        end
 
-  \setcounter{ajoutlignes}{0}
+      end
 
-  \setkeys{parametres}{#1}%
+    else
 
-  \ifx \choixtype\cleBrevet
-    \setlength{\fichepied}{0.5cm}
-    \brevettrue
-  \fi
+      if not HEADER then
+        tex.sprint('\\titreactif')
+      end
+    tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
 
-  \ifbrevet 
-  \ifFirstCompile
-    \newcommand{\tableaubrevet}{}
-    \immediate\openout\myauxbrevet=brevet.aux\relax
-    \immediate\write\myauxbrevet{\string\begin{tabular}{|c|c|}}\relax
-      % \makeatletter
-      % \write\@auxout{\noexpand\global\noexpand\brevettrue}
-      % \makeatother
-  \else
-    \newcommand{\tableaubrevet}{\input{brevet.aux}}
-  \fi
-\fi
+    end
 
+    PARAMETRES.premier = false
+  end 
+\end{luacode*}
 
+\begin{luacode*}
+  function mesParametres(str)
+  end
+\end{luacode*}
 
-  \ifx\choixheader\cleVrai%Load geometry en fonction de header
-    \iffiche
-      \formatfichetitre
-      \affichagetitretrue
-    \else
-      \ifdiapo
-        \formatdiapotitre
-        \affichagetitretrue
-      \fi
-    \fi
-  \else
-    \iffiche
-      \formatfiche
-    \else
-      \ifdiapo
-        \formatdiapo
-      \fi
-    \fi
-  \fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDE PARAMETRAGE PERMETTANT DE MODIFIER LES OPTIONS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  \ifx\choixenonce\cleVrai
-  \enoncetrue
-  \fi
-  \ifx\choixcorrection\cleVrai
-  \correctiontrue
-  \fi
+\begin{luacode*}
+  function ParametrageDocument()
 
-  \ifx\choixbareme\cleVrai
-  \baremetrue
-  \fi
-  \ifx\choixtheme\cleVrai
-  \themetrue
-  \fi
-  \ifx\choixdifficulte\cleVrai
-  \difficultetrue
-  \fi
-  \ifx\choixcompetence\cleVrai
-  \competencetrue
-  \fi
-  \ifx\choixsource\cleVrai
-  \sourcetrue
-  \fi
+    if Format == nil then
+      PARAMETRES.format = 'fiche'
+    else
+      PARAMETRES.format = Format
+    end
 
-  \ifx\choixtype\cleActivite
-      \activitetrue
-  \else
-      \ifx\choixtype\cleBasique
-          \basiquetrue
-      \else
-          \ifx\choixtype\cleCorrige
-              \corrigetrue
-          \else
-              \ifx\choixtype\cleCours
-                  \courstrue
-              \else
-                  \ifx\choixtype\cleTD
-                      \TDtrue
-                  \else
-                      \ifx\choixtype\cleDM
-                          \DMtrue
-                      \else
-                          \ifx\choixtype\cleDS
-                              \DStrue
-                          \else
-                              \ifx\choixtype\cleInterro
-                                  \interrotrue
-                              \else
-                                \ifx\choixtype\cleFlash
-                                    \flashtrue
-                                    \else
-                                      \ifx \choixtype\cleBrevet
-                                        \brevettrue
-                                        \else
-                                          \basiquetrue
-                                      \fi
-                                  \fi
-                              \fi
-                          \fi
-                      \fi
-                  \fi
-              \fi
-          \fi
-      \fi
-  \fi
+    if Type == nil then
+      PARAMETRES.type = 'basique'
+    else
+      PARAMETRES.type = Type
+    end
 
-  \ifx\choixlignes\cleVrai
-      \lignestrue
-      \carreauxtrue
-  \else
-      \ifx\choixlignes\cleSeyes
-          \lignestrue
-          \seyestrue
-      \else
-          \ifx\choixlignes\cleCarreaux
-              \lignestrue
-              \carreauxtrue
-          \else 
-            \ifx\choixlignes\cleSurligne
-              \lignestrue
-              \surlignetrue
-            \fi
-          \fi
-      \fi
-  \fi
+    if Impression == nil then
+    PARAMETRES.print = false
+    else
+    PARAMETRES.print = Impression
+    end 
 
-  \ifx\choixlignesetoile\cleVrai
-    \lignesetoiletrue
-    \carreauxetoiletrue
-  \else
-    \ifx\choixlignesetoile\cleSeyes
-        \lignesetoiletrue
-        \seyesetoiletrue
-    \else
-      \ifx\choixlignesetoile\cleCarreaux
-          \lignesetoiletrue
-          \carreauxetoiletrue
-      \else
-          \ifx\choixlignesetoile\cleSurligne
-          \lignesetoiletrue
-          \surligneetoiletrue
-          \fi
-      \fi
-    \fi
-  \fi
+    if Header == nil then
+    PARAMETRES.header = false
+    else
+    PARAMETRES.header = Header
+    end 
 
-\titretoc
-\ifaffichagetitre
-  \setkomafont{pagehead}{\normalfont}
-  \ohead{\selectiontitre}
-  \cfoot{
-    \ifbrevet
-      \mdseries \textbf{\rivrepere} \hfill Page \textbf{\thepage{}} sur \pageref{LastPage}
-    \fi
-  }
-\else
-  \ohead{}
-  \cfoot{
-    \ifbrevet
-      \mdseries \textbf{\rivrepere} \hfill Page \textbf{\thepage{}} sur \pageref{LastPage}
-    \fi
-  }
-  \selectiontitre
+    PARAMETRES.taille = Taille
 
-  \iffiche
-    \vspace{\ficheseparationtitre}
-  \else
-    \ifdiapo
-      \vspace{\diaposeparationtitre}
-    \fi
-  \fi
-\fi
-}
+    if Correction == nil then
+    PARAMETRES.correction = false
+    else
+    PARAMETRES.correction = Correction
+    end 
 
-%Parametresetoile
+    if Enonce == nil then
+    PARAMETRES.enonce = false
+    else
+    PARAMETRES.enonce = Enonce
+    end 
 
-\newcommand{\parametresetoile}[1]{
+    if Visible == nil then
+    PARAMETRES.visible = false
+    else
+    PARAMETRES.visible = Visible
+    end 
 
-\setkeys{parametres}{#1}%
+    if Bareme == nil then
+    PARAMETRES.bareme = false
+    else
+    PARAMETRES.bareme = Bareme
+    end 
 
-\ifx\choixenonce\cleVrai
-\enoncetrue
-\else
-\ifx\choixenonce\cleFaux
-  \enoncefalse
-\fi
-\fi
+    if Competence == nil then
+    PARAMETRES.competence = false
+    else
+    PARAMETRES.competence = Competence
+    end 
 
-\ifx\choixcorrection\cleVrai
-\correctiontrue
-\else
-\ifx\choixcorrection\cleFaux
-  \correctionfalse
-\fi
-\fi
+    if Difficulte == nil then
+    PARAMETRES.difficulte = false
+    else
+    PARAMETRES.difficulte = Difficulte
+    end 
 
-\ifx\choixtheme\cleVrai
-\themetrue
-\else
-\ifx\choixtheme\cleFaux
-  \themefalse
-\fi
-\fi
+    if Source == nil then
+    PARAMETRES.source = false
+    else
+    PARAMETRES.source = Source
+    end 
 
-\ifx\choixdifficulte\cleVrai
-\difficultetrue
-\else
-\ifx\choixdifficulte\cleFaux
-  \difficultefalse
-\fi
-\fi
+    if Theme == nil then
+    PARAMETRES.theme = false
+    else
+    PARAMETRES.theme = Theme
+    end 
 
-\ifx\choixcompetence\cleVrai
-\competencetrue
-\else
-\ifx\choixcompetence\cleFaux
-  \competencefalse
-\fi
-\fi
+    if Stretch == nil then
+    PARAMETRES.stretch = false
+    else
+    PARAMETRES.stretch = Stretch
+    end 
 
-\ifx\choixsource\cleVrai
-\sourcetrue
-\else
-\ifx\choixsource\cleFaux
-  \sourcefalse
-\fi
-\fi
+    PoliceUtilisateur()
+    PoliceDocument()
 
-\ifx\choixbareme\cleVrai
-\baremetrue
-\else
-\ifx\choixbareme\cleFaux
-  \baremefalse
-\fi
-\fi
+    FormatUtilisateur()
+    FormatDocument()
 
-\ifx\choixlignes\cleVrai
-\lignestrue
-\carreauxtrue
-\seyesfalse
-\surlignefalse
-\else
-  \ifx\choixlignes\cleSeyes
-    \lignestrue
-    \seyestrue
-    \carreauxfalse
-    \surlignefalse
-  \else
-    \ifx\choixlignes\cleCarreaux
-        \lignestrue
-        \carreauxtrue
-        \seyesfalse
-        \surlignefalse
-    \else
-      \ifx \choixlignes\cleSurligne
-        \lignestrue
-        \carreauxfalse
-        \seyesfalse
-        \surlignetrue
-      \else
-        \ifx\choixlignes\cleFaux
-        \lignesfalse
-        \seyesfalse
-        \carreauxtrue
-        \surlignefalse
-        \fi
-      \fi
-    \fi
-  \fi
-\fi
+    CouleursUtilisateur()
+    CouleursDocument()
 
-\ifx\choixlignesetoile\cleVrai
-\lignesetoiletrue
-\carreauxetoiletrue
-\seyesetoilefalse
-\surligneetoilefalse
-\else
-  \ifx\choixlignesetoile\cleSeyes
-    \lignesetoiletrue
-    \seyesetoiletrue
-    \carreauxetoilefalse
-    \surligneetoilefalse
-  \else
-    \ifx\choixlignesetoile\cleCarreaux
-        \lignesetoiletrue
-        \seyesetoilefalse
-        \carreauxetoiletrue
-        \surligneetoilefalse
-    \else
-      \ifx\choixligneetoiles\cleSurligne
-        \lignesetoiletrue
-        \seyesetoilefalse
-        \carreauxetoilefalse
-        \surligneetoiletrue
-      \else
-        \ifx\choixlignesetoile\cleFaux
-          \lignesetoilefalse
-          \seyesetoilefalse
-          \carreauxetoiletrue
-          \surligneetoilefalse
-        \fi
-      \fi
-    \fi
-  \fi
-\fi
-}
+    LogosUtilisateur()
+    LogosDocument()
 
-% \ifmulti
-%   \def\parametres#1{}
-% \else
-%   \makeatletter
-%   \def\parametres{\@ifstar\parametresetoile\parametresnormal}
-%   \makeatother
-% \fi
+    BooleensDocument()
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% RÉGLAGES DE LA TOC %%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    StylesTitresUtilisateur()
+    StylesTitresDocument()
+    TitresUtilisateur()
+    TitresDocument()
+    EnvironnementsUtilisateur()
+    EnvironnementsDocument()
+    TitreLua()
 
-\RequirePackage{atbegshi}
+    Type = nil
+    Impression = nil
+    Header = nil
+    Taille = nil
+    Correction = nil
+    Enonce = nil
+    Visible = nil
+    Competence = nil
+    Bareme = nil
+    Difficulte = nil
+    Source = nil
+    Theme = nil
+    Stretch = nil
+  end
+\end{luacode*}
 
-\AtBeginShipout{\stepcounter{compteurfeuille}}
-
-\newif\ifmegadoctoc
-  \megadoctocfalse
-
-\newif\ifmegadoc
-  \megadocfalse
-
-  \ifnum\conditionmacro=2
-    \megadoctrue
-  \else
-    \ifnum\conditionmacro=3
-      \megadoctrue
-    \else 
-      \ifnum\conditionmacro=158
-        \megadoctoctrue
-      \else
-        \ifnum\conditionmacro=237
-          \megadoctoctrue
-        \fi
-      \fi
-    \fi
-  \fi
-
-\ifmegadoc
-
-\else
-  \ifmegadoctoc
-    \AtBeginDocument{\tableofcontents}
-  \else
-    \iffiche
-      \ifheader
-        \setkomafont{pagehead}{\normalfont}
-        \ohead{\selectiontitre}
-        \cfoot{}
-        \AtBeginDocument{\titretoc\pagestyle{scrheadings}}
-      \else
-        \ohead{}
-        \cfoot{}
-        \AtBeginDocument{\pagestyle{scrheadings}\titretoc\selectiontitre}
-      \fi
-    \else
-      \ifdiapo
-        \ifheader
-          \setkomafont{pagehead}{\normalfont}
-          \ohead{\selectiontitre}
-          \cfoot{
-            \ifbrevet
-              \mdseries \textbf{\rivrepere} \hfill Page \textbf{\thepage{}} sur \pageref{LastPage}
-            \fi
-            }
-          \AtBeginDocument{\titretoc\pagestyle{scrheadings}}
-        \else
-          \ohead{}
-          \cfoot{
-            \ifbrevet
-              \mdseries \textbf{\rivrepere} \hfill Page \textbf{\thepage{}} sur \pageref{LastPage}
-            \fi
-            }
-          \AtBeginDocument{\pagestyle{scrheadings}\titretoc\selectiontitre}
-        \fi
-      \fi
-    \fi
-  \fi
-\fi
+\newcommand{\parametrage}{\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}}
