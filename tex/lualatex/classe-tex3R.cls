@@ -12,6 +12,26 @@
   \ClassError{Lualatex only}{Ce document doit êtres compilé en LuaLaTeX}{}\stop
 \fi
 
+\begin{luacode*}
+  PARAMETRES = {}
+  PAGE = {}
+  POLICE = {}
+  COULEURS = {}
+  LOGOS = {}
+  STYLESTITRES = {}
+  TITRES = {}
+  ENVIRONNEMENTS = {}
+  PARAMETRES.premier = true
+\end{luacode*}
+
+\DeclareOption{fiche}{\directlua{PARAMETRES.format = "fiche"}}
+\DeclareOption{diapo}{\directlua{PARAMETRES.format = "diapo"}}
+\ProcessOptions\relax
+
+\begin{luacode*}
+  Format = PARAMETRES.format
+\end{luacode*}
+
 %Formatage de la page et du texte
 \RequirePackage{geometry}
 \RequirePackage{silence}
@@ -104,52 +124,108 @@
 \newif\ifheader
 \newif\ifprint
 
-\begin{luacode*}
-  PARAMETRES = {}
-  PARAMETRES.numeropage = 1
+\newcommand{\FormatPage}
 
-  function SupprimeNewline(string)
-    local newstring = string.gsub(string, "\n", "")
-    return newstring
+\begin{luacode*}
+
+  function FormatageString(string)
+  -- local newString = ''
+  if string ~= nil then
+    newString = string.gsub(string, "\n", "")
+    newString = string.gsub(newString, "^%s+", "")
+    newString = string.gsub(newString, "%s+$", "")
+  end
+    return newString
+  end
+
+  function RestoreHeader()
+    if PARAMETRES.header then
+    tex.sprint('\\headertrue')
+    end
   end
 
 --Formatage de la page d'après les paramètres utilisateurs
-  function FormatDocument(PAGE,PARAMETRES)
+  function FormatDocument()
 
     local HEADER = PARAMETRES.header
     local FORMAT = PARAMETRES.format
     local PRINT = PARAMETRES.print
+    local PREMIER = PARAMETRES.premier
 
-    tex.sprint(
-      '\\setlength{\\parindent}{' .. PAGE.parindent ..'}' ..
-      '\\setlength{\\parskip}{' .. PAGE.parskip ..'}' ..
-      '\\frenchbsetup{ItemLabeli=' .. PAGE.itemi .. '}' ..
-      '\\frenchbsetup{ItemLabelii=' .. PAGE.itemii ..'}' ..
-      '\\setlist[enumerate,1]{label=' .. PAGE.enumi .. '}' ..
-      '\\setlist[enumerate,2]{label=' .. PAGE.enumii .. '}' ..
-      '\\DeclareInstance{tasks}{enumerate}{default}{label =' .. PAGE.enumi .. ',label-width=1.125em}' ..
-      '\\DeclareInstance{tasks}{itemize}{default}{label = ' .. PAGE.itemi .. ',label-width=1.125em}' ..
-      '\\renewcommand*{\\sectionformat}{' .. PAGE.sectionnumber .. '}' ..
-      '\\renewcommand*{\\subsectionformat}{' .. PAGE.subsectionnumber .. '}' ..
-      '\\renewcommand*{\\subsubsectionformat}{' .. PAGE.subsubsectionnumber .. '}' ..
-      '\\setkomafont{section}{' .. PAGE.sectionname .. '}' ..
-      '\\setkomafont{subsection}{' .. PAGE.subsectionname .. '}' ..
-      '\\setkomafont{subsubsection}{' .. PAGE.subsubsectionname .. '}' ..
-      '\\renewcommand*{\\sectionlinesformat}[4]{' .. PAGE.sectionsformat .. '}'
-    )
+    if PREMIER then
 
-    tex.sprint(
-      
-    )
+      tex.sprint(
+        '\\setlength{\\parindent}{' ..  FormatageString(PAGE.parindent) ..'}' ..
+        '\\setlength{\\parskip}{' ..  FormatageString(PAGE.parskip) ..'}' ..
+        '\\frenchbsetup{ItemLabeli=' ..  FormatageString(PAGE.itemi) .. '}' ..
+        '\\frenchbsetup{ItemLabelii=' ..  FormatageString(PAGE.itemii) ..'}' ..
+        '\\setlist[enumerate,1]{label=' ..  FormatageString(PAGE.enumi) .. '}' ..
+        '\\setlist[enumerate,2]{label=' ..  FormatageString(PAGE.enumii) .. '}' ..
+        '\\DeclareInstance{tasks}{enumerate}{default}{label =' ..  FormatageString(PAGE.enumi) .. ',label-width=1.125em}' ..
+        '\\DeclareInstance{tasks}{itemize}{default}{label = ' ..  FormatageString(PAGE.itemi) .. ',label-width=1.125em}' ..
+        '\\renewcommand*{\\sectionformat}{' ..  FormatageString(PAGE.sectionnumber) .. '}' ..
+        '\\renewcommand*{\\subsectionformat}{' ..  FormatageString(PAGE.subsectionnumber) .. '}' ..
+        '\\renewcommand*{\\subsubsectionformat}{' ..  FormatageString(PAGE.subsubsectionnumber) .. '}' ..
+        '\\setkomafont{section}{' ..  FormatageString(PAGE.sectionname) .. '}' ..
+        '\\setkomafont{subsection}{' ..  FormatageString(PAGE.subsectionname) .. '}' ..
+        '\\setkomafont{subsubsection}{' ..  FormatageString(PAGE.subsubsectionname) .. '}' ..
+        '\\renewcommand*{\\sectionlinesformat}[4]{' ..  FormatageString(PAGE.sectionsformat) .. '}' ..
+        '\\renewcommand*\\partlineswithprefixformat[3]{\\thispagestyle{empty}'.. FormatageString(PAGE.partformat) .. '}' ..
+        '\\renewcommand{\\formatchapitrenormal}{' .. FormatageString(PAGE.chapitrenormalformat) .. '}' ..
+        '\\renewcommand{\\formatchapitreetoile}{' .. FormatageString(PAGE.chapitreetoileformat) .. '}'
+      )
 
-    if FORMAT =='fiche' then
-      tex.sprint('\\fichetrue')
-    elseif FORMAT == 'diapo' then
-      tex.sprint('\\diapotrue')
+      if FORMAT =='fiche' then
+        tex.sprint('\\fichetrue')
+      elseif FORMAT == 'diapo' then
+        tex.sprint('\\diapotrue')
+      end
     end
 
+    if PRINT then
+      tex.sprint('\\printtrue')
+    end
+
+    if PREMIER then
+      tex.sprint('\\geometry{paperwidth=' ..  FormatageString(PAGE.width) .. ',paperheight=' ..  FormatageString(PAGE.height) ..'}')
+    end
+
+    tex.sprint(
+          '\\newgeometry{' ..
+          'top=' ..  FormatageString(PAGE.top) ..
+          ',bottom=' ..  FormatageString(PAGE.bottom) ..
+          ',right=' ..  FormatageString(PAGE.right) ..
+          ',left=' ..  FormatageString(PAGE.left) ..
+          ',includehead' ..
+          ',includefoot' ..
+          ',marginparsep=' ..  FormatageString(PAGE.marginparsep) ..
+          ',marginparwidth=' ..  FormatageString(PAGE.marginparwidth) ..
+          ',headheight=' ..  FormatageString(PAGE.headheight) ..
+          ',headsep=' ..  FormatageString(PAGE.headsep) ..
+          ',footskip=' ..  FormatageString(PAGE.footskip) ..
+        '}' ..
+        '\\savegeometry{Normal}'
+    )
+
+    tex.sprint(
+      '\\newgeometry{' ..
+      'top=' ..  FormatageString(PAGE.headertop) ..
+      ',bottom=' ..  FormatageString(PAGE.headerbottom) ..
+      ',right=' ..  FormatageString(PAGE.headerright) ..
+      ',left=' ..  FormatageString(PAGE.headerleft) ..
+      ',includehead' ..
+      ',includefoot' ..
+      ',marginparsep=' ..  FormatageString(PAGE.headermarginparsep) ..
+      ',marginparwidth=' ..  FormatageString(PAGE.headermarginparwidth) ..
+      ',headheight=' ..  FormatageString(PAGE.headerheadheight) ..
+      ',headsep=' ..  FormatageString(PAGE.headerheadsep) ..
+      ',footskip=' ..  FormatageString(PAGE.headerfootskip) ..
+    '}' ..
+    '\\savegeometry{Header}'
+    )
+
     if HEADER then
-      tex.sprint('\\headertrue')
+      tex.sprint('\\headertrue\\loadgeometry{Header}')
       tex.sprint(
       '\\setkomafont{pagehead}{\\normalfont}' ..
       '\\ihead{\\vspace*{-1em}{\\titreactif}}' ..
@@ -160,6 +236,7 @@
         '\\ifoot{}'
       )
     else
+      tex.sprint('\\loadgeometry{Normal}')
       tex.sprint(
         '\\setkomafont{pagehead}{\\normalfont}' ..
         '\\ihead{}' ..
@@ -171,35 +248,6 @@
       )
     end
 
-    if PRINT then
-      tex.sprint('\\printtrue')
-    end
-
-    tex.sprint('\\geometry{paperwidth=' .. PAGE.width .. ',paperheight=' .. PAGE.height ..'}')
-
-    tex.sprint(
-      '\\gdef\\FormatPage{' ..
-        '\\newgeometry{' ..
-          'top=' .. PAGE.top ..
-          ',bottom=' .. PAGE.bottom ..
-          ',right=' .. PAGE.right ..
-          ',left=' .. PAGE.left ..
-          ',includehead' ..
-          ',includefoot' ..
-          ',marginparsep=' .. PAGE.marginparsep ..
-          ',marginparwidth=' .. PAGE.marginparwidth ..
-          ',headheight=' .. PAGE.headheight ..
-          ',headsep=' .. PAGE.headsep ..
-          ',footskip=' .. PAGE.footskip ..
-        '}' ..
-      '}'
-    )
-    tex.sprint('\\AtBeginDocument{\\FormatPage}')
-
-    if not HEADER then
-      tex.sprint('\\AtBeginDocument{\\titreactif}')
-      -- Chargement police se fait après
-    end
   end
 \end{luacode*}
 
@@ -224,6 +272,7 @@
 \newif\ifenonce
 \newif\ifvisible
 
+\newif\ifbareme
 \newif\ifdifficulte
 \newif\ifcompetence
 \newif\ifsource
@@ -236,20 +285,30 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{luacode*}
-function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les paramètres
-  -- tex.sprint(
-  --   '\\activitefalse' ..
-  --   '\\basiquefalse' ..
-  --   '\\bilanfalse' ..
-  --   '\\corrigefalse' ..
-  --   '\\coursfalse' ..
-  --   '\\flashfalse' ..
-  --   '\\TDfalse' ..
-  --   '\\DMfalse' ..
-  --   '\\DSfalse' ..
-  --   '\\interrofalse' ..
-  --   '\\flashfalse'
-  -- )
+function BooleensDocument()
+  local bool =[[
+    \activitefalse
+    \basiquefalse
+    \bilanfalse
+    \corrigefalse
+    \coursfalse
+    \flashfalse
+    \TDfalse
+    \DMfalse
+    \DSfalse
+    \interrofalse
+    \flashfalse
+    \baremefalse
+    \correctionfalse
+    \enoncefalse
+    \visiblefalse
+    \competencefalse
+    \difficultefalse
+    \sourcefalse
+    \themefalse
+    \stretchfalse
+  ]]
+  tex.sprint(FormatageString(bool))
 
   if PARAMETRES.type == 'activite' then
     tex.sprint('\\activitetrue')
@@ -283,6 +342,9 @@ function BooleensDocument(PARAMETRES) -- PARAMETRES liste stockant tous les para
     tex.sprint('\\visibletrue')
   end
 
+  if PARAMETRES.bareme then
+    tex.sprint('\\baremetrue')
+  end
   if PARAMETRES.competence then
     tex.sprint('\\competencetrue')
   end
@@ -334,8 +396,8 @@ end
 
 %Commandes de mise en page
 
-\begin{luacode}
-  function TailleTexte(nombre)
+\begin{luacode*}
+  function TailleTexteLua(nombre)
     if nombre == -4 then
       tex.sprint('\\tiny')
     elseif nombre == -3 then
@@ -347,24 +409,24 @@ end
     elseif nombre == 1 then
       tex.sprint('\\large')
     elseif nombre == 2 then
-    tex.sprint('\\Large')
+      tex.sprint('\\Large')
     elseif nombre == 3 then
-    tex.sprint('\\LARGE')
+      tex.sprint('\\LARGE')
     elseif nombre == 4 then
-    tex.sprint('\\huge') 
+      tex.sprint('\\huge') 
     else
       tex.sprint('\\normalsize')
     end
   end
-\end{luacode}
+\end{luacode*}
 
 \newcommand{\tailletexte}[1]{
-  \directlua{TailleTexte{#1}}
+  \directlua{TailleTexteLua(#1)}
 }
 
 \newcommand{\important}[1]{}
 
-\newcommand{\sautdeligne}{\vspace{\baselineskip}}
+\newcommand{\sautligne}{\vspace{\baselineskip}}
 \newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 
@@ -373,16 +435,15 @@ end
 \newcommand{\contenuchapitre}{}
 \newcommand{\contenuniveau}{}
 
+\newcommand{\contenubareme}{}
 \newcommand{\contenucompetence}{}
 \newcommand{\contenudifficulte}{}
 \newcommand{\contenusource}{}
 \newcommand{\contenutheme}{}
 
-\newcommand{\contenurepere}{}
-
 %
 \begin{luacode}
-  function Difficulte(nombre)
+  function DifficulteLua(nombre)
     if nombre then
       for i=1,nombre do
         tex.sprint('\\faStar')
@@ -390,37 +451,67 @@ end
     end
   end
 
-  function Chapitre(nombre)
+  function ChapitreLua(nombre)
     if nombre then
+
       tex.sprint('\\setcounter{part}{' .. nombre ..'}')
     end
   end
 \end{luacode}
 
 
-\newcommand{\chapitre}[2]{\directlua{Chapitre(#1)}\renewcommand{\contenuchapitre}{#2}}
-\newcommand{\niveau}[1]{\renewcommand{\contenuniveau}{#1}}
+\newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
+\newcommand{\definirniveau}[1]{\renewcommand{\contenuniveau}{#1}}
 
+\newcommand{\bareme}[1]{\renewcommand{\contenubareme}{#1}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
-\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{Difficulte(#1)}}}
+\newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{DifficulteLua(#1)}}}
 \newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
 \newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
 
-\newcommand{\repere}[1]{\renewcommand{\contenurepere}{#1}}
+
+%%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\formatchapitreetoile}{}
+\newcommand{\formatchapitrenormal}{}
+
+\newif\ifpartetoile
+
+\newcommand{\formatchapitre}{\ifpartetoile \formatchapitreetoile \else \formatchapitrenormal \fi}
+
+\newcommand{\chapitrenormal}[1]{
+  \partetoilefalse
+  \part{#1}
+  \renewcommand{\contenuchapitre}{#1}
+}
+
+\newcommand{\chapitreetoile}[1]{
+  \partetoiletrue
+  \part*{#1}
+  \phantomsection\addcontentsline{toc}{part}{#1}
+  \renewcommand{\contenuchapitre}{#1}
+}
+
+\makeatletter
+\def\chapitre{\@ifstar\chapitreetoile\chapitrenormal}
+\makeatother
+
+\newcommand{\partie}[1]{\subsection{#1}}
+\newcommand{\souspartie}[1]{\subsubsection{#1}}
 
 %Commandes de lignes
 
 \begin{luacode}
 
-function Lignes(arg,nombre)
+function LignesLua(arg,nombre)
 
   if nombre == nil then
     nombre = 1
   end
 
-  if arg == 'carreaux' or arg == 'carreau' then
+  if str == 'carreaux' or str == 'carreau' then
     tex.sprint('\\tracecarreaux{' ..nombre ..'}')
-  elseif arg == 'surligne' then
+  elseif str == 'surligne' then
     tex.sprint('\\tracesurligne{' ..nombre ..'}')
   else
     tex.sprint('\\tracelignes{' ..nombre ..'}')
@@ -430,7 +521,7 @@ end
 
 \end{luacode}
 
-\newcommand{\lignes}[2]{\directlua{Lignes(#1,#2)}}
+\newcommand{\lignes}[2]{\directlua{LignesLua("#1",#2)}}
 
 
 \newcommand{\tracelignes}[1]{
@@ -447,7 +538,7 @@ end
 
 \newcommand{\tracecarreaux}[1]{
   \hfill\begin{tikzpicture}
-      \draw[xstep=0.5,ystep=0.5, color=couleurcarreau] (0,0) grid (\linewidth-0.8pt,#1);
+    \draw[xstep=0.5,ystep=0.5, color=couleurcarreau] (0,0) grid (\linewidth-0.8pt,#1);
   \end{tikzpicture}\hfill
 }
 
@@ -459,7 +550,6 @@ end
     }%
 \end{tikzpicture}%
 }%
-
 
 %Nouveau soulignement pour le titre, utilisant lua-ul
 \newunderlinetype\beginUnderLine{\cleaders\hbox{%
@@ -478,37 +568,42 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{luacode}
-  function CouleursDocument(COULEURS)
+  function CouleursDocument()
+
+    local PREMIER = PARAMETRES.premier
 
     tex.sprint(
-      '\\colorlet{couleurligne}{' .. COULEURS.ligne .. '}' ..
-      '\\colorlet{couleurinterligne}{' .. COULEURS.interligne .. '}' ..
-      '\\colorlet{couleursection}{' .. COULEURS.section .. '}' ..
-      '\\colorlet{couleursubsection}{' .. COULEURS.subsection .. '}' ..
-      '\\colorlet{couleursubsubsection}{' .. COULEURS.subsubsection .. '}' ..
-      '\\colorlet{couleurcarreau}{' .. COULEURS.carreau .. '}' ..
-      '\\colorlet{couleursurlignelignea}{' .. COULEURS.surlignelignea .. '}' ..
-      '\\colorlet{couleursurligneligneb}{' .. COULEURS.surligneligneb .. '}' ..
-      '\\colorlet{couleurboitecours}{' .. COULEURS.boitecours .. '}' ..
-      '\\colorlet{couleurbackground}{' .. COULEURS.background .. '}' ..
-      '\\colorlet{couleurapplication}{' .. COULEURS.application .. '}' ..
-      '\\colorlet{couleurdefinition}{' .. COULEURS.definition .. '}' ..
-      '\\colorlet{couleurconvention}{' .. COULEURS.convention .. '}' ..
-      '\\colorlet{couleurexercice}{' .. COULEURS.exercice .. '}' ..
-      '\\colorlet{couleurexemple}{' .. COULEURS.exemple .. '}' ..
-      '\\colorlet{couleurmethode}{' .. COULEURS.methode .. '}' ..
-      '\\colorlet{couleurpreuve}{' .. COULEURS.preuve .. '}' ..
-      '\\colorlet{couleurpropriete}{' .. COULEURS.propriete .. '}' ..
-      '\\colorlet{couleurremarque}{' .. COULEURS.remarque .. '}' ..
-      '\\colorlet{couleurenonce}{' .. COULEURS.enonce .. '}' ..
-      '\\colorlet{couleurcorrection}{' .. COULEURS.correction .. '}' ..
-      '\\colorlet{couleursurligne}{' .. COULEURS.surligne .. '}' ..
-      '\\colorlet{rouge}{' .. COULEURS.rouge .. '}' ..
-      '\\colorlet{vert}{' .. COULEURS.vert .. '}' ..
-      '\\colorlet{bleu}{' .. COULEURS.bleu .. '}'
+      '\\colorlet{couleurligne}{' ..  FormatageString(COULEURS.ligne) .. '}' ..
+      '\\colorlet{couleurinterligne}{' ..  FormatageString(COULEURS.interligne) .. '}' ..
+      '\\colorlet{couleursection}{' ..  FormatageString(COULEURS.section) .. '}' ..
+      '\\colorlet{couleursubsection}{' ..  FormatageString(COULEURS.subsection) .. '}' ..
+      '\\colorlet{couleursubsubsection}{' ..  FormatageString(COULEURS.subsubsection) .. '}' ..
+      '\\colorlet{couleurcarreau}{' ..  FormatageString(COULEURS.carreau) .. '}' ..
+      '\\colorlet{couleursurlignelignea}{' ..  FormatageString(COULEURS.surlignelignea) .. '}' ..
+      '\\colorlet{couleursurligneligneb}{' ..  FormatageString(COULEURS.surligneligneb) .. '}' ..
+      '\\colorlet{couleurboitecours}{' ..  FormatageString(COULEURS.boitecours) .. '}' ..
+      '\\colorlet{couleurbackground}{' ..  FormatageString(COULEURS.background) .. '}' ..
+      '\\colorlet{couleurapplication}{' ..  FormatageString(COULEURS.application) .. '}' ..
+      '\\colorlet{couleurdefinition}{' ..  FormatageString(COULEURS.definition) .. '}' ..
+      '\\colorlet{couleurconvention}{' ..  FormatageString(COULEURS.convention) .. '}' ..
+      '\\colorlet{couleurexercice}{' ..  FormatageString(COULEURS.exercice) .. '}' ..
+      '\\colorlet{couleurexemple}{' ..  FormatageString(COULEURS.exemple) .. '}' ..
+      '\\colorlet{couleurmethode}{' ..  FormatageString(COULEURS.methode) .. '}' ..
+      '\\colorlet{couleurpreuve}{' ..  FormatageString(COULEURS.preuve) .. '}' ..
+      '\\colorlet{couleurpropriete}{' ..  FormatageString(COULEURS.propriete) .. '}' ..
+      '\\colorlet{couleurremarque}{' ..  FormatageString(COULEURS.remarque) .. '}' ..
+      '\\colorlet{couleurenonce}{' ..  FormatageString(COULEURS.enonce) .. '}' ..
+      '\\colorlet{couleurcorrection}{' ..  FormatageString(COULEURS.correction) .. '}' ..
+      '\\colorlet{couleursurligne}{' ..  FormatageString(COULEURS.surligne) .. '}' ..
+      '\\colorlet{couleursurlignevisible}{' ..  FormatageString(COULEURS.surlignevisible) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}' ..
+      '\\colorlet{rouge}{' ..  FormatageString(COULEURS.rouge) .. '}' ..
+      '\\colorlet{vert}{' ..  FormatageString(COULEURS.vert) .. '}' ..
+      '\\colorlet{bleu}{' ..  FormatageString(COULEURS.bleu) .. '}'
     )
 
     tex.sprint('\\sethlcolor{couleursurligne}')
+    tex.sprint('\\pagecolor{' .. COULEURS.background ..'}')
 
   end 
 \end{luacode}
@@ -518,25 +613,29 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{luacode}
-  function PoliceDocument(POLICE,PARAMETRES)
+  function PoliceDocument()
     local TAILLE = PARAMETRES.taille
     local FORMAT = PARAMETRES.format
+    local PREMIER = PARAMETRES.premier
 
     if TAILLE == nil then
       if FORMAT == 'fiche' then
-        tex.sprint('\\KOMAoption{fontsize}{'.. POLICE.taillefiche ..'}')
+        tex.sprint('\\KOMAoption{fontsize}{'..  FormatageString(POLICE.taillefiche) ..'}')
       elseif FORMAT == 'diapo' then
-        tex.sprint('\\KOMAoption{fontsize}{'.. POLICE.taillediapo ..'}')
+        tex.sprint('\\KOMAoption{fontsize}{'..  FormatageString(POLICE.taillediapo) ..'}')
       end
     else
       tex.sprint('\\KOMAoption{fontsize}{' .. TAILLE ..'}')
     end
-    tex.sprint('\\renewcommand{\\important}[1]{'.. POLICE.important ..'}')
+
+    if PREMIER then
+      tex.sprint('\\renewcommand{\\important}[1]{'..  FormatageString(POLICE.important) ..'}')
+    end
 
   tex.sprint(
-    '\\IfFontExistsTF{' .. POLICE.texte ..'}{\\setmainfont{' .. POLICE.texte .. '}}\\n' ..
-    '\\IfFontExistsTF{' .. POLICE.math .. '}{\\setmathfont{' .. POLICE.math .. '}}{}' ..
-    '\\IfFontExistsTF{' .. POLICE.mathcal .. '}{\\setmathfont{' .. POLICE.mathcal .. '}[range=cal]}{}'
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.texte) ..'}{\\setmainfont{' ..  FormatageString(POLICE.texte) .. '}}\\n' ..
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.math) .. '}{\\setmathfont{' ..  FormatageString(POLICE.math) .. '}}{}' ..
+    '\\IfFontExistsTF{' ..  FormatageString(POLICE.mathcal) .. '}{\\setmathfont{' ..  FormatageString(POLICE.mathcal) .. '}[range=cal]}{}'
   )
   end
 \end{luacode}
@@ -551,30 +650,30 @@ end
 \newcommand{\logoactif}{}
 
 \begin{luacode}
-  function LogosDocument(PARAMETRES,LOGOS)
+  function LogosDocument()
 
     local TYPE = PARAMETRES.type
 
     if TYPE == 'activite' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.activite ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.activite) ..'}')
     elseif TYPE == 'basique' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.basique ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.basique) ..'}')
     elseif TYPE == 'bilan' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.bilan ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.bilan) ..'}')
     elseif TYPE == 'corrige' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.corrige ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.corrige) ..'}')
     elseif TYPE == 'cours' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.cours ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.cours) ..'}')
     elseif TYPE == 'DM' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DM ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.DM) ..'}')
     elseif TYPE == 'DS' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.DS ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.DS) ..'}')
     elseif TYPE == 'flash' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.flash ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.flash) ..'}')
     elseif TYPE == 'interro' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.interro ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.interro) ..'}')
     elseif TYPE == 'TD' then
-      tex.sprint('\\renewcommand{\\logoactif}{' .. LOGOS.TD ..'}')
+      tex.sprint('\\renewcommand{\\logoactif}{' ..  FormatageString(LOGOS.TD) ..'}')
     end
   end
 \end{luacode}
@@ -589,37 +688,37 @@ end
 \newcommand{\stylesections}[3]{}
 
 \begin{luacode}
-  function StylesTitresDocument(PARAMETRES,STYLESTITRES)
+  function StylesTitresDocument()
 
     local TYPE = PARAMETRES.type
     local HEADER = PARAMETRES.header
 
     if HEADER then
-      tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre ..'}')
+      tex.sprint('\\renewcommand{\\titre}[1]{'..  FormatageString(STYLESTITRES.titre) ..'}')
     else
-      tex.sprint('\\renewcommand{\\titre}[1]{'.. STYLESTITRES.titre .. '\\vspace{' .. STYLESTITRES.espacement ..'}}')
+      tex.sprint('\\renewcommand{\\titre}[1]{'..  FormatageString(STYLESTITRES.titre) .. '\\vspace{' ..  FormatageString(STYLESTITRES.espacement) ..'}}')
     end
 
     if TYPE == 'activite' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.activite ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.activite) ..'}')
     elseif TYPE == 'basique' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.basique ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.basique) ..'}')
     elseif TYPE == 'bilan' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.bilan ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.bilan) ..'}')
     elseif TYPE == 'corrige' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.corrige ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.corrige) ..'}')
     elseif TYPE == 'cours' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.cours ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.cours) ..'}')
     elseif TYPE == 'DM' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.DM ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.DM) ..'}')
     elseif TYPE == 'DS' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.DS ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.DS) ..'}')
     elseif TYPE == 'flash' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.flash ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.flash) ..'}')
     elseif TYPE == 'interro' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.interro ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.interro) ..'}')
     elseif TYPE == 'TD' then
-      tex.sprint('\\renewcommand{\\styleactif}[1]{' .. STYLESTITRES.TD ..'}')
+      tex.sprint('\\renewcommand{\\styleactif}[1]{' ..  FormatageString(STYLESTITRES.TD) ..'}')
     end
   end
 \end{luacode}
@@ -629,41 +728,42 @@ end
 
 
 \begin{luacode}
-  function TitresDocument(PARAMETRES,TITRES)
-    local TITRETOC = PARAMETRES.titretoc
+  function TitresDocument()
     local TYPE = PARAMETRES.type
+    local PREMIER = PARAMETRES.premier
 
-    tex.sprint('\\titretoctrue')
-
-    if TYPE == 'activite' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocactivite ..'}')
-    elseif TYPE == 'basique' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocbasique ..'}')
-    elseif TYPE == 'bilan' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocbilan ..'}')
-    elseif TYPE == 'corrige' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.toccorrige ..'}')
-    elseif TYPE == 'cours' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.toccours ..'}')
-    elseif TYPE == 'DM' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocDM ..'}')
-    elseif TYPE == 'DS' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocDS ..'}')
-    elseif TYPE == 'flash' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocflash ..'}')
-    elseif TYPE == 'interro' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocinterro ..'}')
-    elseif TYPE == 'TD' then
-      tex.sprint('\\renewcommand{\\motcletitretoc}{' .. TITRES.tocTD ..'}')
+    if TYPE == 'basique' then
+      tex.sprint('\\titretocfalse')
+    else
+      tex.sprint('\\titretoctrue')
     end
 
-    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' .. TITRES.format .. '}}')
-    tex.sprint('\\AtBeginDocument{\\iftitretoc\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi}')
-    tex.sprint('\\AddToHook{shipout/before}{\\iftitretoc\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}\\titretocfalse\\fi}')
+    if TYPE == 'activite' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocactivite) ..'}')
+    elseif TYPE == 'basique' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocbasique) ..'}')
+    elseif TYPE == 'bilan' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocbilan) ..'}')
+    elseif TYPE == 'corrige' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.toccorrige) ..'}')
+    elseif TYPE == 'cours' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.toccours) ..'}')
+    elseif TYPE == 'DM' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocDM) ..'}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocDS) ..'}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocflash) ..'}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocinterro) ..'}')
+    elseif TYPE == 'TD' then
+      tex.sprint('\\renewcommand{\\motcletitretoc}{' ..  FormatageString(TITRES.tocTD) ..'}')
+    end
+
+    tex.sprint('\\renewcommand{\\titreactif}{\\styleactif{' ..  FormatageString(TITRES.format) .. '}}')
  
   end
 \end{luacode}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
@@ -673,10 +773,10 @@ end
 
 \begin{luacode}
 
-function VerificationVisible(FLAG,PARAMETRES)
+function VerificationVisible(flag)
   local VISIBLE = tostring(PARAMETRES.visible)
 
-  if FLAG == VISIBLE then
+  if flag == VISIBLE then
     tex.sprint('\\visibletrue')
   else
     tex.sprint('\\visiblefalse')
@@ -685,20 +785,37 @@ end
 
 \end{luacode}
 
-
-\NewEnviron{visible*}[1][true]{%
-  \directlua{VerificationVisible('#1',PARAMETRES)}
+\NewEnviron{visible}[1][true]{%
+  \directlua{VerificationVisible('#1')}
   \ifvisible
-    \BODY
+    \begin{tcolorbox}[
+      colback=couleursurlignevisible, 
+      colframe=couleurbackground, 
+      boxrule=0pt, 
+      left=0pt, 
+      top=0pt, 
+      bottom=0pt, 
+      right=0pt,
+      before skip =0pt,
+      after skip = 0.3em,
+      left skip =0pt,
+      right skip = 0pt, 
+      boxsep=0pt,
+      enhanced, 
+      shield externalize=true,
+      breakable
+      ]
+      \BODY
+      \end{tcolorbox}
   \fi
 }
 
-\newcommand{\visible}[2][true]{%
-  \directlua{VerificationVisible('#1',PARAMETRES)}
-  \ifvisible
-    #2
-  \fi
-}
+% \newcommand{\visible*}[2][true]{%
+%   \directlua{VerificationVisible('#1')}
+%   \ifvisible
+%     #2
+%   \fi
+% }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ENVIRONNEMENTS DE COURS ET EXERCICES %%%
@@ -709,7 +826,7 @@ end
 \NewEnviron{application}[1][]{\BODY}
 \NewEnviron{definition}[1][]{\BODY}
 \NewEnviron{convention}[1][]{\BODY}
-\NewEnviron{exercice}[1][]{\BODY}
+% \NewEnviron{exercice}[1][]{\BODY}
 \NewEnviron{exemple}[1][]{\BODY}
 \NewEnviron{methode}[1][]{\BODY}
 \NewEnviron{preuve}[1][]{\BODY}
@@ -720,43 +837,28 @@ end
 \NewEnviron{enonce}[1][]{\BODY}
 
 \begin{luacode*}
-  function EnvironnementsDocument(ENVIRONNEMENTS)
-    ENVIRONNEMENTS.formatcours = SupprimeNewline(ENVIRONNEMENTS.formatcours)
-    ENVIRONNEMENTS.enonce = SupprimeNewline(ENVIRONNEMENTS.enonce)
-    ENVIRONNEMENTS.correction = SupprimeNewline(ENVIRONNEMENTS.correction)
+  function EnvironnementsDocument()
 
-    tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'.. ENVIRONNEMENTS.formatcours ..'}')
-    tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'.. ENVIRONNEMENTS.tocexercice ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'.. ENVIRONNEMENTS.tocenonce ..'}\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.enonce .. '\\fi}')
+    local PREMIER = PARAMETRES.premier
 
-    tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\phantomsection\\addcontentsline{toc}{subsubsection}{' .. ENVIRONNEMENTS.toccorrection .. '}\\ifstretch\\vfill\\fi' .. ENVIRONNEMENTS.correction .. '\\fi}')
+    if PREMIER then
 
-    tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
-    tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
-    tex.sprint([[\RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}}]])
-    tex.sprint([[\RenewEnviron{exercice}[1][Exercice]{\formatEnvCours[#1]{couleurexercice}}]])
-    tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
-    tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
-    tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
-    tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
-    tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
+      tex.sprint('\\renewcommand{\\formatEnvCours}[2][]{\\ifstretch\\vfill\\fi'..  FormatageString(ENVIRONNEMENTS.formatcours) ..'}')
+      tex.sprint('\\RenewEnviron{enonce}{\\stepcounter{compteurexercice}\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\fi\\ifenonce\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi}')
+
+      tex.sprint('\\RenewEnviron{correction}{\\ifcorrection\\ifcours\\else\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\fi\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
+
+      tex.sprint([[\RenewEnviron{application}[1][Application]{\formatEnvCours[#1]{couleurapplication}}]])
+      tex.sprint([[\RenewEnviron{definition}[1][Définition]{\formatEnvCours[#1]{couleurdefinition}}]])
+      tex.sprint([[\RenewEnviron{convention}[1][Convention]{\formatEnvCours[#1]{couleurconvention}}]])
+      tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
+      tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
+      tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
+      tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
+      tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
+    end
   end
 \end{luacode*}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% CRÉATION DU TITRE SELON LE HEADER %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% \begin{luacode}
-%   function TitreDocument(PARAMETRES)
-%     local HEADER = PARAMETRES.header
-
-%     -- tex.sprint('\\AtBeginDocument{\\titreactif}')
-%     if HEADER then
-%     -- tex.sprint('\\AddToHook{shipout/after}{TEST}')
-%     end
-%   end
-% \end{luacode}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
@@ -764,57 +866,176 @@ end
 
 % \NewEnviron{lignes}{\BODY}
 % \NewEnviron{lignes*}{\BODY}
-\newcommand{\rivcorrection}[2]{\ifvisible #1 \else #2 \fi}
+\newcommand{\rivcorrection}[2]{\ifvisible~#1 \else #2 \fi}
 \newcommand{\rivimportant}[1]{\important{#1}}
 \newcommand{\ajoutlignes}[1]{}
 \providecommand{\adjustbox}[2]{#2}
 \newcommand{\parametres}[1]{}
+\newcommand{\sautdeligne}{\sautligne}
+\newcommand{\niveau}{\definirniveau}
+\NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
+
+%%%
+
+\begin{luacode*}
+
+  function TitreLua()
+    local HEADER = PARAMETRES.header
+    local PREMIER = PARAMETRES.premier
+    local TYPE = PARAMETRES.type
+
+    if PREMIER then
+
+      if not HEADER then
+        tex.sprint('\\AtBeginDocument{\\titreactif}')
+
+        if TYPE ~= 'basique' then
+          tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
+        end
+
+      end
+
+    else
+
+      if not HEADER then
+        tex.sprint('\\titreactif')
+      end
+    tex.sprint('\\phantomsection\\addcontentsline{toc}{section}{\\motcletitretoc}')
+
+    end
+
+    PARAMETRES.premier = false
+  end 
+\end{luacode*}
+
+\begin{luacode*}
+  function mesParametres(str)
+  end
+\end{luacode*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% COMMANDE PARAMETRAGE PERMETTANT DE MODIFIER LES OPTIONS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\parametrage}{
-  \directlua{
-  PARAMETRES.format = Format
-  PARAMETRES.type = Type
-  PARAMETRES.print = Impression
-  PARAMETRES.header = Header
-  PARAMETRES.taille = Taille
+\begin{luacode*}
+  function ParametrageDocument()
 
-  PARAMETRES.correction = Correction
-  PARAMETRES.enonce = Enonce
-  PARAMETRES.visible = Visible
+    if Format == nil then
+      PARAMETRES.format = 'fiche'
+    else
+      PARAMETRES.format = Format
+    end
 
-  PARAMETRES.competence = Competence
-  PARAMETRES.difficulte = Difficulte
-  PARAMETRES.source = Source
-  PARAMETRES.theme = Theme
+    if Type == nil then
+      PARAMETRES.type = 'basique'
+    else
+      PARAMETRES.type = Type
+    end
 
-  PARAMETRES.stretch = Stretch
+    if Impression == nil then
+    PARAMETRES.print = false
+    else
+    PARAMETRES.print = Impression
+    end 
 
-    POLICE = PoliceUtilisateur()
-    PoliceDocument(POLICE,PARAMETRES)
+    if Header == nil then
+    PARAMETRES.header = false
+    else
+    PARAMETRES.header = Header
+    end 
 
-    PAGE = FormatUtilisateur(PARAMETRES)
-    FormatDocument(PAGE,PARAMETRES)
+    PARAMETRES.taille = Taille
 
+    if Correction == nil then
+    PARAMETRES.correction = false
+    else
+    PARAMETRES.correction = Correction
+    end 
 
+    if Enonce == nil then
+    PARAMETRES.enonce = false
+    else
+    PARAMETRES.enonce = Enonce
+    end 
 
-    COULEURS = CouleursUtilisateur(PARAMETRES)
-    CouleursDocument(COULEURS)
+    if Visible == nil then
+    PARAMETRES.visible = false
+    else
+    PARAMETRES.visible = Visible
+    end 
 
-    LOGOS = LogosUtilisateur()
-    LogosDocument(PARAMETRES,LOGOS)
+    if Bareme == nil then
+    PARAMETRES.bareme = false
+    else
+    PARAMETRES.bareme = Bareme
+    end 
 
-    BooleensDocument(PARAMETRES)
+    if Competence == nil then
+    PARAMETRES.competence = false
+    else
+    PARAMETRES.competence = Competence
+    end 
 
-    STYLESTITRES = StylesTitresUtilisateur(PARAMETRES)
-    StylesTitresDocument(PARAMETRES,STYLESTITRES)
-    TITRES = TitresUtilisateur(PARAMETRES)
-    TitresDocument(PARAMETRES,TITRES)
-    ENVIRONNEMENTS = EnvironnementsUtilisateur()
-    EnvironnementsDocument(ENVIRONNEMENTS)
-  }
-}
+    if Difficulte == nil then
+    PARAMETRES.difficulte = false
+    else
+    PARAMETRES.difficulte = Difficulte
+    end 
 
+    if Source == nil then
+    PARAMETRES.source = false
+    else
+    PARAMETRES.source = Source
+    end 
+
+    if Theme == nil then
+    PARAMETRES.theme = false
+    else
+    PARAMETRES.theme = Theme
+    end 
+
+    if Stretch == nil then
+    PARAMETRES.stretch = false
+    else
+    PARAMETRES.stretch = Stretch
+    end 
+
+    PoliceUtilisateur()
+    PoliceDocument()
+
+    FormatUtilisateur()
+    FormatDocument()
+
+    CouleursUtilisateur()
+    CouleursDocument()
+
+    LogosUtilisateur()
+    LogosDocument()
+
+    BooleensDocument()
+
+    StylesTitresUtilisateur()
+    StylesTitresDocument()
+    TitresUtilisateur()
+    TitresDocument()
+    EnvironnementsUtilisateur()
+    EnvironnementsDocument()
+    TitreLua()
+
+    Type = nil
+    Impression = nil
+    Header = nil
+    Taille = nil
+    Correction = nil
+    Enonce = nil
+    Visible = nil
+    Competence = nil
+    Bareme = nil
+    Difficulte = nil
+    Source = nil
+    Theme = nil
+    Stretch = nil
+  end
+\end{luacode*}
+
+\newcommand{\parametrage}{\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}}

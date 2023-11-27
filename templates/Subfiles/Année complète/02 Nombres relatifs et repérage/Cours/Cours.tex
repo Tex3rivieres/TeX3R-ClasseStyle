@@ -1,0 +1,142 @@
+\documentclass[../Chapitre2.tex]{subfiles}
+
+\begin{document}
+
+
+\definirchapitre{2}{Nombres relatifs et repérage}
+\definirniveau{5}
+
+\begin{luacode}
+  mesParametres('Cours')
+\end{luacode}
+\parametrage
+
+
+\partie{Premières définitions}
+
+\souspartie{Nombres positifs et négatifs}
+
+%%%%%%%%%%%%%%%%%%%%
+%%%% DÉFINITION %%%%
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}[Définitions]
+
+\begin{itemize}
+  \item Un \important{nombre positif} est un nombre supérieur ou égal à zéro.
+  \item Un \important{nombre négatif} est un nombre inférieur ou égal à zéro.
+  \item Un \important{nombre relatif} est un nombre positif ou négatif.
+\end{itemize}
+
+\end{definition}
+
+%%%%%%%%%%%%%%%%%
+%%%% EXEMPLE %%%%
+%%%%%%%%%%%%%%%%%
+
+\begin{exemple}
+    \begin{itemize}
+      \item $5$ ; $+18$ ; $0$ sont des nombres positifs.
+      \item $-17$ ; $-489$ ; $0$ sont des nombres négatifs.
+    \end{itemize}
+\end{exemple}
+
+%%%%%%%%%%%%%%%%%%
+%%%% REMARQUE %%%%
+%%%%%%%%%%%%%%%%%%
+
+\begin{remarque}[Remarques]
+  \begin{itemize}
+    \item $0$ est à la fois positif et négatif.
+    \item Le signe $+$ n'est pas toujours écrit pour les nombres postifs : $+12$ peut s'écrire simplement $12$.
+  \end{itemize}
+\end{remarque}
+
+\souspartie{Opposé d'un nombre}
+
+%%%%%%%%%%%%%%%%%%%%
+%%%% DÉFINITION %%%%
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}
+  Deux nombres sont dits \important{opposés} lorsqu'ils ont la même valeur mais des signes différents.
+\end{definition}
+
+%%%%%%%%%%%%%%%%%
+%%%% EXEMPLE %%%%
+%%%%%%%%%%%%%%%%%
+
+\begin{exemple}
+    \begin{itemize}
+      \item $+5$ et $-5$ sont opposés.
+      \item L'opposé de $-8$ est $+8$.
+    \end{itemize}
+\end{exemple}
+
+\partie{Repérage}
+
+\souspartie{Sur une droite graduée}
+
+%%%%%%%%%%%%%%%%%
+%%%% MÉTHODE %%%%
+%%%%%%%%%%%%%%%%%
+
+\begin{remarque}
+    Un nombre relatif peut se représenter sur une droite graduée.
+\end{remarque}
+
+%%%%%%%%%%%%%%%%%
+%%%% EXEMPLE %%%%
+%%%%%%%%%%%%%%%%%
+
+\begin{exemple}
+  \Reperage[AffichageNom,AffichageGrad,ValeurMin=-5,ValeurMax=5]{-5/,2/B,-3/A,5/}
+
+  \bigskip 
+
+  On note les abscisses des points $A(-3)$ et $B(2)$.
+\end{exemple}
+
+\sautfiche
+
+
+
+\partie{Dans un repère}
+
+%%%%%%%%%%%%%%%%%%%%
+%%%% DÉFINITION %%%%
+%%%%%%%%%%%%%%%%%%%%
+
+\begin{definition}
+  Un repère permet d'identifier chaque point du plan par deux coordonnées. 
+  
+  On note $A(x;y)$ un point du plan, où :
+
+  \begin{itemize}
+    \item $x$ représente son \important{abscisse}, obtenue horizontalement ($\rightarrow$)
+    \item $y$ représente son \important{ordonnée}, obtenue verticalement ($\uparrow$)
+  \end{itemize}
+\end{definition}
+
+%%%%%%%%%%%%%%%%%
+%%%% EXEMPLE %%%%
+%%%%%%%%%%%%%%%%%
+
+\begin{exemple}
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+    \Reperage[Plan,AffichageNom,LectureCoord,AffichageGrad]{1/2/A,-2/1/B,2/-3/C,-4/-1/D}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+    On peut lire les coordonnées suivantes :
+  
+    \begin{itemize}
+      \item $A(1\,;\,2)$
+      \item $B(-2\,;\,1)$
+      \item $C(2\,;\,-3)$
+      \item $D(-4\,;\,-1)$
+    \end{itemize}
+
+\end{minipage}}%
+\end{exemple}
+
+\end{document}
