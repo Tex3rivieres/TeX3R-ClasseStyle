@@ -389,7 +389,7 @@ function EnvironnementsUtilisateur()
         \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
         }
       }
-      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme~pts}\fi\par
+      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme~points}\fi\par
         \medskip
         \BODY
         \ifsource\par
@@ -448,6 +448,7 @@ end
       Competence = true
       Enonce = true
       Stretch = true
+      Bareme = true
     elseif str == 'flash' or str == 'Flash' then
 
     elseif str == 'interro' or str == 'Interro' then
@@ -456,6 +457,7 @@ end
       Competence = true
       Enonce = true
       Stretch = true
+      Bareme = true
     elseif str == 'TD' then
       Type = 'TD'
       Header = true

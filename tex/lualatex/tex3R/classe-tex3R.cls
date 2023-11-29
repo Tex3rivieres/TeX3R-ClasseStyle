@@ -463,13 +463,21 @@ end
   function NiveauDocument(str)
   tex.sprint('\\renewcommand{\\contenuniveau}{' .. str ..'}')
   end
+
+  function BaremeLua(arg)
+    if arg then
+      tex.sprint('\\renewcommand{\\contenubareme}{' .. arg .. '}')      
+    else
+      tex.sprint('\\renewcommand{\\contenubareme}{?}')
+    end
+  end
 \end{luacode}
 
 
 \newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
 \newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur("#1")}}
 
-\newcommand{\bareme}[1]{\renewcommand{\contenubareme}{#1}}
+\newcommand{\bareme}[1]{\directlua{BaremeLua(#1)}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
 \newcommand{\difficulte}[1]{\renewcommand{\contenudifficulte}{\directlua{DifficulteLua(#1)}}}
 \newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
