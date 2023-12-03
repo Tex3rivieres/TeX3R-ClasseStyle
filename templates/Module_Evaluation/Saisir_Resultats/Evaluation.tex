@@ -248,44 +248,44 @@ mesParametres('basique')
     
                         if csvtable[C][1]=="Communiquer" then
                             if competence < 3 then
-                                communiquer = "\\subfile{../Remediation/communiquer_1.tex}"
+                                communiquer = "\\subfile{../Exercices_Remediation/communiquer_1.tex}"
                             else
-                                communiquer = "\\subfile{../Remediation/communiquer_2.tex}"
+                                communiquer = "\\subfile{../Exercices_Remediation/communiquer_2.tex}"
                             end
     
                         elseif csvtable[C][1]=="Calculer" then
                             if competence < 3 then
-                                calculer = "\\subfile{../Remediation/calculer_1.tex}"
+                                calculer = "\\subfile{../Exercices_Remediation/calculer_1.tex}"
                             else
-                                calculer = "\\subfile{../Remediation/calculer_2.tex}"
+                                calculer = "\\subfile{../Exercices_Remediation/calculer_2.tex}"
                             end
     
                         elseif csvtable[C][1]=="Représenter" then
                             if competence < 3 then
-                                representer = "\\subfile{../Remediation/representer_1.tex}"
+                                representer = "\\subfile{../Exercices_Remediation/representer_1.tex}"
                             else
-                                representer = "\\subfile{../Remediation/representer_2.tex}"
+                                representer = "\\subfile{../Exercices_Remediation/representer_2.tex}"
                             end
                        
                         elseif csvtable[C][1]=="Raisonner" then
                             if competence < 3 then
-                                raisonner = "\\subfile{../Remediation/raisonner_1.tex}"
+                                raisonner = "\\subfile{../Exercices_Remediation/raisonner_1.tex}"
                             else
-                                raisonner = "\\subfile{../Remediation/raisonner_2.tex}"
+                                raisonner = "\\subfile{../Exercices_Remediation/raisonner_2.tex}"
                             end
     
                         elseif csvtable[C][1]=="Chercher" then
                             if competence < 3 then
-                                chercher = "\\subfile{../Remediation/chercher_1.tex}"
+                                chercher = "\\subfile{../Exercices_Remediation/chercher_1.tex}"
                             else
-                                chercher = "\\subfile{../Remediation/chercher_2.tex}"
+                                chercher = "\\subfile{../Exercices_Remediation/chercher_2.tex}"
                             end
     
                         elseif csvtable[C][1]=="Modéliser" then
                             if competence < 3 then
-                                modeliser = "\\subfile{../Remediation/modeliser_1.tex}"
+                                modeliser = "\\subfile{../Exercices_Remediation/modeliser_1.tex}"
                             else
-                                modeliser = "\\subfile{../Remediation/modeliser_2.tex}"
+                                modeliser = "\\subfile{../Exercices_Remediation/modeliser_2.tex}"
                             end
                         end
                     
@@ -326,7 +326,7 @@ mesParametres('basique')
             tex.sprint{"\\end{minipage}\\par"}
             tex.sprint{"\\vspace{0.5em}"}
             end
-            -- tex.sprint("\\par\\vspace{0.5em}\\input{../Remediation/communiquer_1.tex}\\par")     
+            -- tex.sprint("\\par\\vspace{0.5em}\\input{../Exercices_Remediation/communiquer_1.tex}\\par")     
             tex.sprint(communiquer .. "\\par")    
             tex.sprint(calculer .. "\\par")   
             tex.sprint(representer .. "\\par")   
