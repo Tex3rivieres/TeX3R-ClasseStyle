@@ -4,6 +4,7 @@
 
 Math mode dans definirniveau
 
+partie* et souspartie* non définis
 
 
 ## Conflits de package

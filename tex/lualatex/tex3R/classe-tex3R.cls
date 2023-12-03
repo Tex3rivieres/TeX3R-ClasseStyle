@@ -484,6 +484,7 @@ end
 \newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
 \newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
 
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Column P centrée verticalement
 
 %%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
