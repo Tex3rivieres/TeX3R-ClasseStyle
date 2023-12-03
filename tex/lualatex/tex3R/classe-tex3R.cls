@@ -108,6 +108,7 @@
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
 \RequirePackage{ccicons}
+\RequirePackage{circledsteps}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SUPPRESSIONS DE WARNINGS ABUSIFS %%%
