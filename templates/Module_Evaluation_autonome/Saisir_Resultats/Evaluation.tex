@@ -1,0 +1,407 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{luacode}
+\usepackage[np]{numprint}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}	
+\usepackage{tasks}
+\usepackage{bookmark}
+\usepackage{subfiles}
+
+\geometry{
+    paperwidth=21cm
+    ,paperheight=29.7cm
+    ,top=1cm
+    ,bottom=1cm
+    ,right=1cm
+    ,left=1cm
+    ,includehead
+    ,includefoot
+    ,marginparsep=0cm
+    ,marginparwidth=0cm
+    ,headheight=0cm
+    ,headsep=0cm
+    ,footskip=0cm
+}
+
+\AtBeginDocument{\npproductsign{\times}\npthousandsep{\,}\npthousandthpartsep{\,}}
+
+\pagestyle{empty}
+
+% \renewenvironment{correction}[1][Correction]{\textbf{#1} \\}{}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+
+%%%%%%%  Contenu du document %%%%%%%%
+
+    
+    \begin{luacode*}
+    nomDS = "\\LARGE{DS}"
+    communiquer = ""
+    calculer = ""
+    representer = ""
+    raisonner = ""
+    chercher = ""
+    modeliser = ""
+    compteurcompetence = 0
+    
+    function csvtotable(filename)
+        local fichier = io.open(filename, "r")
+        local csvtable = {}
+        for ligne in fichier:lines() do
+            local lignecsvtable = {}
+            for value in ligne:gmatch("[^;]+") do
+                value = value:gsub(",", ".")  -- Remplacer les virgules par des points
+                table.insert(lignecsvtable, value) 
+            end
+            table.insert(csvtable, lignecsvtable) 
+        end
+        fichier:close()
+        return csvtable
+    end
+    
+    
+    
+    function extraction_globale(csvtable,number)
+       local maxlignes=#csvtable
+       local longueur = csvtable[1]
+       local maxcolonnes = #longueur
+       for j=2,maxcolonnes do
+          tex.sprint(csvtable[1][j])
+       end
+    end
+    
+    --1:Exercice
+    --2:Question
+    --3:Description
+    --4:Calculer
+    --5:Chercher
+    --6:Communiquer
+    --7:Modéliser
+    --8:Raisonner
+    --9:Représenter
+    
+    --10:Points max
+    --10+:Points élève
+    
+    function extraction_competence(csvtable,C,E) --C:numéro de compétence ; E:numéro de l'élève à extraire
+        local maxlignes=#csvtable
+        local longueur = csvtable[1]
+        local maxcolonnes = #longueur
+    
+        local points = 0
+        local pointsmax=0
+        local competence=nil
+        local ratio=nil
+        local question=nil
+        local liste_score={}
+    
+    
+        --Attribution globale de la compétence
+        for j=2,maxcolonnes do
+            if csvtable[C][j] == "1" then --On vérifie si la compétence est à 1 colonne par colonne
+                if csvtable[2][j]~="Bonus" then
+                    pointsmax = pointsmax + csvtable[10][j]
+                end
+                if csvtable[E][j] ~= "a" then
+                    points = points + csvtable[E][j]
+    
+                    --Récupération du score par exercice et par question
+                    local pts = csvtable[E][j]
+                    local ptsmax = csvtable[10][j]
+    
+                    if pts%1 == 0 then
+                        pts = math.floor(pts)
+                    end
+                    if ptsmax%1 == 0 then
+                        ptsmax = math.floor(ptsmax)
+                    end            
+    
+                    -- construction des item competences
+                    question = "$\\underset{\\text{".. csvtable[3][j] .."}}{\\text{Ex " .. csvtable[1][j] .."-" .. csvtable[2][j] .. "}: \\mathbf{\\np{" .. pts .. "}/\\np{" .. ptsmax .. "}}}$"
+    
+                    table.insert(liste_score,question)
+                end
+            end
+        end
+    
+    
+        --Si la compétence est sollicitée, attribution d'un niveau
+        if pointsmax ~= 0 then
+            if csvtable[E][2] ~= "a" then
+                ratio = points/pointsmax
+                if ratio >= 0.8 then
+                    competence = 4
+                elseif ratio >= 0.6 then
+                    competence = 3
+                elseif ratio >= 0.3 then
+                    competence = 2
+                else
+                    competence = 1
+                end
+            else
+                competence = "a"
+            end
+    
+    
+        end
+        --La fonction retourne le score global de la compétence, et la liste des scores à chacune des questions
+        return competence,liste_score
+    end
+    
+    function extraction_notes(csvtable,E)
+        local maxlignes=#csvtable
+        local longueur = csvtable[1]
+        local maxcolonnes = #longueur
+    
+        local points = 0
+        local pointsmax=0
+        local total = 0
+        local totalmax = 0
+    
+        local exercice = 1
+        local question = nil
+        local liste_score={}
+        local pourcentage=0
+    
+        if csvtable[E][2] ~= "a" then
+            for j=2,maxcolonnes do
+            
+                if csvtable[1][j] ~= tostring(exercice) then --On vérifie si on est toujours dans le bon exercice
+    
+                    if points%1 == 0 then
+                    points = math.floor(points)
+                    end
+    
+                    if pointsmax%1 == 0 then
+                        pointsmax=math.floor(pointsmax)
+                    end
+    
+                    question = "Exercice " .. exercice .. " : $\\mathbf{\\np{" .. points .. "}/\\np{" .. pointsmax .. "}}$"
+                    table.insert(liste_score,question)
+                    exercice = exercice + 1
+                    points = 0
+                    pointsmax = 0
+                end
+    
+                points = points + csvtable[E][j]
+                if csvtable[2][j]~="Bonus" then
+                    pointsmax = pointsmax + csvtable[10][j]
+                end
+    
+                total = total + csvtable[E][j]
+                if csvtable[2][j]~="Bonus" then
+                    totalmax = totalmax + csvtable[10][j]
+                end
+            end
+    
+            --Insertion du dernier exercice
+            if points%1 == 0 then
+                points = math.floor(points)
+            end
+    
+            if pointsmax%1 == 0 then
+                pointsmax=math.floor(pointsmax)
+            end
+    
+            question = "Exercice " .. exercice .. " : $\\mathbf{\\np{" .. points .. "}/\\np{" .. pointsmax .. "}}$"
+            table.insert(liste_score,question)
+    
+            pourcentage = math.floor(total/totalmax*100)
+        else
+            pourcentage = "a"
+        end
+    
+        return pourcentage,liste_score
+    end
+    
+    function affiche_eleve(csvtable,E)
+       
+        local ligne_nom = ""
+        local ligne_exercice = ""
+        local ligne_competence = ""
+        local recap_eleve = {}
+        local recap_classe = {}
+        local entete_classe = {"ÉLÈVE","POURCENTAGE"}
+    
+        --Création de la première ligne : NOM Prénom et pourcentage
+        pourcentage,liste_score = extraction_notes(csvtable,E)
+        if pourcentage ~= "a" then
+            ligne_nom = "\\phantomsection\\addcontentsline{toc}{subsection}{" .. csvtable[E][1] .. "}"
+            ligne_nom = ligne_nom .. "\\Large\\faUserGraduate\\, " .. csvtable[E][1] .. "\\hfill " .. nomDS .. " \\hfill \\circled{" .. pourcentage .. "\\%}"
+        end
+        recap_eleve = {csvtable[E][1],pourcentage}
+        -- recap_eleve = recap_eleve,pourcentage
+    
+        --Création de la deuxième ligne avec le récapitulatif par exercice
+        if pourcentage ~= "a" then
+            for i=1,#liste_score do
+            ligne_exercice = ligne_exercice .. "\\task \\large " .. liste_score[i]
+            end
+    
+            ligne_exercice = "\\normalsize\\begin{tasks}[label=$\\empty$,item-indent=15pt](4) " .. ligne_exercice .. "\\end{tasks}"
+        end
+    
+        --Création des lignes pour chaque compétence
+        function ligne_competence(csvtable,C,E)
+            local competence = nil
+            local liste_score = {}
+            local ligne_competence = ""
+            local recap_eleve = {}
+            local entete_classe = {}
+            competence,liste_score = extraction_competence(csvtable,C,E)
+            if competence then
+                entete_classe = csvtable[C][1]
+                recap_eleve = competence
+                if competence ~= "a" then
+                    ligne_competence = "\\begin{minipage}{0.25\\linewidth}\\bfseries\\Large " .. csvtable[C][1] .. "\\end{minipage}\\hfill\\begin{minipage}{0.05\\linewidth}\\circled{" .. competence .. "}\\end{minipage}\\hfill\\begin{minipage}{0.7\\linewidth}\\begin{tasks}[label=$\\empty$,item-indent=15pt](4) "
+    
+                        if csvtable[C][1]=="Communiquer" then
+                            if competence < 3 then
+                                communiquer = "\\subfile{../Exercices_Remediation/communiquer_1.tex}"
+                            else
+                                communiquer = "\\subfile{../Exercices_Remediation/communiquer_2.tex}"
+                            end
+    
+                        elseif csvtable[C][1]=="Calculer" then
+                            if competence < 3 then
+                                calculer = "\\subfile{../Exercices_Remediation/calculer_1.tex}"
+                            else
+                                calculer = "\\subfile{../Exercices_Remediation/calculer_2.tex}"
+                            end
+    
+                        elseif csvtable[C][1]=="Représenter" then
+                            if competence < 3 then
+                                representer = "\\subfile{../Exercices_Remediation/representer_1.tex}"
+                            else
+                                representer = "\\subfile{../Exercices_Remediation/representer_2.tex}"
+                            end
+                       
+                        elseif csvtable[C][1]=="Raisonner" then
+                            if competence < 3 then
+                                raisonner = "\\subfile{../Exercices_Remediation/raisonner_1.tex}"
+                            else
+                                raisonner = "\\subfile{../Exercices_Remediation/raisonner_2.tex}"
+                            end
+    
+                        elseif csvtable[C][1]=="Chercher" then
+                            if competence < 3 then
+                                chercher = "\\subfile{../Exercices_Remediation/chercher_1.tex}"
+                            else
+                                chercher = "\\subfile{../Exercices_Remediation/chercher_2.tex}"
+                            end
+    
+                        elseif csvtable[C][1]=="Modéliser" then
+                            if competence < 3 then
+                                modeliser = "\\subfile{../Exercices_Remediation/modeliser_1.tex}"
+                            else
+                                modeliser = "\\subfile{../Exercices_Remediation/modeliser_2.tex}"
+                            end
+                        end
+                    
+                        for i=1,#liste_score do
+                        ligne_competence = ligne_competence .. "\\task " .. liste_score[i]
+                        end
+    
+                    ligne_competence = ligne_competence .. "\\end{tasks}\\end{minipage}\\par\\par"
+                end
+                return ligne_competence,recap_eleve,entete_classe
+            end
+            
+        end
+            if pourcentage ~= "a" then
+                tex.sprint("\\begin{minipage}{\\linewidth}")
+                tex.sprint(ligne_nom)
+                tex.sprint("\\vspace{0.2cm}\\par\\hrule\\par")
+                tex.sprint("\\large\\fbox{Détail par exercice}\\par\\vspace{0.2cm}")
+                tex.sprint(ligne_exercice)
+                tex.sprint("\\vspace{0.2cm}\\par\\hrule\\par")
+                tex.sprint("\\large\\fbox{Détail par compétence}\\normalsize\\par")
+                tex.sprint("\\vspace{0.2cm}")
+            end
+            for i=4,9 do
+            local ligne
+            local eleve
+            local entete
+            ligne,eleve,entete = ligne_competence(csvtable,i,E,recap_eleve)
+            table.insert(recap_eleve,eleve)
+            table.insert(entete_classe,entete)
+                if ligne then
+                    tex.sprint(ligne)
+                    tex.sprint("\\vspace{0.4cm}")
+                end
+            end
+                if pourcentage ~= "a" then
+            tex.sprint("\\vspace{0.2cm}\\hrule")
+            tex.sprint{"\\end{minipage}\\par"}
+            tex.sprint{"\\vspace{0.5em}"}
+            end
+            -- tex.sprint("\\par\\vspace{0.5em}\\input{../Exercices_Remediation/communiquer_1.tex}\\par")     
+            tex.sprint(communiquer .. "\\par")    
+            tex.sprint(calculer .. "\\par")   
+            tex.sprint(representer .. "\\par")   
+            tex.sprint(raisonner .. "\\par")   
+            tex.sprint(chercher .. "\\par")   
+            tex.sprint(modeliser .. "\\par")   
+        return recap_eleve,entete_classe
+    end
+    
+    function genere(csvtable)
+        local recap_eleve = {}
+        local recap_classe = {}
+        local entete_classe = {}
+    
+        for i =11,#csvtable do
+           
+            recap_eleve,entete_classe = affiche_eleve(csvtable,i)
+    
+            tex.sprint("\\newpage")
+            
+            if i == 11 then
+                table.insert(recap_classe,entete_classe)
+            end
+            table.insert(recap_classe,recap_eleve)
+        end
+        return recap_classe
+    end
+    
+    filename = "Export_pronote.csv"
+    csvtable = csvtotable("Evaluation.csv")
+    recap_classe = genere(csvtable)
+    
+        local file = assert(io.open(filename, "w"))
+    
+        function escape_csv_field(field)
+            if string.find(field, '[,"]') then
+                field = '"' .. string.gsub(field, '"', '""') .. '"'
+            end
+            return field
+        end
+    
+        for _, row in ipairs(recap_classe) do
+            local csv_row = {}
+            for _, field in ipairs(row) do
+                table.insert(csv_row, escape_csv_field(tostring(field)))
+            end
+            file:write(table.concat(csv_row, ",") .. "\n")
+        end
+    
+        file:close()
+    
+    
+    
+    
+    \end{luacode*}
+     
+
+\end{document}
