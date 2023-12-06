@@ -475,7 +475,12 @@ end
   end
 
   function NiveauDocument(str)
-  tex.sprint('\\renewcommand{\\contenuniveau}{' .. str ..'}')
+    if str then
+      tex.sprint('\\niveaucustomfalse')
+      tex.sprint('\\renewcommand{\\contenuniveau}{' .. str ..'}')
+    else
+      tex.sprint('\\niveaucustomtrue')
+    end
   end
   
   function BaremeLua(arg)
@@ -489,7 +494,10 @@ end
 
 
 \newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
-\newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur("#1")}}
+
+\newif\ifniveaucustom
+
+\newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur([[#1]])}\ifniveaucustom \renewcommand{\contenuniveau}{#1}\fi}
 
 \newcommand{\bareme}[1]{\directlua{BaremeLua(#1)}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
@@ -521,12 +529,17 @@ end
   \renewcommand{\contenuchapitre}{#1}
 }
 
+\newcommand{\partienormal}[1]{\subsection{#1}}
+\newcommand{\partieetoile}[1]{\subsection*{#1}}
+\newcommand{\souspartienormal}[1]{\subsubsection{#1}}
+\newcommand{\souspartieetoile}[1]{\subsubsection*{#1}}
+
 \makeatletter
 \def\chapitre{\@ifstar\chapitreetoile\chapitrenormal}
+\def\partie{\@ifstar\partieetoile\partienormal}
+\def\souspartie{\@ifstar\souspartieetoile\souspartienormal}
 \makeatother
 
-\newcommand{\partie}[1]{\subsection{#1}}
-\newcommand{\souspartie}[1]{\subsubsection{#1}}
 
 %Commandes de lignes
 
