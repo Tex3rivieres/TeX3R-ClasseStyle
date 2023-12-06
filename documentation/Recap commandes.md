@@ -51,6 +51,8 @@ Theme = true -- false
 \end{luacode}
 \parametrage
 
+\titrecustom[]{} %#1 = logo (optionnel) ; #2 = Texte du titre ; commande utilisable en Type = 'basique'
+
 
 \important{texte}
 

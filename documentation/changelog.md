@@ -6,6 +6,7 @@
 - Debug de la commande ```\definirniveau```
 - Création des versions étoilées de ```\partie``` et ```\souspartie```
 - Template autonome de 'Évaluation' rajouté 
+- Commande ```\titrecustom``` rajoutée
 
 ## 27/11/2023
 
