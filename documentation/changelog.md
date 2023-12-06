@@ -1,5 +1,12 @@
 # Changelog
 
+## 06/12/23
+
+- Création de la commande ```\visiblecmd```
+- Debug de la commande ```\definirniveau```
+- Création des versions étoilées de ```\partie``` et ```\souspartie```
+- Template autonome de 'Évaluation' rajouté 
+
 ## 27/11/2023
 
 Diapo réparé
