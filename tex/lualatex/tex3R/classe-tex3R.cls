@@ -108,6 +108,7 @@
 \RequirePackage[]{qrcode}
 \RequirePackage{tikzsymbols}
 \RequirePackage{ccicons}
+\RequirePackage{circledsteps}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SUPPRESSIONS DE WARNINGS ABUSIFS %%%
@@ -420,6 +421,16 @@ end
       tex.sprint('\\normalsize')
     end
   end
+
+  function SautLua(arg)
+    if arg == 'ligne' then
+      tex.sprint('\\sautligne')
+    elseif arg =='fiche' then
+      tex.sprint('\\sautfiche')
+    elseif arg == 'diapo' then
+      tex.sprint('\\sautdiapo')
+    end
+  end
 \end{luacode*}
 
 \newcommand{\tailletexte}[1]{
@@ -431,6 +442,9 @@ end
 \newcommand{\sautligne}{\vspace{\baselineskip}}
 \newcommand{\sautdiapo}{\ifdiapo \newpage \fi}
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
+\newcommand{\saut}[1]{\directlua{SautLua("#1")}}
+
+
 
 %Commandes des environnements
 %
@@ -483,6 +497,7 @@ end
 \newcommand{\source}[1]{\renewcommand{\contenusource}{#1}}
 \newcommand{\theme}[1]{\renewcommand{\contenutheme}{#1}}
 
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Column P centrée verticalement
 
 %%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -813,29 +828,7 @@ end
 \NewEnviron{visible}[1][true]{%
   \directlua{VerificationVisible(#1)}
   \ifmontre
-    \ifvisible
-      \begin{tcolorbox}[
-        colback=couleursurlignevisible, 
-        colframe=couleurbackground, 
-        boxrule=5pt, 
-        left=0pt, 
-        top=0pt, 
-        bottom=0pt, 
-        right=0pt,
-        before skip =0pt,
-        after skip = 0.3em,
-        left skip =0pt,
-        right skip = 0pt, 
-        boxsep=0pt,
-        enhanced, 
-        shield externalize=true,
-        breakable
-      ]
-        \BODY
-      \end{tcolorbox}
-    \else
       \BODY
-    \fi
   \fi
 }
 
@@ -848,7 +841,6 @@ end
 \NewEnviron{application}[1][]{\BODY}
 \NewEnviron{definition}[1][]{\BODY}
 \NewEnviron{convention}[1][]{\BODY}
-% \NewEnviron{exercice}[1][]{\BODY}
 \NewEnviron{exemple}[1][]{\BODY}
 \NewEnviron{methode}[1][]{\BODY}
 \NewEnviron{preuve}[1][]{\BODY}

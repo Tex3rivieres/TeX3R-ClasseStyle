@@ -1,5 +1,12 @@
 # Pistes de travail
 
+## Problèmes
+
+Math mode dans definirniveau
+
+partie* et souspartie* non définis
+
+
 ## Conflits de package
 
 ### Adjustbox/pstricks
@@ -40,3 +47,11 @@ Trois documentations à écrire :
 ### Style utilisateur
 
 Améliorer l'ergonomie de la modification du style.
+
+### Fusion
+
+Fusionner enonce et correction dans un snippet exercice
+
+Enlever les mathrm
+
+Enlever °
