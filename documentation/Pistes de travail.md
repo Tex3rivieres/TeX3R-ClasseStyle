@@ -1,12 +1,5 @@
 # Pistes de travail
 
-## Problèmes
-
-Math mode dans definirniveau
-
-partie* et souspartie* non définis
-
-
 ## Conflits de package
 
 ### Adjustbox/pstricks
@@ -32,11 +25,6 @@ TOC à mettre en forme (suppression des numéros des subsubsections ou transform
 
 Supprimer les commandes obsolètes de la classe.
 
-### Templates
-
-* Template de brevet
-* Template Evaluation + remédiation
-
 ### Documentation
 
 Trois documentations à écrire :
@@ -47,11 +35,3 @@ Trois documentations à écrire :
 ### Style utilisateur
 
 Améliorer l'ergonomie de la modification du style.
-
-### Fusion
-
-Fusionner enonce et correction dans un snippet exercice
-
-Enlever les mathrm
-
-Enlever °

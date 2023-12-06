@@ -729,6 +729,10 @@ end
 \newcommand{\styleactif}[1]{}
 \newcommand{\stylesections}[3]{}
 
+\newcommand{\titrecustom}[2][]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\titre{#2}}\else\titre{#2}\fi}
+
+
+
 \begin{luacode}
   function StylesTitresDocument()
 
