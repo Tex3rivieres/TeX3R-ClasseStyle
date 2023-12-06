@@ -54,11 +54,13 @@ Theme = true -- false
 
 \important{texte}
 
+\saut{} %ligne/diapo/fiche
+
 \sautligne
 \sautdiapo
 \sautfiche
 
-\chapitre{Une part en LaTeX}
+\chapitre{Une part en LaTeX} %Les versions étoilées sont définies
 \partie{Une subsection en LaTeX}
 \souspartie{Une subsubsection en LaTeX}
 
@@ -68,7 +70,7 @@ Theme = true -- false
 \source{texte}
 \theme{texte}
 
-\lignes{carreau/carreaux/surligne/seyes}{nombre ou nil}
+\lignes{}{} % #1=carreau/carreaux/surligne/seyes #2 = nombre
 
 \titre{texte}
 \styleactif{\titre{texte}}

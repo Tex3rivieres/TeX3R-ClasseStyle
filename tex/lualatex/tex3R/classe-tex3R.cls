@@ -811,7 +811,6 @@ end
 %%% ENVIRONNEMENT ET COMMANDE VISIBLE %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \newif\ifvisible
 \newif\ifmontre
 
 \begin{luacode}
@@ -841,7 +840,14 @@ end
 \NewEnviron{visible}[1][true]{%
   \directlua{VerificationVisible(#1)}
   \ifmontre
-      \BODY
+    \BODY
+  \fi
+}
+
+\newcommand{\visiblecmd}[2][true]{%
+  \directlua{VerificationVisible(#1)}
+  \ifmontre
+    #2
   \fi
 }
 
