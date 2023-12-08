@@ -729,7 +729,7 @@ end
 \newcommand{\styleactif}[1]{}
 \newcommand{\stylesections}[3]{}
 
-\newcommand{\titrecustom}[2][\hspace{-0.25em}]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\titre{#2}}\else\titre{#2}\fi}
+\newcommand{\montitre}[2][\hspace{-0.25em}]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\titre{#2}}\else\titre{#2}\fi}
 
 
 

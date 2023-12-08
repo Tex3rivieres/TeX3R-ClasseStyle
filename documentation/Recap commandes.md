@@ -92,6 +92,8 @@ Au choix :
   Visible si Visible = false
 \end{visible}
 
+\visiblecmd[true]{}
+
 \begin{application}[Titre de remplacement ou nil]
   Contenu
 \end{application}
