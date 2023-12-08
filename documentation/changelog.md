@@ -1,5 +1,9 @@
 # Changelog
 
+## 08/12/23
+
+Commande ```\titrecustom``` renommée en ```\montitre```
+
 ## 06/12/23
 
 - Création de la commande ```\visiblecmd```

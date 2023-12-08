@@ -731,8 +731,6 @@ end
 
 \newcommand{\montitre}[2][\hspace{-0.25em}]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\titre{#2}}\else\titre{#2}\fi}
 
-
-
 \begin{luacode}
   function StylesTitresDocument()
 
