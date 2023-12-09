@@ -76,7 +76,11 @@
     ifstretch,
     ifsubfile,
     else,
-    fi
+    fi,
+    newcounter,
+    setcounter,
+    stepcounter,
+    thecompteurexercice
   }, 
   emphstyle={[1]\color{colorKeyword}},
   %Environnements
@@ -881,6 +885,34 @@ Ceci est un texte qui s'étend sur plusieurs lignes et qui sera plus facilement 
 \end{minipage}}%
 
 \section{Booléens et compteurs}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\newcounter{compteurexercice}
+
+\newcounter{compteurinterro}
+\newcounter{compteurflash}
+\newcounter{compteurDM}
+\newcounter{compteurDS}
+\newcounter{compteurTD}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  Ces compteurs sont utilisés dans les environnements de la \texttt{classe-tex3R}. Voici un rappel des commandes de compteurs :
+
+\begin{lstlisting}
+\setcounter{compteurexercice}{3}
+\stepcounter{compteurexercice}
+\thecompteurexercice
+\end{lstlisting}
+
+\end{minipage}}%
+
+
+\vspace{0pt}
 
 \adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
   \begin{lstlisting}

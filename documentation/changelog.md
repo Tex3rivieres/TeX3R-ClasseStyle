@@ -8,6 +8,10 @@ Fix de ```\lignes{surligne}```
 
 Ajustement des marges de bas de page pour la numérotation
 
+Suppression de ```compteurfeuille``` (non utilisé)
+
+Ajout des compteurs à la documentation ```classe-tex3R```
+
 ## 08/12/23
 
 Commande ```\titrecustom``` renommée en ```\montitre```

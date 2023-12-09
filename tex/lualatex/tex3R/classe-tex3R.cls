@@ -372,8 +372,6 @@ end
 %%%%%%%%%%%%%
 
 %Création
-\newcounter{compteurfeuille}
-
 \newcounter{compteurexercice}
 
 \newcounter{compteurinterro}
@@ -383,8 +381,6 @@ end
 \newcounter{compteurTD}
 
 %Initialisation
-\setcounter{compteurfeuille}{1}
-
 \setcounter{compteurexercice}{0}
 
 \setcounter{compteurinterro}{0}
