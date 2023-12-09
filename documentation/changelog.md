@@ -1,5 +1,13 @@
 # Changelog
 
+## 09/12/23
+
+Fix de ```\lignes{surligne}```
+
+Écriture de la première documentation (classe-tex3R)
+
+Ajustement des marges de bas de page pour la numérotation
+
 ## 08/12/23
 
 Commande ```\titrecustom``` renommée en ```\montitre```

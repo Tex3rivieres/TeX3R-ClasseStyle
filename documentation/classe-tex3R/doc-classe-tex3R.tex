@@ -1,0 +1,935 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+\usepackage{dirtree}
+
+\definirchapitre{7}{Théorème de Pythagore}
+\definirniveau{4}
+
+\colorlet{colorBasic}{SlateGrey}
+\colorlet{colorBracket}{DarkViolet}
+\colorlet{colorKeyword}{DarkBlue}
+\colorlet{colorEnvironment}{LightSeaGreen}
+\colorlet{colorComment}{Green}
+\colorlet{colorString}{DarkOrange}
+\colorlet{colorChange}{Red}
+\colorlet{colorMath}{Teal}
+\colorlet{colorVariable}{LightSkyBlue}
+\colorlet{colorBoolean}{Indigo}
+\colorlet{colorFunction}{DarkBlue}
+
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+\lstset{
+  %Réglages généraux
+  backgroundcolor=\color{gray!20!white},
+  basicstyle=\ttfamily\small\color{colorBasic},
+  columns=fullflexible,
+  aboveskip=\baselineskip,
+  belowskip=0pt,
+  breaklines=true,
+  %Keywords
+  emph={[1]
+    begin,
+    end,
+    documentclass,
+    usepackage,
+    definirchapitre,
+    definirniveau,
+    parametrage,
+    bareme,
+    competence,
+    difficulte,
+    source,
+    theme,
+    montitre,
+    important,
+    tailletexte,
+    partie,
+    souspartie,
+    chapitre,
+    visiblecmd,
+    saut,
+    lignes,
+    ifdiapo,
+    iffiche,
+    ifheader,
+    ifprint,
+    ifactivite,
+    ifbasique,
+    ifbilan,
+    ifcorrige,
+    ifcours,
+    ifTD,
+    ifflash,
+    ifDM,
+    ifDS,
+    ifinterro,
+    ifcorrection,
+    ifenonce,
+    ifvisible,
+    ifbareme,
+    ifdifficulte,
+    ifcompetence,
+    ifsource,
+    iftheme,
+    ifstretch,
+    ifsubfile,
+    else,
+    fi
+  }, 
+  emphstyle={[1]\color{colorKeyword}},
+  %Environnements
+  emph={[2]
+    environnement,
+    luacode,
+    fiche,
+    document,
+    application,
+    convention,
+    definition,
+    exemple,
+    methode,
+    propriete,
+    preuve,
+    remarque,
+    enonce,
+    correction,
+    visible
+  }, 
+  emphstyle={[2]\color{colorEnvironment}},
+  %Variable lua
+  emph={[3]
+  Type,
+  Impression,
+  Header,
+  Taille,
+  Stretch,
+  Correction,
+  Enonce,
+  Visible,
+  Competence,
+  Bareme,
+  Difficulte,
+  Source,
+  Theme
+  },
+  emphstyle={[3]\color{colorVariable}},
+  %Booléens lua
+  emph={[4]
+  true,
+  false,
+  nil
+  },
+  emphstyle={[4]\color{colorBoolean}},
+  %Fonctions lua
+  emph={[5]
+  mesParametres
+  },
+  emphstyle={[4]\color{colorFunction}},
+  %Literate
+  literate={
+    {\{}{{\textcolor{colorBracket}{\{}}}1
+    {\}}{{\textcolor{colorBracket}{\}}}}1
+    {[}{{\textcolor{colorBracket}{[}}}1
+    {]}{{\textcolor{colorBracket}{]}}}1
+    {[[}{{\textcolor{colorString}{[[ }}}1
+    {]]}{{\textcolor{colorString}{]]}}}1
+    {\\}{{\textcolor{colorKeyword}{\textbackslash}}}1
+    {0}{{$\cancel{0}$}}1
+    },
+  %Comment
+  comment=[l]{--},
+  morecomment=[l]{\%},
+  commentstyle=\color{colorComment},
+  %Delimiters
+  moredelim=[is][\color{colorChange}]{@}{@},
+  moredelim=[s][\color{colorMath}]{\$}{\$},
+  moredelim=[is][\color{colorString}]{||}{||},
+  moredelim=[is][\color{colorBasic}]{//}{//},
+  moredelim=[is][\color{colorComment}]{/*}{/*},
+  }
+
+\title{\bfseries classe-tex3R\par}
+\author{Vincent Crombez \& Frédéric Léothaud}
+\date{}
+
+\cfoot{\pagemark}
+\setlength{\parskip}{\baselineskip}
+\setcounter{tocdepth}{3}
+\renewcommand{\sectionformat}{\LARGE\textbf{\thesection~}}
+  \setkomafont{section}{\normalfont\LARGE\color{Black}\bfseries}
+\renewcommand{\subsectionformat}{\Large\textbf{\thesubsection~}}
+  \setkomafont{subsection}{\normalfont\Large\color{Black}\bfseries}
+\renewcommand{\subsubsectionformat}{\large\textbf{\thesubsubsection~}}
+  \setkomafont{subsubsection}{\normalfont\large\color{Black}\bfseries}
+
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+
+La \texttt{classe-tex3R} est un travail collaboratif mené par deux professeurs de mathématiques. Le but a été dans un premier temps de rendre compatibles un certain nombre d'outils, notamment le très riche package \href{https://ctan.org/pkg/profcollege}{\texttt{\textbf{\textbackslash ProfCollege}}} ou encore les exercices aléatoires générés sur \href{https://coopmaths.fr/}{\textbf{Coopmaths}} tout comme le travail sur les exercices de Brevet réalisé par l'\href{https://www.apmep.fr/Annales-du-Brevet-des-colleges}{\textbf{APMEP}}. Les packages \href{https://www.ctan.org/pkg/scratch3}{\textbf{\texttt{scratch3}}} et \href{https://www.ctan.org/pkg/pstricks-base}{\textbf{\texttt{pstricks}}} nous donnèrent du fil à retordre, pour finalement arriver au résultat actuel, d'une stabilité  à toute épreuve (jusqu'à preuve du contraire).
+
+La \texttt{classe-tex3R} se veut comme une classe clé en main, que les puristes jugeront sans doute beaucoup trop lourde au vu du nombre de packages inclus. Elle a cependant le mérite d'être robuste, et de ne nécessiter le chargement d'aucun package supplémentaire pour la plupart des usages courants et d'élaboration de documents à destination des élèves.
+
+La \texttt{classe-tex3R} a été conçue afin de pouvoir créer des documents modulaires à partir de différentes options, permettant d'afficher ou masquer certains environnements ou commandes, pour pouvoir générer plusieurs documents à partir d'un même fichier source.
+
+La \texttt{classe-tex3R} fait partie d'un projet comprenant :
+%
+\begin{itemize}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-ClasseStyle}{Une classe, un style et des templates de documents pratiques}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-Portable}{Un environnement LaTeX portable}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-Workshop}{Une extension (basée sur \texttt{latex-workshop})}
+\end{itemize}
+
+L'utilisateur n'étant pas friand de l'apparence proposée dans la \texttt{classe-tex3R} trouvera son bonheur du côté du \texttt{style-tex3R}, où il pourra personnaliser l'apparence de l'ensemble des environnements et outil proposés, tout en gardant les commandes et environnements proposés par la \texttt{classe-tex3R}.
+
+\newpage
+
+\section{Principe des options}
+
+\subsection{Document minimal}
+
+\begin{lstlisting}
+\documentclass[fiche]{classe-tex3R} %#1=diapo (optionnel)
+\usepackage{style-tex3R}
+
+\definirchapitre{}{} %#1=nombre, #2=nom
+\definirniveau{} %#1=nombre ou nom
+
+\begin{document}
+
+\begin{luacode}
+  Type = ||'basique'|| --activite/bilan/corrige/cours/DM/DS/flash/interro/TD
+  Impression = false --true
+  Header = false --true
+  Taille = nil --'14pt'
+  Stretch = false --true
+
+  Correction = false --true
+  Enonce = false --true
+  Visible = false --true
+
+  Competence = false --true
+  Bareme = false --true
+  Difficulte = false --true
+  Source = false --true
+  Theme = false --true
+\end{luacode}
+\parametrage
+
+%Le texte du document
+
+\end{document}
+\end{lstlisting}
+
+En première ligne, il est possible de changer l'option de classe entre \texttt{fiche} et \texttt{diapo} pour basculer d'un document A4 à un document au format 16:10.
+
+La commande \texttt{\textbackslash definirchapitre} permet de spécifier le numéro et le nom du chapitre tandis que \texttt{\textbackslash definirniveau} permet de spécifier le niveau de classe pour qui le document est destiné.
+
+Ensuite, dans l'environnement \texttt{luacode}, un certain nombre d'options vont permettre de mettre en forme automatiquement le document, en fonction de ce qui est voulu par l'utilisateur.
+
+\subsection{Options de mise en page}
+
+L'option \texttt{Type} permet de modifier l'apparence du titre de la page en fonction de l'option choisie.
+
+L'option \texttt{Impression} permet de passer les couleurs du document en niveau de gris pour une impression (seulement les couleurs prédéfinies, pas les images insérées).
+
+L'option \texttt{Header} permet, si le document est sur plusieurs pages, de répéter ou non le titre en début de chaque nouvelle page.
+
+L'option \texttt{Taille} permet de modifier globalement la taille de police du document.
+
+L'option \texttt{Stretch} permet de combler les espaces vides entre les différents environnements, afin d'avoir une page plus aérée.
+
+\subsection{Options pour les environnements d'exercice}
+
+L'option \texttt{Correction} permet de masquer ou non le contenu des environnements \texttt{correction} du document.
+
+L'option \texttt{Enonce} permet de masquer ou non le contenu des environnements \texttt{enonce} du document.
+
+L'option \texttt{Visible} permet de masquer ou non le contenu des environnements \texttt{visible} du document.
+
+\subsection{Options pour les commandes d'exercice}
+
+L'option \texttt{Competence} permet de masquer ou non le nom des compétences dans les énoncés d'exercice.
+
+L'option \texttt{Bareme} permet de masquer ou non le barème dans les énoncés d'exercice.
+
+L'option \texttt{Difficulte} permet de masquer ou non les étoiles de difficulté dans les énoncés d'exercice.
+
+L'option \texttt{Source} permet de masquer ou non la source d'où provient l'énoncé de l'exercice.
+
+L'option \texttt{Theme} permet de masquer ou non le thème dans les énoncés d'exercice.
+
+\subsection{Remarques}
+
+Dans \texttt{style-tex3R}, des paramètres prédéfinis pour chaque type de document en fonction de l'usage courant permettent d'éviter l'affichage de l'ensemble des options. Ainsi, il est possible de remplacer l'assignation des options par :
+
+\begin{lstlisting}
+\begin{luacode}
+  mesParametres(||'basique'||) --activite/bilan/corrige/cours/DM/DS/flash/interro/TD
+\end{luacode}
+\parametrage
+\end{lstlisting}
+
+En dehors d'un paramétrage prédéfini, les options sont toutes initialisées à \texttt{false}, hormis \texttt{Type} (initialisé à \texttt{basique}) et \texttt{Taille} (\texttt{12pt} pour la fiche et \texttt{20pt} pour le diapo)
+
+\section{Type du document}
+
+Avant de choisir le \texttt{Type}, dans les exemples suivant on considèrera que les commandes suivantes ont été appelées en début de document :
+
+\begin{lstlisting}
+\definirchapitre{7}{Théorème de Pythagore}
+\definirniveau{4}
+\end{lstlisting}
+
+L'option \texttt{Type} permet de choisir l'apparence du titre. Voici ci-dessous l'apparence des différents titre prédéfinis pour chaque \texttt{Type} :
+
+\begin{itemize}
+  \item \texttt{'basique'} :
+
+  \hfill
+  
+  \renewcommand{\logoactif}{\reflectbox{\faPencil*}}
+  \renewcommand{\styleactif}{\titre{Activité\hfill\mdseries\large\contenuniveau}}
+  \item \texttt{'activite'} : 
+
+  \styleactif
+
+  \renewcommand{\logoactif}{\faEdit[regular]}
+  \renewcommand{\styleactif}{\titre{Bilan\hfill\mdseries\large\contenuniveau}}
+  \item \texttt{'bilan'} : 
+
+  \styleactif
+
+  \renewcommand{\logoactif}{\faUserSecret}
+  \renewcommand{\styleactif}{\titre{Questions Flash\hfill\mdseries\large\contenuniveau}}
+  \item \texttt{'flash'} : 
+
+  \styleactif
+  
+  \renewcommand{\logoactif}{\faEdit[regular]}
+  \renewcommand{\styleactif}{\titre{Corrigé~\mdseries|~\contenuchapitre\hfill\large\contenuniveau}}
+  \item \texttt{'corrige'} : 
+
+  \styleactif
+
+  \renewcommand{\logoactif}{\faBook}
+  \renewcommand{\styleactif}{\titre{Chapitre~\thepart~\mdseries|~\contenuchapitre\hfill\large\contenuniveau}}
+  \item \texttt{'cours'} : 
+
+  \styleactif
+
+  \renewcommand{\logoactif}{\faEdit[regular]}
+  \renewcommand{\styleactif}{\titre{TD~\mdseries|~\contenuchapitre\hfill\large\contenuniveau}}
+  \item \texttt{'TD'} : 
+  
+  \styleactif
+
+  \renewcommand{\logoactif}{\faHome}
+  \renewcommand{\styleactif}{\titre{DM n°\stepcounter{compteurDM}\thecompteurDM~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau}}
+  \item \texttt{'DM'} : 
+  
+  \styleactif
+
+  \renewcommand{\logoactif}{\faFile*[regular]}
+  \renewcommand{\styleactif}{\titre{DS n°\stepcounter{compteurDS}\thecompteurDS~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau}}
+  \item \texttt{'DS'} : 
+  
+  \styleactif
+
+  \renewcommand{\logoactif}{\faFile*[regular]}
+  \renewcommand{\styleactif}{\titre{Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau}}
+  \item \texttt{'interro'} : 
+  
+  \styleactif
+
+\end{itemize}
+
+Une fois le \texttt{Type} de document choisi, la commande \texttt{\textbackslash titreactif} devient disponible afin d'imprimer un titre au besoin à l'emplacement voulu, ce qui est pratique lorsque l'on veut faire tenir deux fiches identiques sur deux demi-pages.
+
+\section{Environnements de cours}
+
+Les environnements \texttt{application}, \texttt{convention}, \texttt{definition}, \texttt{exemple}, \texttt{methode},  \texttt{propriete}, \texttt{preuve} et \texttt{remarque} sont spécifiquement pensés pour les fiches de cours, même s'ils restent disponibles pour les autres \texttt{Type} de document.\newline
+%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\begin{application}
+  Le contenu.
+\end{application}
+
+\begin{convention}
+  Le contenu.
+\end{convention}
+
+\begin{definition}
+  Le contenu.
+\end{definition}
+
+\begin{exemple}
+  Le contenu.
+\end{exemple}
+
+\begin{methode}
+  Le contenu.
+\end{methode}
+
+\begin{propriete}
+  Le contenu.
+\end{propriete}
+
+\begin{preuve}
+  Le contenu.
+\end{preuve}
+
+\begin{remarque}
+  Le contenu.
+\end{remarque}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+\vspace{\baselineskip}
+
+  \begin{application}
+    Le contenu.
+  \end{application}
+  
+  \begin{convention}
+    Le contenu.
+  \end{convention}
+  
+  \begin{definition}
+    Le contenu.
+  \end{definition}
+  
+  \begin{exemple}
+    Le contenu.
+  \end{exemple}
+  
+  \begin{methode}
+    Le contenu.
+  \end{methode}
+  
+  \begin{propriete}
+    Le contenu.
+  \end{propriete}
+  
+  \begin{preuve}
+    Le contenu.
+  \end{preuve}
+  
+  \begin{remarque}
+    Le contenu.
+  \end{remarque}
+
+\end{minipage}}%
+
+Les deux environnements \texttt{enonce} et \texttt{correction} sont plutôt prévus pour les fiches d'exercice, mais ils changent d'apparence en \texttt{Type='cours'} pour être comme ci-dessous.
+
+\RenewEnviron{enonce}[1][Énoncé]{\formatEnvCours[#1]{couleurenonce}}
+\RenewEnviron{correction}[1][Correction]{\formatEnvCours[#1]{couleurcorrection}}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\begin{enonce}
+  Le contenu.
+\end{enonce}
+
+\begin{correction}
+  Le contenu.
+\end{correction}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+\vspace{\baselineskip}
+
+\begin{enonce}
+  Le contenu.
+\end{enonce}
+
+\begin{correction}
+  Le contenu.
+\end{correction}
+
+\end{minipage}}%
+
+Tous les environnements de cours peuvent prendre une option permettant de changer le texte affiché, ce qui est parfois pratique.
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\begin{propriete}[Propriété (admise)]
+  Le contenu.
+\end{propriete}
+
+\begin{remarque}[Remarques]
+  Le contenu.
+\end{remarque}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  \begin{propriete}[Propriété (admise)]
+    Le contenu.
+  \end{propriete}
+  
+  \begin{remarque}[Remarques]
+    Le contenu.
+  \end{remarque}
+\end{minipage}}%
+
+\section{Commandes et environnements pour les exercices}
+
+\subsection{Présentation générale}
+
+En dehors du \texttt{Type='cours'}, les environnements \texttt{enonce} et \texttt{correction} sont pensés pour être utilisés comme suit :
+
+\begin{lstlisting}
+\bareme{} %#1=nombre
+\competence{} %#1=nom
+\difficulte{} %#1=nombre
+\source{} %#1=nom
+\theme{} %#1=nom
+
+\begin{enonce}
+  %L'énoncé de l'exercice.
+\end{enonce}
+
+\begin{correction}
+  %La correction de l'exercice.
+\end{correction}
+\end{lstlisting}
+
+Un exercice est composé des cinq commandes \texttt{\textbackslash bareme}, \texttt{\textbackslash competence}, \texttt{\textbackslash difficulte}, \texttt{\textbackslash source} et \texttt{\textbackslash theme}, puis des deux environnements \texttt{enonce} et \texttt{correction}. Grâce au jeu des options, il sera possible de cacher tout ou partie des éléments composant l'exercice.
+
+\subsection{Exemples d'apparence selon les options}
+
+\enoncetrue
+
+
+\RenewEnviron{enonce}[1][]{
+  \setcounter{compteurexercice}{1}
+    \ifenonce
+      \iftheme
+        \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
+      \fi%
+      \colorbox{couleurenonce}{\textcolor{white}{%
+        {\Large\textbf{\thecompteurexercice}}\ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi%
+        }%
+      }
+      \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\contenucompetence}}\fi\ifbareme\hfill {\bfseries/\contenubareme~points}\fi\par
+        \medskip
+        \BODY
+      \ifsource\par
+        \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+      \fi
+  \fi}
+
+  \RenewEnviron{correction}[1][]{
+  \ifcorrection
+    \colorbox{couleurcorrection}{\textcolor{white}{
+      \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+    }\par
+    \medskip
+    \BODY
+  \fi
+  }
+
+
+Dans la suite, nous prendrons comme référence cette structure d'exercice et observerons son apparence en fonction des paramètres choisis au début du document.
+
+\begin{lstlisting}
+  \bareme{6} 
+  \competence{Modéliser, Raisonner} 
+  \difficulte{2} 
+  \source{Groupe de travail TeX3R} 
+  \theme{Pythagore} 
+
+  \begin{enonce}
+    Ceci est l'énoncé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{enonce}
+
+  \begin{correction}
+    Ceci est le corrigé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{correction}
+\end{lstlisting}
+
+Comme indiqué précédemment, tous les paramètres étant initialisés à \texttt{false}, il n'est pas nécessaire de les indiquer. Dans un souci de clarté de l'exemple, nous les indiquerons ici, systématiquement, même si cela n'est pas nécessaire.
+
+\subsubsection{Premier exemple}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+    Correction = true
+    Enonce = true
+  
+    Bareme = true
+    Competence = true
+    Difficulte = true
+    Source = true
+    Theme = true
+  
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \correctiontrue
+  \enoncetrue
+  \baremetrue
+  \competencetrue
+  \difficultetrue
+  \sourcetrue
+  \themetrue
+%
+  \vspace{\baselineskip}
+%
+  \bareme{6} 
+  \competence{Modéliser, Raisonner} 
+  \difficulte{2} 
+  \source{Groupe de travail TeX3R} 
+  \theme{Pythagore} 
+ % 
+  \begin{enonce}
+    Ceci est l'énoncé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{enonce}
+
+  \begin{correction}
+    Ceci est le corrigé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{correction}
+
+\end{minipage}}%
+
+\subsubsection{Deuxième exemple}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+    Correction = false
+    Enonce = true
+  
+    Bareme = false
+    Competence = true
+    Difficulte = false
+    Source = false
+    Theme = false
+  
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \correctionfalse
+  \enoncetrue
+  \baremefalse
+  \competencetrue
+  \difficultefalse
+  \sourcefalse
+  \themefalse
+%
+  \vspace{\baselineskip}
+%
+  \bareme{6} 
+  \competence{Modéliser, Raisonner} 
+  \difficulte{2} 
+  \source{Groupe de travail TeX3R} 
+  \theme{Pythagore} 
+ % 
+  \begin{enonce}
+    Ceci est l'énoncé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{enonce}
+
+  \begin{correction}
+    Ceci est le corrigé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{correction}
+
+\end{minipage}}%
+
+\subsubsection{Troisième exemple}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+    Correction = true
+    Enonce = false
+  
+    Bareme = true
+    Competence = true
+    Difficulte = true
+    Source = true
+    Theme = true
+  
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \correctiontrue
+  \enoncefalse
+  \baremetrue
+  \competencetrue
+  \difficultetrue
+  \sourcetrue
+  \themetrue
+%
+  \vspace{\baselineskip}
+%
+  \bareme{6} 
+  \competence{Modéliser, Raisonner} 
+  \difficulte{2} 
+  \source{Groupe de travail TeX3R} 
+  \theme{Pythagore} 
+ % 
+  \begin{enonce}
+    Ceci est l'énoncé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{enonce}
+
+  \begin{correction}
+    Ceci est le corrigé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{correction}
+
+\end{minipage}}%
+
+
+\subsubsection{Quatrième exemple}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+    Correction = false
+    Enonce = true
+  
+    Bareme = false
+    Competence = false
+    Difficulte = true
+    Source = false
+    Theme = true
+  
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \correctionfalse
+  \enoncetrue
+  \baremefalse
+  \competencefalse
+  \difficultetrue
+  \sourcefalse
+  \themetrue
+%
+  \vspace{\baselineskip}
+%
+  \bareme{6} 
+  \competence{Modéliser, Raisonner} 
+  \difficulte{2} 
+  \source{Groupe de travail TeX3R} 
+  \theme{Pythagore} 
+ % 
+  \begin{enonce}
+    Ceci est l'énoncé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{enonce}
+
+  \begin{correction}
+    Ceci est le corrigé de l'exercice, qui s'étend sur plusieurs lignes afin de pouvoir observer et juger son allure globale.
+  \end{correction}
+
+\end{minipage}}%
+
+\subsection{Remarque}
+
+Il n'est pas nécessaire de compléter les commandes \texttt{\textbackslash bareme}, \texttt{\textbackslash competence}, \texttt{\textbackslash difficulte}, \texttt{\textbackslash source} et \texttt{\textbackslash theme}. Il est cependant recommandé de les laisser, même vides car elles redéfinissent des commandes internes pour chaque exercice. En leur absence, le contenu appliqué serait celui de l'exercice précédent, ce qui n'est pas un comportement souhaité.
+
+\section{Autres environnements et commandes}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\montitre[]{} 
+%#1=logo (optionnel), #2=contenu
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  La commande \texttt{\textbackslash montitre} permet de mettre un autre titre que ceux prédéfinis, au besoin. Le paramètre \texttt{Header} est compatible avec ce titre.
+\end{minipage}}%
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+Ceci est un texte \important{//très important//}.
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  Ceci est un texte \important{très important}.
+\end{minipage}}%
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+{\tailletexte{0} Texte normal} 
+{\tailletexte{2} Texte plus grand}
+{\tailletexte{-3} Texte plutôt petit}
+%#1 va de -4 à 4
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  {\tailletexte{0} Texte normal}\par
+  {\tailletexte{2} Texte plus grand}\par
+  {\tailletexte{-3} Texte plutôt petit}
+\end{minipage}}%
+
+\renewcommand{\subsectionformat}{\stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\,}
+  \setkomafont{subsection}{\Large\bfseries\textcolor{couleursubsection}}
+\renewcommand{\subsubsectionformat}{\stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\,}
+  \setkomafont{subsubsection}{\normalfont\large\bfseries\textcolor{couleursubsubsection}}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+\begin{lstlisting}
+\partie{//Une partie//}
+\souspartie{//Une sous-partie//}
+\end{lstlisting}
+
+\saut{ligne}
+
+La commande \texttt{\textbackslash chapitre} est utilisée pour les méga-documents, voir en template.
+
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+\vspace{\baselineskip}
+
+  \tocless\partie{Une partie}\par
+  \tocless\souspartie{Une sous-partie}
+\end{minipage}}%
+
+\vspace{0pt}
+
+\renewcommand{\subsectionformat}{\Large\textbf{\thesubsection~}}
+  \setkomafont{subsection}{\normalfont\Large\color{Black}\bfseries}
+\renewcommand{\subsubsectionformat}{\large\textbf{\thesubsubsection~}}
+  \setkomafont{subsubsection}{\normalfont\large\color{Black}\bfseries}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\begin{visible}[false]
+  %Contenu visible si Visible = false                       
+\end{visible}
+
+\begin{visible}[true]
+  %Contenu visible si Visible = true
+\end{visible}
+
+\visiblecmd[true]{//Contenu visible si Visible = true//}
+\visiblecmd[false]{//Contenu visible si Visible = false//}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  L'environnement \texttt{visible} et son équivalent en commande \texttt{\textbackslash visiblecmd} permettent de commuter entre deux contenus en fonction du booléen choisi pour le paramètre \texttt{Visible}, ce qui est parfois pratique.
+\end{minipage}}%
+
+\vspace{0pt}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\saut{//ligne//}
+\saut{//fiche//}
+\saut{//diapo//}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+  \vspace{\baselineskip}
+
+  \texttt{\textbackslash saut\{ligne\}} effectue un saut de ligne, relativement à la hauteur actuelle du texte.\newline
+  \texttt{\textbackslash saut\{fiche\}} effectue un saut de page uniquement en format \texttt{fiche}.\newline
+  \texttt{\textbackslash saut\{diapo\}} effectue un saut de page uniquement en format \texttt{diapo}.
+
+\end{minipage}}%
+
+\vspace{0pt}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\lignes{seyes}{1}
+\lignes{carreau}{2}
+\lignes{surligne}{3}
+//Ceci est un texte qui s'étend sur plusieurs lignes et qui sera plus facilement lisible si on le surligne une ligne sur deux avec des couleurs différentes.//
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+\vspace{\baselineskip}
+
+  \lignes{seyes}{1}
+
+\lignes{carreau}{2}
+
+\tracesurligne{3}%
+Ceci est un texte qui s'étend sur plusieurs lignes et qui sera plus facilement lisible si on le surligne une ligne sur deux avec des couleurs différentes.
+\end{minipage}}%
+
+\section{Booléens et compteurs}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
+\ifdiapo
+\iffiche
+\ifheader
+\ifprint
+
+\ifactivite
+\ifbasique
+\ifbilan
+\ifcorrige
+\ifcours
+\ifTD
+\ifflash
+\ifDM
+\ifDS
+\ifinterro
+
+\ifcorrection
+\ifenonce
+\ifvisible
+
+\ifbareme
+\ifdifficulte
+\ifcompetence
+\ifsource
+\iftheme
+
+\ifstretch
+
+\ifsubfile
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+
+\vspace{\baselineskip}
+
+  Les booléens suivants sont initialisés lors du paramétrage initial à \texttt{true} ou \texttt{false}. 
+
+  Le booléen \texttt{\textbackslash ifsubfile} est utilisé pour l'appel d'exercices en \texttt{subfile} (voir template).
+
+  Voici un exemple d'utilisation d'un booléen, pour afficher du contenu en fonction du paramétrage initial :
+
+  \begin{lstlisting}
+\ifdiapo Choix1 \else Choix2 \fi
+  \end{lstlisting}
+\end{minipage}}%
+
+
+
+\end{document}

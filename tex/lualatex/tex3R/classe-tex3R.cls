@@ -584,14 +584,25 @@ end
   \end{tikzpicture}\hfill
 }
 
+\newcounter{compteursurligne}
+\setcounter{compteursurligne}{1}
+
 \newcommand{\tracesurligne}[1]{%
   \begin{tikzpicture}[overlay]
-    \foreach \i in {0,2,...,#1} {%
-    \fill [couleursurlignelignea] ($(0,-0.15)+(0,-\i*\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
-    \fill [couleursurligneligneb] ($(0,-0.15)+(0,-\i*\baselineskip-\baselineskip)$) rectangle ($(0,-0.15)+(\linewidth,-\i*\baselineskip-2\baselineskip)$);
+    \foreach \i in {1,2,...,#1} {%
+    \ifnum\value{compteursurligne}=1
+      \fill[couleursurlignelignea]($(0,0.85)+(0,-\i*\baselineskip)$) rectangle ($(0,0.85)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+      \setcounter{compteursurligne}{0}
+    \else
+    \fill[couleursurligneligneb]($(0,0.85)+(0,-\i*\baselineskip)$) rectangle ($(0,0.85)+(\linewidth,-\i*\baselineskip-\baselineskip)$);
+      \setcounter{compteursurligne}{1}
+    \fi
     }%
 \end{tikzpicture}%
 }%
+
+
+
 
 %Nouveau soulignement pour le titre, utilisant lua-ul
 \newunderlinetype\beginUnderLine{\cleaders\hbox{%

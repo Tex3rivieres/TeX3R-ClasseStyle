@@ -1,5 +1,9 @@
 # Pistes de travail
 
+## Numérotation
+
+Conflit de numérotation avec le type 'basique'
+
 ## Conflits de package
 
 ### Adjustbox/pstricks
@@ -29,7 +33,6 @@ Supprimer les commandes obsolètes de la classe.
 
 Trois documentations à écrire :
   - Installation d'un environnement LaTeX
-  - Utilisation des commandes de la classe
   - Personnalisation du style
 
 ### Style utilisateur
