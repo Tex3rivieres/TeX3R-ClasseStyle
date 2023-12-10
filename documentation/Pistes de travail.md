@@ -1,5 +1,15 @@
 # Pistes de travail
 
+## Remarques
+
+Deux adjustbox successifs font planter la compilation (ajouter un \vspace{0pt} entre les deux permet de résoudre le problème, sûrement un problème de passage vertical/horinzontal mode)
+
+A cause de la classe scrartcl qui n'autorise pas le changement de taille de police en milieu de paragraphe, un environnement scratch ne peut être placé en milieu de ligne directement (fix possible : le mettre dans une parbox)
+
+## Snippets
+
+Le snippet Scratch est invalide
+
 ## Numérotation
 
 Conflit de numérotation avec le type 'basique'

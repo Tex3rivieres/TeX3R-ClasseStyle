@@ -612,6 +612,16 @@ end
 
 \NewDocumentCommand\underLine{+m}{{\beginUnderLine#1}}
 
+% Nouvelles commandes tkz euclide
+
+\tikzset{
+    handdrawn/.style={
+        decorate,
+        decoration={random steps,segment length=2mm,amplitude=0.3mm},
+    }
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DÉFINITION DES COULEURS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

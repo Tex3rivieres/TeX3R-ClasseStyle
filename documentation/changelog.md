@@ -1,5 +1,11 @@
 # Changelog
 
+## 10/12/23
+
+Ajout d'un paramètre ```handdrawn``` pour les segments de tkz euclide.
+
+Remarques ajoutées à Pistes de travail
+
 ## 09/12/23
 
 Fix de ```\lignes{surligne}```
