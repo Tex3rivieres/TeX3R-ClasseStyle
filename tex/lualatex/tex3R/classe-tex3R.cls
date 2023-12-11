@@ -76,8 +76,8 @@
 \RequirePackage{scratch3}
 \catcode`\_11
 \renewcommand{\turn_arrow}[1]{%
-\tikz[baseline=.25ex,x=6.5ex,y=6.5ex,#1]
-\draw[-{Triangle[angle=110:0.6ex 0.15ex]},line width=.3333ex](0,0) arc[start angle=-80,end angle=190,radius=1ex];%
+\tikz[baseline=.25ex, x=6.5ex, y=6.5ex, #1]
+\draw[>=stealth, line width=1pt, postaction={decorate, decoration={markings, mark=at position 1 with {\draw (0,-0.05) -- (0,0.05)   -- (0.1,0) -- (0,-0.05) -- (0,0) -- (0.055,0) -- (0.02,0.02) -- (0.02,-0.02);}}}](0,0) arc[start angle=-80, end angle=190, radius=1ex];%
 }
 \scr_restorecatcode
 
@@ -621,6 +621,15 @@ end
     }
 }
 
+\tikzset{point style/.style = {%
+	draw = black,
+	inner sep = 3pt,
+	shape = cross,
+	minimum size = 3 pt,
+	fill = black,
+	}
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DÉFINITION DES COULEURS %%%
@@ -700,7 +709,7 @@ end
 \end{luacode}
 
 \newfontfamily\myfontScratch{FreeSans}%Pour les blocs Scratch de ProfCollege
-\AtBeginEnvironment{scratch}{\KOMAoption{fontsize}{12pt}}%Scaling plutôt que taille de police
+%\AtBeginEnvironment{scratch}{\KOMAoption{fontsize}{12pt}}%Scaling plutôt que taille de police
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DES LOGOS %%%

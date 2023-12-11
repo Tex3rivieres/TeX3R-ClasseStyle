@@ -1,5 +1,15 @@
 # Changelog
 
+## 11/12/23
+
+Fix de la flèche de Scratch
+
+Compétences passées en ```\large``` dans leur affichage dans l'énoncé.
+
+Suppression du cnahgement de taille de police au début d'un environnement Scratch (sujet à bugs)
+
+Début de la documentation tkz-euclide
+
 ## 10/12/23
 
 Ajout d'un paramètre ```handdrawn``` pour les segments de tkz euclide.

@@ -1,0 +1,205 @@
+\documentclass[fiche]{classe-tex3R}
+\usepackage{style-tex3R}
+
+\colorlet{colorBasic}{SlateGrey}
+\colorlet{colorBracket}{DarkViolet}
+\colorlet{colorKeyword}{DarkBlue}
+\colorlet{colorEnvironment}{LightSeaGreen}
+\colorlet{colorComment}{Green}
+\colorlet{colorString}{DarkOrange}
+\colorlet{colorChange}{Red}
+\colorlet{colorMath}{Teal}
+\colorlet{colorVariable}{LightSkyBlue}
+\colorlet{colorBoolean}{Indigo}
+\colorlet{colorFunction}{DarkBlue}
+
+\lstset{
+  %Réglages généraux
+  backgroundcolor=\color{gray!20!white},
+  basicstyle=\ttfamily\small\color{colorBasic},
+  columns=fullflexible,
+  aboveskip=\baselineskip,
+  belowskip=0pt,
+  breaklines=true,
+  %Keywords
+  emph={[1]
+    begin,
+    end,
+    documentclass,
+    usepackage,
+    definirchapitre,
+    definirniveau,
+    parametrage,
+    bareme,
+    competence,
+    difficulte,
+    source,
+    theme,
+    montitre,
+    important,
+    tailletexte,
+    partie,
+    souspartie,
+    chapitre,
+    visiblecmd,
+    saut,
+    lignes,
+    ifdiapo,
+    iffiche,
+    ifheader,
+    ifprint,
+    ifactivite,
+    ifbasique,
+    ifbilan,
+    ifcorrige,
+    ifcours,
+    ifTD,
+    ifflash,
+    ifDM,
+    ifDS,
+    ifinterro,
+    ifcorrection,
+    ifenonce,
+    ifvisible,
+    ifbareme,
+    ifdifficulte,
+    ifcompetence,
+    ifsource,
+    iftheme,
+    ifstretch,
+    ifsubfile,
+    else,
+    fi,
+    newcounter,
+    setcounter,
+    stepcounter,
+    thecompteurexercice
+  }, 
+  emphstyle={[1]\color{colorKeyword}},
+  %Environnements
+  emph={[2]
+    environnement,
+    luacode,
+    fiche,
+    document,
+    application,
+    convention,
+    definition,
+    exemple,
+    methode,
+    propriete,
+    preuve,
+    remarque,
+    enonce,
+    correction,
+    visible
+  }, 
+  emphstyle={[2]\color{colorEnvironment}},
+  %Variable lua
+  emph={[3]
+  Type,
+  Impression,
+  Header,
+  Taille,
+  Stretch,
+  Correction,
+  Enonce,
+  Visible,
+  Competence,
+  Bareme,
+  Difficulte,
+  Source,
+  Theme
+  },
+  emphstyle={[3]\color{colorVariable}},
+  %Booléens lua
+  emph={[4]
+  true,
+  false,
+  nil
+  },
+  emphstyle={[4]\color{colorBoolean}},
+  %Fonctions lua
+  emph={[5]
+  mesParametres
+  },
+  emphstyle={[4]\color{colorFunction}},
+  %Literate
+  literate={
+    {\{}{{\textcolor{colorBracket}{\{}}}1
+    {\}}{{\textcolor{colorBracket}{\}}}}1
+    {[}{{\textcolor{colorBracket}{[}}}1
+    {]}{{\textcolor{colorBracket}{]}}}1
+    {[[}{{\textcolor{colorString}{[[ }}}1
+    {]]}{{\textcolor{colorString}{]]}}}1
+    {\\}{{\textcolor{colorKeyword}{\textbackslash}}}1
+    {0}{{$\cancel{0}$}}1
+    },
+  %Comment
+  comment=[l]{--},
+  morecomment=[l]{\%},
+  commentstyle=\color{colorComment},
+  %Delimiters
+  moredelim=[is][\color{colorChange}]{@}{@},
+  moredelim=[s][\color{colorMath}]{\$}{\$},
+  moredelim=[is][\color{colorString}]{||}{||},
+  moredelim=[is][\color{colorBasic}]{//}{//},
+  moredelim=[is][\color{colorComment}]{/*}{/*},
+  }
+
+
+  \title{\bfseries guide rapide tkz-euclide\par}
+  \author{Vincent Crombez \& Frédéric Léothaud}
+  \date{}
+
+  \cfoot{\pagemark}
+  \setlength{\parskip}{\baselineskip}
+  \setcounter{tocdepth}{3}
+  \renewcommand{\sectionformat}{\LARGE\textbf{\thesection~}}
+    \setkomafont{section}{\normalfont\LARGE\color{Black}\bfseries}
+  \renewcommand{\subsectionformat}{\Large\textbf{\thesubsection~}}
+    \setkomafont{subsection}{\normalfont\Large\color{Black}\bfseries}
+  \renewcommand{\subsubsectionformat}{\large\textbf{\thesubsubsection~}}
+    \setkomafont{subsubsection}{\normalfont\large\color{Black}\bfseries}
+
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+
+Ce document se veut comme un aide mémoire rapide pour tracer des figures à l'aide du package \href{https://texlive.mycozy.space/macros/latex/contrib/tkz/tkz-euclide/doc/tkz-euclide.pdf}{\texttt{tkz-euclide}}.
+
+Le package est extrêmement complet, mais pour le quotidien, un nombre limité de commandes suffisent amplement.
+
+Le package fonctionne de manière assez naturelle. L'utilisateur définit des objets, ce qui ne les affiche pas. Il est ensuite possible d'afficher tout ou partie des objets (nom, symbole, légende, etc). Il est possible de placer des points via leurs coordonnées, puis de tracer des droites ou segments passant par ces points. Le package permet de récupérer automatiquement les points d'intersection, de tracer des parallèles ou perpendiculaires à une droite passant par un point, etc. Ainsi, en changeant les valeurs des coordonnées de départ, l'ensemble de la figure reste valide, comme si l'on utilisait un logiciel de géométrie dynamique.
+
+
+\section{Définition de points}
+
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{tikzpicture}
+    \tkzDefPoints{0/0/A, 3/0/B}
+    \tkzDrawPoints(A,B)
+    \tkzLabelPoints(A,B)
+  \end{tikzpicture}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  
+\end{minipage}}%
+
+
+
+
+
+\end{document}
