@@ -1,5 +1,14 @@
 # Changelog
 
+## 13/12/23
+
+Documentations tikz-euclide continuée.
+Fix du ```\n``` dans la déclaration des polices
+
+Option ```lua``` ajoutée à tkz-euclide pour optimiser le calcul des figures.
+
+Modificiation du style par défaut dans ```tkz-euclide```
+
 ## 11/12/23
 
 Fix de la flèche de Scratch

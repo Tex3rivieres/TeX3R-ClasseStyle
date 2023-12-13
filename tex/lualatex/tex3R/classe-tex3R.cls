@@ -91,7 +91,7 @@
 \RequirePackage{listings}
 
 \RequirePackage{tkz-fct,tkz-tab}
-\RequirePackage{tkz-euclide}
+\RequirePackage[lua]{tkz-euclide}
 
 \RequirePackage{amsmath}
 \RequirePackage{amsfonts}
@@ -105,7 +105,7 @@
 \RequirePackage{setspace}	
 \RequirePackage{multirow}	
 \RequirePackage{import}
-\RequirePackage[]{qrcode}
+\RequirePackage{qrcode}
 \RequirePackage{tikzsymbols}
 \RequirePackage{ccicons}
 \RequirePackage{circledsteps}
@@ -612,24 +612,21 @@ end
 
 \NewDocumentCommand\underLine{+m}{{\beginUnderLine#1}}
 
-% Nouvelles commandes tkz euclide
+% Paramétrage tkz euclide
 
 \tikzset{
-    handdrawn/.style={
-        decorate,
-        decoration={random steps,segment length=2mm,amplitude=0.3mm},
-    }
+  handdrawn/.style={%Nouveau style handdrawn pour les segments
+    decorate,
+    decoration={random steps,segment length=2mm,amplitude=0.3mm}
+  },
+  point style/.style = {%Style + par défaut pour les points seuls
+    draw = black,
+    inner sep = 3pt,
+    shape = cross,
+    minimum size = 3 pt,
+    fill = black
+	},
 }
-
-\tikzset{point style/.style = {%
-	draw = black,
-	inner sep = 3pt,
-	shape = cross,
-	minimum size = 3 pt,
-	fill = black,
-	}
-}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DÉFINITION DES COULEURS %%%
@@ -700,8 +697,7 @@ end
       tex.sprint('\\renewcommand{\\important}[1]{'..  FormatageString(POLICE.important) ..'}')
     end
 
-  tex.sprint(
-    '\\IfFontExistsTF{' ..  FormatageString(POLICE.texte) ..'}{\\setmainfont{' ..  FormatageString(POLICE.texte) .. '}}\\n' ..
+  tex.sprint('\\IfFontExistsTF{' ..  FormatageString(POLICE.texte) ..'}{\\setmainfont{' ..  FormatageString(POLICE.texte) .. '}}\\par' ..
     '\\IfFontExistsTF{' ..  FormatageString(POLICE.math) .. '}{\\setmathfont{' ..  FormatageString(POLICE.math) .. '}}{}' ..
     '\\IfFontExistsTF{' ..  FormatageString(POLICE.mathcal) .. '}{\\setmathfont{' ..  FormatageString(POLICE.mathcal) .. '}[range=cal]}{}'
   )
