@@ -437,29 +437,29 @@
 % }
 
 %Partie (collection regroupant tout un chapitre, dans un megadocument)
-\renewcommand*\partlineswithprefixformat[3]{%
-\thispagestyle{empty}
-\hfill
-\vfill
-  \begin{tcolorbox}[
-    colframe = black, 
-    colback=white,
-    coltitle=white,
-    sharp corners,
-    valign=center,
-    top=2cm,
-    bottom=2cm,
-    left=0.5cm,
-    enhanced,
-    before skip=0cm,
-  ]
-  \makeatletter
-  \@ifstar{}{\Large Chapitre \Roman{part}}
-  \makeatother
+% \renewcommand*\partlineswithprefixformat[3]{%
+% \thispagestyle{empty}
+% \hfill
+% \vfill
+%   \begin{tcolorbox}[
+%     colframe = black, 
+%     colback=white,
+%     coltitle=white,
+%     sharp corners,
+%     valign=center,
+%     top=2cm,
+%     bottom=2cm,
+%     left=0.5cm,
+%     enhanced,
+%     before skip=0cm,
+%   ]
+%   \makeatletter
+%   \@ifstar{}{\Large Chapitre \Roman{part}}
+%   \makeatother
   
-  \tcblower
-  #3%
-  \end{tcolorbox}
-  \vfill
-  \hfill
-}
+%   \tcblower
+%   #3%
+%   \end{tcolorbox}
+%   \vfill
+%   \hfill
+% }

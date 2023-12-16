@@ -1,4 +1,4 @@
-# Tex3R (Classe & Style)
+# TeX3R (Classe & Style)
 
 ## Description de la classe et du style
 
@@ -19,7 +19,7 @@ Des outils et exemples de documents produits se trouvent dans [templates](https:
 
 TeX3R c'est aussi une extension pour VSCode/VSCodium, avec des panels de raccourcis et une configuration adaptée à la classe et au style TeX3R : [https://github.com/Tex3rivieres/TeX3R-Workshop](https://github.com/Tex3rivieres/TeX3R-Workshop)
 
-TeX3R c'est aussi un environnement LaTeX portable : [https://github.com/Tex3rivieres/TeX3R-Portable](https://github.com/Tex3rivieres/TeX3R-Portable)
+TeX3R c'est aussi un environnement LaTeX portable préconfiguré : [https://github.com/Tex3rivieres/TeX3R-Portable](https://github.com/Tex3rivieres/TeX3R-Portable)
 
 ## Licence et crédits
 
