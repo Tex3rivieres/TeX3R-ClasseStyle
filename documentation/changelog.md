@@ -1,13 +1,23 @@
 # Changelog
 
+## 16/12/23
+
+Fix du coloriage de la flèche de Scratch
+
+Documentation ```tkz-euclide``` continuée
+
+
 ## 13/12/23
 
-Documentations tikz-euclide continuée.
+Documentation ```tkz-euclide``` continuée.
+
 Fix du ```\n``` dans la déclaration des polices
 
 Option ```lua``` ajoutée à tkz-euclide pour optimiser le calcul des figures.
 
-Modificiation du style par défaut dans ```tkz-euclide```
+Modification du style par défaut dans ```tkz-euclide```
+
+Changement du texte par défaut en 'Propriété (admise)' pour l'environnement ```propriete```
 
 ## 11/12/23
 
@@ -15,9 +25,9 @@ Fix de la flèche de Scratch
 
 Compétences passées en ```\large``` dans leur affichage dans l'énoncé.
 
-Suppression du cnahgement de taille de police au début d'un environnement Scratch (sujet à bugs)
+Suppression du changement de taille de police au début d'un environnement ```scratch``` (sujet à bugs)
 
-Début de la documentation tkz-euclide
+Début de la documentation ```tkz-euclide```
 
 ## 10/12/23
 

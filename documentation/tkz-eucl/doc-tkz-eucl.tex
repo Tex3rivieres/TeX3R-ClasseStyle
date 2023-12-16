@@ -1,7 +1,15 @@
 \documentclass[fiche]{classe-tex3R}
 \usepackage{style-tex3R}
 
-\usepackage{accsupp}
+\makeatletter
+%Patch pour la parenthèse fermante du listings
+\patchcmd{\lsthk@SelectCharTable}{%
+  \lst@ifbreaklines\lst@Def{`)}{\lst@breakProcessOther)}\fi
+}{%
+}{
+}{
+}
+\makeatother
 
 \colorlet{colorBasic}{SlateGrey}
 \colorlet{colorBracket}{DarkViolet}
@@ -22,7 +30,7 @@
   columns=fullflexible,
   aboveskip=0pt,
   belowskip=0pt,
-  breaklines=true,
+  breaklines=true,              
   %Keywords
   emph={[1]
     begin,
@@ -98,6 +106,8 @@
     tkzDefPointOnLine,
     tkzDefPointOnCircle,
     tkzDrawArc,
+    tkzDefEquilateral,
+    tkzMarkAngles,
   }, 
   emphstyle={[1]\color{colorKeyword}},
   %Environnements
@@ -155,8 +165,10 @@
     {\}}{{\textcolor{colorBracket}{\}}}}1
     {[}{{\textcolor{colorBracket}{[}}}1
     {]}{{\textcolor{colorBracket}{]}}}1
-    {)}{{\textcolor{colorBracket}{)}}}1
     {(}{{\textcolor{colorBracket}{(}}}1
+    {)}{{\textcolor{colorBracket}{)}}}1
+    {*(}{{\textcolor{colorComment}{(}}}1
+    {*)}{{\textcolor{colorComment}{)}}}1
     {[[}{{\textcolor{colorString}{[[ }}}1
     {]]}{{\textcolor{colorString}{]]}}}1
     {\\}{{\textcolor{colorKeyword}{\textbackslash}}}1
@@ -172,7 +184,6 @@
   moredelim=[is][\color{colorBasic}]{//}{//},
   moredelim=[is][\color{colorComment}]{/*}{/*},
   }
-
 
   \title{\bfseries exemples avec tkz-euclide\par}
   \author{Vincent Crombez \& Frédéric Léothaud}
@@ -504,10 +515,10 @@ Le package fonctionne de manière assez naturelle. L'utilisateur définit des ob
 \begin{lstlisting}
 \begin{tikzpicture}[scale=1.2]
   \tkzDefPoints{0/0/F,1/0/A,2/0/T,3/0/B,4/0/H}
-  \tkzDrawSegments(F,A A,T T,B B,H)
   \tkzLabelPoints[above](F,T,H)
   \tkzDrawSemiCircles[fill=black!20](T,F)
   \tkzDrawSemiCircles[fill=white](A,F B,T)
+  \tkzDrawSegments(F,A A,T T,B B,H)
   \tkzMarkSegments[pos=0,mark=|](A,B B,A)
   \tkzMarkSegments[pos=0.5,mark=s||](F,A A,T T,B B,H)
 \end{tikzpicture}
@@ -516,10 +527,10 @@ Le package fonctionne de manière assez naturelle. L'utilisateur définit des ob
 \adjustbox{valign=t}{\begin{minipage}{0.3\linewidth}%
   \begin{tikzpicture}[scale=1.2]
     \tkzDefPoints{0/0/F,1/0/A,2/0/T,3/0/B,4/0/H}
-    \tkzDrawSegments(F,A A,T T,B B,H)
     \tkzLabelPoints[above](F,T,H)
     \tkzDrawSemiCircles[fill=black!20](T,F)
     \tkzDrawSemiCircles[fill=white](A,F B,T)
+    \tkzDrawSegments(F,A A,T T,B B,H)
     \tkzMarkSegments[pos=0,mark=|](A,B B,A)
     \tkzMarkSegments[pos=0.5,mark=s||](F,A A,T T,B B,H)
   \end{tikzpicture}
@@ -533,7 +544,7 @@ Le package fonctionne de manière assez naturelle. L'utilisateur définit des ob
   \tkzDefPoints{0/0/A,2/0/B}
   \tkzDefPointOnCircle[through = center A angle 50 point B]
   \tkzGetPoint{C}
-  \tkzDrawArc(A,C)(B)%(centre,point1)(point2)
+  \tkzDrawArc(A,C)(B)%*(centre,point1*)*(point2*)
   \tkzDrawSegments(A,B A,C)
   \tkzLabelPoints[right](B,C)
   \tkzLabelPoints[below](A)
@@ -791,6 +802,105 @@ Le package fonctionne de manière assez naturelle. L'utilisateur définit des ob
     \tkzLabelPoints[above](C)
     \tkzLabelPoints[above left](O)
   \end{tikzpicture} 
+\end{minipage}}%
+
+\subsection{Triangles particuliers}
+
+\adjustbox{valign=t}{\begin{minipage}{0.66\linewidth}%
+  \begin{lstlisting}
+\begin{tikzpicture}
+  \tkzDefPoints{0/0/A,4/0/B}
+  \tkzDefEquilateral(A,B)\tkzGetPoint{C}
+  \tkzDrawPolygon(A,B,C)
+
+  \tkzMarkAngles[size=0.4cm,mark=|](B,A,C C,B,A A,C,B)
+  \tkzMarkSegments[mark=s||](A,B B,C C,A)
+  
+  \tkzLabelPoints[below](A)
+  \tkzLabelPoints[below right](B)
+  \tkzLabelPoints[above](C)
+\end{tikzpicture}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.3\linewidth}%
+  \begin{tikzpicture}
+    \tkzDefPoints{0/0/A,4/0/B}
+    \tkzDefEquilateral(A,B)\tkzGetPoint{C}
+    \tkzDrawPolygon(A,B,C)
+  
+    \tkzMarkAngles[size=0.4cm,mark=|](B,A,C C,B,A A,C,B)
+    \tkzMarkSegments[mark=s||](A,B B,C C,A)
+    
+    \tkzLabelPoints[below](A)
+    \tkzLabelPoints[below right](B)
+    \tkzLabelPoints[above](C)
+  \end{tikzpicture}
+\end{minipage}}%
+
+\vspace{0pt}
+
+\adjustbox{valign=t}{\begin{minipage}{0.66\linewidth}%
+  \begin{lstlisting}
+\begin{tikzpicture}[rotate=55]
+  \tkzDefPoints{0/0/A,3/0/B}
+  \tkzDefLine[mediator](A,B)\tkzGetPoints{c}{d}
+  \tkzDefPointWith[linear,K=1.25](c,d) \tkzGetPoint{C}
+  \tkzDrawPolygon(A,B,C)
+
+  \tkzMarkAngles[size=0.4cm,mark=||](C,A,B A,B,C)
+  \tkzMarkSegments[mark=o](B,C C,A)
+
+  \tkzLabelPoints[left](A)
+  \tkzLabelPoints[above](B)
+  \tkzLabelPoints[right](C)
+\end{tikzpicture}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.3\linewidth}%
+  \begin{tikzpicture}[rotate=55]
+    \tkzDefPoints{0/0/A,3/0/B}
+    \tkzDefLine[mediator](A,B)\tkzGetPoints{c}{d}
+    \tkzDefPointWith[linear,K=1.25](c,d) \tkzGetPoint{C}
+    \tkzDrawPolygon(A,B,C)
+  
+    \tkzMarkAngles[size=0.4cm,mark=||](C,A,B A,B,C)
+    \tkzMarkSegments[mark=o](B,C C,A)
+  
+    \tkzLabelPoints[left](A)
+    \tkzLabelPoints[above](B)
+    \tkzLabelPoints[right](C)
+  \end{tikzpicture}
+\end{minipage}}%
+
+\adjustbox{valign=t}{\begin{minipage}{0.66\linewidth}%
+\begin{lstlisting}
+\begin{tikzpicture}[rotate=25,scale=0.8]
+  \tkzDefPoints{0/0/A,4/0/B}
+  \tkzDefLine[orthogonal=through A](A,B)\tkzGetPoint{c}
+  \tkzDefPointWith[linear,K=1.25](A,c) \tkzGetPoint{C}
+  \tkzDrawPolygon(A,B,C)
+
+  \tkzMarkRightAngles(B,A,C)
+
+  \tkzLabelPoints[below](A)
+  \tkzLabelPoints[right](B)
+  \tkzLabelPoints[above left](C)
+\end{tikzpicture}
+\end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.3\linewidth}%
+  \begin{tikzpicture}[rotate=25,scale=0.8]
+    \tkzDefPoints{0/0/A,4/0/B}
+    \tkzDefLine[orthogonal=through A](A,B)\tkzGetPoint{c}
+    \tkzDefPointWith[linear,K=1.25](A,c) \tkzGetPoint{C}
+    \tkzDrawPolygon(A,B,C)
+  
+    \tkzMarkRightAngles(B,A,C)
+  
+    \tkzLabelPoints[below](A)
+    \tkzLabelPoints[right](B)
+    \tkzLabelPoints[above left](C)
+  \end{tikzpicture}
 \end{minipage}}%
 
 

@@ -77,7 +77,7 @@
 \catcode`\_11
 \renewcommand{\turn_arrow}[1]{%
 \tikz[baseline=.25ex, x=6.5ex, y=6.5ex, #1]
-\draw[>=stealth, line width=1pt, postaction={decorate, decoration={markings, mark=at position 1 with {\draw (0,-0.05) -- (0,0.05)   -- (0.1,0) -- (0,-0.05) -- (0,0) -- (0.055,0) -- (0.02,0.02) -- (0.02,-0.02);}}}](0,0) arc[start angle=-80, end angle=190, radius=1ex];%
+\draw[>=stealth, line width=1pt, postaction={decorate, decoration={markings, mark=at position 1 with {\draw (0,-0.05) -- (0,0.05)   -- (0.1,0) -- (0,-0.05) -- (0,0) -- (0.05,0) -- (0.02,0.02) -- (0.02,-0.02) -- (0.05,0);}}}](0,0) arc[start angle=-80, end angle=190, radius=1ex];%
 }
 \scr_restorecatcode
 
@@ -909,7 +909,7 @@ end
       tex.sprint([[\RenewEnviron{exemple}[1][Exemple]{\formatEnvCours[#1]{couleurexemple}}]])
       tex.sprint([[\RenewEnviron{methode}[1][Méthode]{\formatEnvCours[#1]{couleurmethode}}]])
       tex.sprint([[\RenewEnviron{preuve}[1][Preuve]{\formatEnvCours[#1]{couleurpreuve}}]])
-      tex.sprint([[\RenewEnviron{propriete}[1][Propriété]{\formatEnvCours[#1]{couleurpropriete}}]])
+      tex.sprint([[\RenewEnviron{propriete}[1][Propriété (admise)]{\formatEnvCours[#1]{couleurpropriete}}]])
       tex.sprint([[\RenewEnviron{remarque}[1][Remarque]{\formatEnvCours[#1]{couleurremarque}}]])
     end
 
