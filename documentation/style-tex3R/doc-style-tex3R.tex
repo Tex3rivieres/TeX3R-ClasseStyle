@@ -1,0 +1,270 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+\usepackage{dirtree}
+
+\colorlet{colorBasic}{SlateGrey}
+\colorlet{colorBracket}{DarkViolet}
+\colorlet{colorKeyword}{DarkBlue}
+\colorlet{colorEnvironment}{LightSeaGreen}
+\colorlet{colorComment}{Green}
+\colorlet{colorString}{DarkOrange}
+\colorlet{colorChange}{Red}
+\colorlet{colorMath}{Teal}
+\colorlet{colorVariable}{LightSkyBlue}
+\colorlet{colorVariableDeux}{Teal}
+\colorlet{colorBoolean}{Indigo}
+\colorlet{colorFunction}{DarkBlue}
+
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+\lstset{
+  %Réglages généraux
+  backgroundcolor=\color{gray!20!white},
+  basicstyle=\ttfamily\small\color{colorBasic},
+  columns=fullflexible,
+  aboveskip=\baselineskip,
+  belowskip=0pt,
+  breaklines=true,
+  %Keywords
+  emph={[1]
+    begin,
+    end,
+    documentclass,
+    usepackage,
+    definirchapitre,
+    definirniveau,
+    parametrage,
+    bareme,
+    competence,
+    difficulte,
+    source,
+    theme,
+    montitre,
+    important,
+    tailletexte,
+    partie,
+    souspartie,
+    chapitre,
+    visiblecmd,
+    saut,
+    lignes,
+    ifdiapo,
+    iffiche,
+    ifheader,
+    ifprint,
+    ifactivite,
+    ifbasique,
+    ifbilan,
+    ifcorrige,
+    ifcours,
+    ifTD,
+    ifflash,
+    ifDM,
+    ifDS,
+    ifinterro,
+    ifcorrection,
+    ifenonce,
+    ifvisible,
+    ifbareme,
+    ifdifficulte,
+    ifcompetence,
+    ifsource,
+    iftheme,
+    ifstretch,
+    ifsubfile,
+    else,
+    fi,
+    newcounter,
+    setcounter,
+    stepcounter,
+    thecompteurexercice,
+  }, 
+  emphstyle={[1]\color{colorKeyword}},
+  %Environnements
+  emph={[2]
+    environnement,
+    luacode,
+    fiche,
+    document,
+    application,
+    convention,
+    definition,
+    exemple,
+    methode,
+    propriete,
+    preuve,
+    remarque,
+    enonce,
+    correction,
+    visible
+  }, 
+  emphstyle={[2]\color{colorEnvironment}},
+  %Variable lua
+  emph={[3]
+  Type,
+  Impression,
+  Header,
+  Taille,
+  Stretch,
+  Correction,
+  Enonce,
+  Visible,
+  Competence,
+  Bareme,
+  Difficulte,
+  Source,
+  Theme
+  },
+  emphstyle={[3]\color{colorVariable}},
+  %Booléens lua
+  emph={[4]
+  true,
+  false,
+  nil
+  },
+  emphstyle={[4]\color{colorBoolean}},
+  %Fonctions lua
+  emph={[5]
+  mesParametres
+  },
+  emphstyle={[4]\color{colorFunction}},
+  %Variables lua
+  emph={[6]
+  PAGE,
+  },
+  emphstyle={[6]\color{colorVariable}},
+  %Variables deux lua
+  emph={[7]
+  enumi,
+  enumii,
+  itemi,
+  itemii,
+  },
+  emphstyle={[7]\color{colorVariableDeux}},
+  %Literate
+  literate={
+    % {\{}{{\textcolor{colorBracket}{\{}}}1
+    % {\}}{{\textcolor{colorBracket}{\}}}}1
+    % {[}{{\textcolor{colorBracket}{[}}}1
+    % {]}{{\textcolor{colorBracket}{]}}}1
+    % {[[}{{\textcolor{colorString}{[[ }}}1
+    % {]]}{{\textcolor{colorString}{]]}}}1
+    % {\\}{{\textcolor{colorKeyword}{\textbackslash}}}1
+    % {0}{{$\cancel{0}$}}1
+    },
+  %Comment
+  comment=[l]{--},
+  morecomment=[l]{\%},
+  commentstyle=\color{colorComment},
+  %Delimiters
+  moredelim=[is][\color{colorChange}]{@}{@},
+  moredelim=[s][\color{colorMath}]{\$}{\$},
+  moredelim=[is][\color{colorString}]{||}{||},
+  moredelim=[s][\color{colorString}]{[[}{]]},
+  moredelim=[is][\color{colorBasic}]{//}{//},
+  moredelim=[is][\color{colorComment}]{/*}{/*},
+  }
+
+\title{\bfseries style-tex3R\par}
+\author{Vincent Crombez \& Frédéric Léothaud}
+\date{}
+
+\cfoot{\pagemark}
+\setlength{\parskip}{\baselineskip}
+\setcounter{tocdepth}{3}
+\renewcommand{\sectionformat}{\LARGE\textbf{\thesection~}}
+  \setkomafont{section}{\normalfont\LARGE\color{Black}\bfseries}
+\renewcommand{\subsectionformat}{\Large\textbf{\thesubsection~}}
+  \setkomafont{subsection}{\normalfont\Large\color{Black}\bfseries}
+\renewcommand{\subsubsectionformat}{\large\textbf{\thesubsubsection~}}
+  \setkomafont{subsubsection}{\normalfont\large\color{Black}\bfseries}
+
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\phantomsection
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
+
+La \texttt{style-tex3R} fait partie d'un projet comprenant :
+%
+\begin{itemize}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-ClasseStyle}{Une classe, un style et des templates de documents pratiques}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-Portable}{Un environnement LaTeX portable}
+  \item \href{https://github.com/Tex3rivieres/TeX3R-Workshop}{Une extension (basée sur \texttt{latex-workshop})}
+\end{itemize}
+
+Il est préférable d'aller d'abord lire la documentation de \texttt{classe-tex3R} qui explique l'ensemble des commandes disponibles. 
+
+L'objectif de ce guide est de guider la personnalisation du style à appliquer aux environnements et commandes de la \texttt{classe-tex3R}, afin d'avoir une apparence propre selon les goûts de chacun, tout en gardant la possibilité de transférer son document à un autre utilisateur de la \texttt{classe-tex3R}, qui lui le compilera avec le style de son choix.
+
+\newpage
+
+\section{Créer un nouveau style}
+
+Afin d'utiliser son style personnalisé, il suffit de créer une copie du fichier \texttt{style-tex3R.sty} dans le même dossier, de le renommer \texttt{monstyle.sty} et de travailler sur ce dernier. Le fichier \texttt{style-tex3R} se trouve dans l'emplacement suivant :
+
+\saut{ligne} %#1=fiche/diapo
+
+\dirtree{%
+.1 TeX3R-ClasseStyle.
+  .2 documentation.
+  .2 templates.
+  .2 tex.
+    .3 fonts.
+    .3 lualatex.
+      .4 tex3R.
+        .5 {classe-tex3R.cls}.
+        .5 {style-tex3R.sty}.
+.2 {.gitignore}.
+.2 {README.md}.
+}
+
+Une fois le fichier \texttt{monstyle.sty} créé il est nécessaire d'ouvrir MiKTeX Console et de faire Tasks > Refresh file name database.
+
+Ensuite, pour appeler \texttt{monstyle} dans un nouveau document, il suffit de changer le préambule comme suit :
+
+\begin{lstlisting}
+\documentclass[fiche]{classe-tex3R}
+\usepackage{monstyle}
+
+\begin{document}
+
+%Le texte du document
+
+\end{document}
+\end{lstlisting}
+
+\section{Principe de modification}
+
+\texttt{classe-tex3R} et \texttt{style-tex3R} sont codés majoritairement en \texttt{lua}. L'idée derrière cela est d'avoir une part minimale de choses à modifier dans le style, dans des chaînes de caractères \texttt{lua}, qui seront ensuite insérées et utilisées par les commandes de la classe. Ceci étant, les choses pouvant être modifiées sont toujours entre \texttt{[[ ]]} ou entre \texttt{' '} qui sont les délimiteurs des chaînes de caractères en \texttt{lua}. 
+
+Cette expérience simplifiée évite d'avoir à aller voir dans de nombreuses documentations pour connaître la syntaxe exacte pour chaque paramètre. 
+
+Par la suite, nous détaillerons chacune des fonctions \texttt{lua}, et à quoi correspondent les différentes parties modifiables.
+
+\section{FormatUtilisateur}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+\begin{lstlisting}
+PAGE.enumi = ||[[ \textbf{\arabic*.~} ]]||
+PAGE.enumii = [[ \textbf{\alph*.~} ]]
+PAGE.itemi = [[ \textbullet ]]
+PAGE.itemii = [[ $\circ$ ]]
+\end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  
+\end{minipage}}%
+
+
+\end{document}

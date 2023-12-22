@@ -253,7 +253,10 @@
   end
 \end{luacode*}
 
-\AtBeginDocument{\loadgeometry{Normal}}
+\AtBeginDocument{
+  \loadgeometry{Normal}
+  \npproductsign{\times}\npthousandsep{\,}\npthousandthpartsep{\,}
+  }
 
 %%%%%%%%%%%%%%%%%%%
 % AUTRES BOOLÉENS %

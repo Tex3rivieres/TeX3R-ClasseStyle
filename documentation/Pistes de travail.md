@@ -4,11 +4,7 @@
 
 Deux adjustbox successifs font planter la compilation (ajouter un \vspace{0pt} entre les deux permet de résoudre le problème, sûrement un problème de passage vertical/horinzontal mode)
 
-A cause de la classe scrartcl qui n'autorise pas le changement de taille de police en milieu de paragraphe, un environnement scratch ne peut être placé en milieu de ligne directement (fix possible : le mettre dans une parbox)
 
-## Snippets
-
-Le snippet Scratch est invalide
 
 ## Numérotation
 
@@ -24,11 +20,6 @@ Redéfinir ```\clipbox``` dans ```pstricks``` plutôt que de la supprimer, en s'
 
 Colonne X déjà définie pour le tableur créé avec ```nicematrix```.
 
-## Extension VS Code / VS Codium
-
-- Définir les commandes à ajouter/supprimer dans le panel > voir Recap commandes.md
-- Modifier les snippets
-
 ## Implémentations à venir
 
 ### TOC
@@ -41,10 +32,4 @@ Supprimer les commandes obsolètes de la classe.
 
 ### Documentation
 
-Trois documentations à écrire :
-  - Installation d'un environnement LaTeX
   - Personnalisation du style
-
-### Style utilisateur
-
-Améliorer l'ergonomie de la modification du style.

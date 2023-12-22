@@ -1,5 +1,11 @@
 # Changelog
 
+## 2212/23
+
+Documentation du style commencée.
+
+Ajout de la syntaxe ```\np{8.e10}``` possible.
+
 ## 16/12/23
 
 Fix du coloriage de la flèche de Scratch
