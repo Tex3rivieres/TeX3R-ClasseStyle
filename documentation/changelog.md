@@ -1,6 +1,11 @@
 # Changelog
 
-## 2212/23
+## 23/12/23
+
+- Options de classe supprimées, ajout d'un parametrage supplémentaire dans le préambule regroupant Format, Chapitre Numéro et  Niveau. Ajout du paramétrage Compteur dans le corps du document.
+- Documentation modifiée en conséquence. 
+
+## 22/12/23
 
 Documentation du style commencée.
 

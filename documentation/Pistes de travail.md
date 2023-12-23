@@ -1,9 +1,12 @@
 # Pistes de travail
 
+## Commandes à créer
+
 ## Remarques
 
 Deux adjustbox successifs font planter la compilation (ajouter un \vspace{0pt} entre les deux permet de résoudre le problème, sûrement un problème de passage vertical/horinzontal mode)
 
+Adjustbox est très inconsistant : le fix de \vspace{0pt} avant et après semble suffisant.
 
 
 ## Numérotation

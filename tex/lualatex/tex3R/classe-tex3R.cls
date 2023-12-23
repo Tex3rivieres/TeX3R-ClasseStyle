@@ -22,15 +22,16 @@
   TITRES = {}
   ENVIRONNEMENTS = {}
   PARAMETRES.premier = true
+  PARAMETRES.format = 'fiche'
 \end{luacode*}
 
-\DeclareOption{fiche}{\directlua{PARAMETRES.format = "fiche"}}
-\DeclareOption{diapo}{\directlua{PARAMETRES.format = "diapo"}}
-\ProcessOptions\relax
+% \DeclareOption{fiche}{\directlua{PARAMETRES.format = "fiche"}}
+% \DeclareOption{diapo}{\directlua{PARAMETRES.format = "diapo"}}
+% \ProcessOptions\relax
 
-\begin{luacode*}
-  Format = PARAMETRES.format
-\end{luacode*}
+% \begin{luacode*}
+%   Format = PARAMETRES.format
+% \end{luacode*}
 
 %Formatage de la page et du texte
 \RequirePackage{geometry}
@@ -125,6 +126,8 @@
 \newif\ifheader
 \newif\ifprint
 \newif\ifsubfile
+\newif\ifpremier
+  \premiertrue
 
 \newcommand{\FormatPage}
 
@@ -153,6 +156,31 @@
     local FORMAT = PARAMETRES.format
     local PRINT = PARAMETRES.print
     local PREMIER = PARAMETRES.premier
+    local NUMERO = PARAMETRES.numero
+    local CHAPITRE = PARAMETRES.chapitre
+    local NIVEAU = PARAMETRES.niveau
+    local COMPTEUR = PARAMETRES.compteur
+    local TYPE = PARAMETRES.type
+
+    if PREMIER then
+      ChapitreLua(NUMERO)
+      tex.sprint('\\renewcommand{\\contenuchapitre}{' .. CHAPITRE ..'}')
+
+      NiveauUtilisateur(NIVEAU)
+      tex.sprint('\\ifniveaucustom\\renewcommand{\\contenuniveau}{' .. NIVEAU ..'}\\fi')
+    end
+
+    if TYPE == 'DM' then
+      tex.sprint('\\setcounter{compteurDM}{' .. COMPTEUR .. '}\\addtocounter{compteurDM}{-1}')
+    elseif TYPE == 'DS' then
+      tex.sprint('\\setcounter{compteurDS}{' .. COMPTEUR .. '}\\addtocounter{compteurDS}{-1}')
+    elseif TYPE == 'interro' then
+      tex.sprint('\\setcounter{compteurinterro}{' .. COMPTEUR .. '}\\addtocounter{compteurinterro}{-1}')
+    elseif TYPE == 'TD' or TYPE == 'corrige' then
+      tex.sprint('\\setcounter{compteurTD}{' .. COMPTEUR .. '}\\addtocounter{compteurTD}{-1}')
+    elseif TYPE == 'flash' then
+      tex.sprint('\\setcounter{compteurflash}{' .. COMPTEUR .. '}\\addtocounter{compteurflash}{-1}')
+    end
 
     if PREMIER then
 
@@ -467,8 +495,7 @@ end
   end
 
   function ChapitreLua(nombre)
-    if nombre then
-
+    if nombre ~= nil and nombre ~= ''  then
       tex.sprint('\\setcounter{part}{' .. nombre ..'}')
     end
   end
@@ -492,11 +519,11 @@ end
 \end{luacode}
 
 
-\newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
+% \newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
 
 \newif\ifniveaucustom
 
-\newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur([[#1]])}\ifniveaucustom \renewcommand{\contenuniveau}{#1}\fi}
+% \newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur([[#1]])}\ifniveaucustom \renewcommand{\contenuniveau}{#1}\fi}
 
 \newcommand{\bareme}[1]{\directlua{BaremeLua(#1)}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
@@ -992,10 +1019,34 @@ end
 \begin{luacode*}
   function ParametrageDocument()
 
-    if Format == nil then
+    if Format == 'diapo' then
+      PARAMETRES.format = 'diapo'
+    else 
       PARAMETRES.format = 'fiche'
-    else
-      PARAMETRES.format = Format
+    end
+
+    if Chapitre then
+      PARAMETRES.chapitre = Chapitre
+    else 
+      PARAMETRES.chapitre = ''
+    end
+
+    if Numero then
+      PARAMETRES.numero = Numero
+    else 
+      PARAMETRES.numero = ''
+    end
+
+    if Niveau then
+      PARAMETRES.niveau = Niveau
+    else 
+      PARAMETRES.niveau = ''
+    end
+
+    if Compteur then
+      PARAMETRES.compteur = Compteur
+    else 
+      PARAMETRES.compteur = '1'
     end
 
     if Type == nil then
@@ -1110,4 +1161,4 @@ end
   end
 \end{luacode*}
 
-\newcommand{\parametrage}{\ifsubfile\else\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}\fi}
+\newcommand{\parametrage}{\ifsubfile\else\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}\fi\ifpremier\premierfalse\mygeometry\fi}

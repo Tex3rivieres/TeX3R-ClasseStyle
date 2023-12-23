@@ -1,9 +1,13 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
-\usepackage{dirtree}
 
-\definirchapitre{7}{Théorème de Pythagore}
-\definirniveau{4}
+\begin{luacode}
+  Format = 'fiche' --diapo/fiche
+  Chapitre = 'Théorème de Pythagore' --nom du chapitre
+  Numero = '7' --numéro du chapitre
+  Niveau = '4' --niveau de classe
+\end{luacode}
+\parametrage
 
 \colorlet{colorBasic}{SlateGrey}
 \colorlet{colorBracket}{DarkViolet}
@@ -116,7 +120,12 @@
   Bareme,
   Difficulte,
   Source,
-  Theme
+  Theme,
+  Compteur,
+  Chapitre,
+  Niveau,
+  Format,
+  Numero
   },
   emphstyle={[3]\color{colorVariable}},
   %Booléens lua
@@ -150,6 +159,7 @@
   moredelim=[is][\color{colorChange}]{@}{@},
   moredelim=[s][\color{colorMath}]{\$}{\$},
   moredelim=[is][\color{colorString}]{||}{||},
+  moredelim=[s][\color{colorString}]{'}{'},
   moredelim=[is][\color{colorBasic}]{//}{//},
   moredelim=[is][\color{colorComment}]{/*}{/*},
   }
@@ -206,11 +216,17 @@ L'utilisateur n'étant pas friand de l'apparence proposée dans la \texttt{class
 \subsection{Document minimal}
 
 \begin{lstlisting}
-\documentclass[fiche]{classe-tex3R} %#1=diapo (optionnel)
+\documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 
-\definirchapitre{}{} %#1=nombre, #2=nom
-\definirniveau{} %#1=nombre ou nom
+\begin{luacode}
+  Format = 'fiche' --diapo/fiche
+  Chapitre = '' --nom du chapitre
+  Numero = '' --numéro du chapitre
+  Niveau = '' --niveau de classe
+\end{luacode}
+\parametrage
+%FIN PARAMÉTRAGE PRÉAMBULE
 
 \begin{document}
 
@@ -220,6 +236,7 @@ L'utilisateur n'étant pas friand de l'apparence proposée dans la \texttt{class
   Header = false --true
   Taille = nil --'14pt'
   Stretch = false --true
+  Compteur = '1'
 
   Correction = false --true
   Enonce = false --true
@@ -232,17 +249,18 @@ L'utilisateur n'étant pas friand de l'apparence proposée dans la \texttt{class
   Theme = false --true
 \end{luacode}
 \parametrage
+%FIN PARAMÉTRAGE DOCUMENT
 
 %Le texte du document
 
 \end{document}
 \end{lstlisting}
 
-En première ligne, il est possible de changer l'option de classe entre \texttt{fiche} et \texttt{diapo} pour basculer d'un document A4 à un document au format 16:10.
+Pour des raisons inhérentes à \LaTeX, le paramétrage doit être coupé en deux : une partie dans le préambule et une partie dans le corps du document.
 
-La commande \texttt{\textbackslash definirchapitre} permet de spécifier le numéro et le nom du chapitre tandis que \texttt{\textbackslash definirniveau} permet de spécifier le niveau de classe pour qui le document est destiné.
+Dans le préambule, \texttt{Format} permet de basculer d'un document A4 à un document au format 16:10. Par ailleurs, \texttt{Chapitre} permet de donner le nom du chapitre, \texttt{Numero} le numéro du chapitre et \texttt{Niveau} le niveau de classe à qui s'adresse le document.
 
-Ensuite, dans l'environnement \texttt{luacode}, un certain nombre d'options vont permettre de mettre en forme automatiquement le document, en fonction de ce qui est voulu par l'utilisateur.
+Ensuite, dans le paramétrage du corps du document, un certain nombre d'options vont permettre de mettre en forme automatiquement le document, en fonction de ce qui est voulu par l'utilisateur.
 
 \subsection{Options de mise en page}
 
@@ -287,15 +305,16 @@ Dans \texttt{style-tex3R}, des paramètres prédéfinis pour chaque type de docu
 \parametrage
 \end{lstlisting}
 
-En dehors d'un paramétrage prédéfini, les options sont toutes initialisées à \texttt{false}, hormis \texttt{Type} (initialisé à \texttt{basique}) et \texttt{Taille} (\texttt{12pt} pour la fiche et \texttt{20pt} pour le diapo)
+En dehors d'un paramétrage prédéfini, les options sont toutes initialisées à \texttt{false}, hormis \texttt{Type} (initialisé à \texttt{basique}), \texttt{Taille} (\texttt{12pt} pour la fiche et \texttt{20pt} pour le diapo) et \texttt{Compteur} initialisé à \texttt{'1'}.
 
 \section{Type du document}
 
-Avant de choisir le \texttt{Type}, dans les exemples suivant on considèrera que les commandes suivantes ont été appelées en début de document :
+Avant de choisir le \texttt{Type}, dans les exemples suivant on considèrera que les paramètres suivants ont été appliqués dans le préambule du document :
 
 \begin{lstlisting}
-\definirchapitre{7}{Théorème de Pythagore}
-\definirniveau{4}
+Chapitre = 'Théorème de Pythagore'
+Numero = '7'
+Niveau = '4'
 \end{lstlisting}
 
 L'option \texttt{Type} permet de choisir l'apparence du titre. Voici ci-dessous l'apparence des différents titre prédéfinis pour chaque \texttt{Type} :
@@ -445,6 +464,8 @@ Les deux environnements \texttt{enonce} et \texttt{correction} sont plutôt pré
 \RenewEnviron{enonce}[1][Énoncé]{\formatEnvCours[#1]{couleurenonce}}
 \RenewEnviron{correction}[1][Correction]{\formatEnvCours[#1]{couleurcorrection}}
 
+\vspace{0pt}
+
 \adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
   \begin{lstlisting}
 \begin{enonce}
@@ -469,6 +490,8 @@ Les deux environnements \texttt{enonce} et \texttt{correction} sont plutôt pré
 \end{correction}
 
 \end{minipage}}%
+
+\vspace{0pt}
 
 Tous les environnements de cours peuvent prendre une option permettant de changer le texte affiché, ce qui est parfois pratique.
 
