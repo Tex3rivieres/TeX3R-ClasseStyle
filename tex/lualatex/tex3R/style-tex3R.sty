@@ -7,7 +7,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 %#1 = couleur ; #2 = type de section
-\renewcommand{\stylesections}[3]{\colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}}}
 
 \begin{luacode*}
   function FormatUtilisateur()
@@ -26,6 +25,8 @@
       PAGE.sectionname = [[ \LARGE\bfseries\textcolor{couleursection} ]]
       PAGE.subsectionname = [[ \Large\bfseries\textcolor{couleursubsection} ]]
       PAGE.subsubsectionname = [[ \normalfont\large\bfseries\textcolor{couleursubsubsection} ]]
+
+      PAGE.stylesections = [[ \colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}} ]]
 
       PAGE.sectionnumber = [[ \stylesections{couleursection}{\LARGE}{~\Roman{section}~}\, ]]
       PAGE.subsectionnumber = [[ \stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\, ]]

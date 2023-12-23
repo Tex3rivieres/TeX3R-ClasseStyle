@@ -25,14 +25,6 @@
   PARAMETRES.format = 'fiche'
 \end{luacode*}
 
-% \DeclareOption{fiche}{\directlua{PARAMETRES.format = "fiche"}}
-% \DeclareOption{diapo}{\directlua{PARAMETRES.format = "diapo"}}
-% \ProcessOptions\relax
-
-% \begin{luacode*}
-%   Format = PARAMETRES.format
-% \end{luacode*}
-
 %Formatage de la page et du texte
 \RequirePackage{geometry}
 \RequirePackage{silence}
@@ -193,6 +185,7 @@
         '\\setlist[enumerate,2]{label=' ..  FormatageString(PAGE.enumii) .. '}' ..
         '\\DeclareInstance{tasks}{enumerate}{default}{label =' ..  FormatageString(PAGE.enumi) .. ',label-width=1.125em}' ..
         '\\DeclareInstance{tasks}{itemize}{default}{label = ' ..  FormatageString(PAGE.itemi) .. ',label-width=1.125em}' ..
+        '\\renewcommand{\\stylesections}[3]{' .. FormatageString(PAGE.stylesections) .. '}' ..
         '\\renewcommand*{\\sectionformat}{' ..  FormatageString(PAGE.sectionnumber) .. '}' ..
         '\\renewcommand*{\\subsectionformat}{' ..  FormatageString(PAGE.subsectionnumber) .. '}' ..
         '\\renewcommand*{\\subsubsectionformat}{' ..  FormatageString(PAGE.subsubsectionnumber) .. '}' ..

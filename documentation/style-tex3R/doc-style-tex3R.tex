@@ -10,7 +10,7 @@
 \colorlet{colorKeyword}{DarkBlue}
 \colorlet{colorEnvironment}{LightSeaGreen}
 \colorlet{colorComment}{Green}
-\colorlet{colorString}{DarkOrange}
+\colorlet{colorString}{Chocolate}
 \colorlet{colorChange}{Red}
 \colorlet{colorMath}{Teal}
 \colorlet{colorVariable}{LightSkyBlue}
@@ -233,6 +233,7 @@
   format,
   espacement,
   titre,
+  stylesections,
   },
   emphstyle={[7]\color{colorVariableDeux}},
   %Variables lua
@@ -368,18 +369,62 @@ PAGE.itemi = [[ \textbullet ]]
 PAGE.itemii = [[ $\circ$ ]]
 \end{lstlisting}
 
+\begin{itemize}
+  \item \texttt{enumi} : liste numérotée de niveau 1.
+  \item \texttt{enumii} : liste numérotée de niveau 2.
+\end{itemize}
+
+\texttt{\textbackslash Alph*}, \texttt{\textbackslash alph*}, \texttt{\textbackslash roman*}, \texttt{\textbackslash Roman*}, \texttt{\textbackslash arabic*}
+
+\begin{itemize}
+  \item \texttt{itemi} : liste à puces de niveau 1.
+  \item \texttt{itemii} : liste à puces de niveau 2.
+\end{itemize}
+
+Possibilité de mettre n'importe quel symbole.
+
 \subsection{Chapitre, partie et sous-partie}
 
 \begin{lstlisting}
 PAGE.sectionname = [[ \LARGE\bfseries\textcolor{couleursection} ]]
 PAGE.subsectionname = [[ \Large\bfseries\textcolor{couleursubsection} ]]
 PAGE.subsubsectionname = [[ \normalfont\large\bfseries\textcolor{couleursubsubsection} ]]
+\end{lstlisting}
+
+Format du texte des \texttt{\textbackslash section}, \texttt{\textbackslash subsection} et \texttt{\textbackslash subsubsection}. Pour rappel, les \texttt{\textbackslash section} ne sont pas utilisées car remplacées par les titres. Les \texttt{\textbackslash subsection} et \texttt{\textbackslash subsubsection} correspondent aux commandes \texttt{\textbackslash partie} et \texttt{\textbackslash souspartie}
+ 
+\begin{lstlisting}
+PAGE.stylesections = [[ \colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}} ]]
 
 PAGE.sectionnumber = [[ \stylesections{couleursection}{\LARGE}{~\Roman{section}~}\, ]]
 PAGE.subsectionnumber = [[ \stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\, ]]
 PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\, ]]
+\end{lstlisting}
 
+\begin{itemize}
+  \item \texttt{stylesections} : style du numéro devant les sections, subsections et subsubsections (par défaut un carré de couleur avec le nombre ou la lettre en blanc). Trois argument :
+    \begin{itemize}
+      \item \#1 = couleur
+      \item \#2 = Taille du texte
+      \item \#3 = Style de la numérotation (Roman, arabic, etc)
+    \end{itemize}
+  \item \texttt{sectionnumber} : style du numéro des \texttt{\textbackslash section}
+  \item \texttt{subsectionnumber} : style du numéro des \texttt{\textbackslash subsection}
+  \item \texttt{subsubsectionnumber} : style du numéro des \texttt{\textbackslash subsubsection}
+\end{itemize}
+
+
+\begin{lstlisting}
 PAGE.sectionsformat = [[ #3 \underLine{#4}\par\vspace{0.5em} ]]
+\end{lstlisting}
+
+\texttt{sectionsformat} : formatage global des \texttt{\textbackslash section}, \texttt{\textbackslash subsection} et \texttt{\textbackslash subsubsection}. Par défaut, texte souligné sans espacement horizontal.
+  \begin{itemize}
+    \item \#3 = emplacement de la numérotation
+    \item \#4 = emplacement du texte
+  \end{itemize}
+
+\begin{lstlisting}
 PAGE.chapitrenormalformat = [[ \huge\bfseries Chapitre \thepart ]]
 PAGE.chapitreetoileformat = [[]]
 PAGE.partformat = [[
@@ -406,6 +451,14 @@ PAGE.partformat = [[
   \vfill
 ]]
 \end{lstlisting}
+
+\begin{itemize}
+  \item \texttt{chapitrenormalformat} : contenu de \texttt{\textbackslash formatchapitre} pour la commande \texttt{\textbackslash chapitre}
+  \item \texttt{chapitreetoileformat} : contenu de \texttt{\textbackslash formatchapitre} pour la commande \texttt{\textbackslash chapitre*}
+  \item \texttt{partformat} : formatage de la \texttt{\textbackslash part}, ce qui formate également la commande \texttt{\textbackslash chapitre}
+\end{itemize}
+
+Rappel : la commande \texttt{\textbackslash chapitre} ne sert que pour les méga-documents, page de séparation entre deux chapitres (par défaut, grand cadre dans une \texttt{tcolorbox}, voir le code ci-dessous)
 
 \subsection{if FORMAT == "fiche"}
 
@@ -467,6 +520,26 @@ PAGE.headsep = '0cm'
 PAGE.footskip = '1cm'
 \end{lstlisting}
 
+Paramétrage des marges et des dimensions du document pour le format \texttt{fiche} et pour le format \texttt{diapo}, avec ou sans header (le header est utilisé lorsque l'option \texttt{Titre} est \texttt{true}, afin d'avoir un titre persistant).
+
+
+\begin{itemize}
+  \item \texttt{width} : largeur de la page
+  \item \texttt{height} : hauteur de la page
+  \item \texttt{parindent} : taille de l'indentation en début de paragraphe
+  \item \texttt{parskip} : taille de l'écart entre deux paragraphes
+\end{itemize}
+
+Les autres variables renvoient pour le document avec ou sans header (selon la variable \texttt{Titre}) aux dimensions usuelles, visibles sur le document en page suivante.
+
+Lors de tests sur la disposition de la page, il est recommandé d'utiliser \texttt{\textbackslash usepackage\{showframe\}} dans le préambule, qui permet de visualiser par des cadres les marges du document.
+
+\begin{center}
+  \includegraphics[width=0.85\linewidth]{Layout-dimensions.png}
+\end{center}
+
+
+
 \section{PoliceUtilisateur()}
 
 \begin{lstlisting}
@@ -477,6 +550,18 @@ POLICE.math = 'STIX Two Math'
 POLICE.mathcal = 'Libertinus Math Regular'
 POLICE.important = [[ \hl{#1} ]]
 \end{lstlisting}
+
+\begin{itemize}
+  \item \texttt{taillefiche} : taille de police par défaut pour les documents au format \texttt{fiche}
+  \item \texttt{taillediapo} : taille de police par défaut pour les documents au format \texttt{diapo}
+  \item \texttt{texte} : police par défaut pour le texte
+  \item \texttt{math} : police par défaut pour le math mode
+  \item \texttt{mathcal} : police par défaut pour les lettres calligraphiées en math mode
+  \item \texttt{important} : style pour la commande \texttt{\textbackslash important} (par défaut, surligné)
+\end{itemize}
+
+Si les polices ne sont pas installées sur le système, la \texttt{classe-tex3R} procédera à une substitution par une police par défaut de \LaTeX. Attention, les polices mathématiques sont des polices spéciales. A voir : \href{https://tug.org/FontCatalogue/}{The \LaTeX Font Catalogue}
+
 
 \section{CouleursUtilisateur()}
 
@@ -546,6 +631,19 @@ COULEURS.bleu = 'Blue'
 COULEURS.vert = 'Green'
 \end{lstlisting}
 
+Toutes les couleurs sont définies dans la classe, il n'est pas possible d'en rajouter dans le \texttt{lua}. L'intérêt de ces couleurs, est de pouvoir changer leur valeur en fonction du paramètre \texttt{Impression}. Le nom des couleurs en \LaTeX{} est \texttt{couleur} + \texttt{variable} (par exemple : \texttt{couleursection} ou \texttt{couleurapplication})
+
+\begin{itemize}
+  \item \texttt{ligne} ; \texttt{interligne} : couleurs pour la commande \texttt{\textbackslash lignes\{seyes\}}
+  \item \texttt{carreau} : couleur pour la commande \texttt{\textbackslash lignes\{carreau\}}
+  \item \texttt{surlignea} ; \texttt{surligneb} : couleurs pour la commande \texttt{\textbackslash lignes\{surligne\}}
+  \item \texttt{boitecours} : couleur de l'arrière plan des boîte de cours
+  \item \texttt{background} : couleur de l'arrière plan des documents
+  \item \texttt{surligne} : couleur de la commande \texttt{\textbackslash hl} utilisée par la commande \texttt{\textbackslash important}
+  \item \texttt{rouge} ; \texttt{bleu} ; \texttt{vert} : couleurs du panel
+\end{itemize}
+
+
 \section{LogosUtilisateur()}
 
 \begin{lstlisting}
@@ -561,7 +659,18 @@ LOGOS.interro = [[ \faFile*[regular] ]]
 LOGOS.TD = [[ \faEdit[regular] ]]
 \end{lstlisting}
 
+Logos utilisés pour les titres, voir le package \href{https://mirrors.ircam.fr/pub/CTAN/fonts/fontawesome5/doc/fontawesome5.pdf}{fontawesome5}. Le logo est stocké dans \texttt{\textbackslash logoactif}, qui change en fonction du \texttt{Type}.
+
 \section{StylesTitresUtilisateur()}
+
+Les titres sont définis en trois temps :
+
+\begin{enumerate}
+  \item Le style global, commun à tous les titres (par défaut, un logo, et un contenu souligné sur toute la longueur)
+  \item Le style particulier au \texttt{Type} du document (le nom du chapitre pour les fiches de TD ou faire apparaître NOM et Prénom pour les DS par exemple)
+  \item Le mot clé à faire apparaître au bon endroit pour les titres partageant le même style (DM, interro ou DS par exemple)
+\end{enumerate}
+
 
 \subsection{Définition des styles}
 
@@ -573,6 +682,15 @@ STYLESTITRES['un'] = [[ \titre{#1\hfill\mdseries\large\contenuniveau} ]]
 STYLESTITRES['deux'] = [[ \titre{#1~\mdseries|~\contenuchapitre\hfill\large\contenuniveau} ]]
 STYLESTITRES['trois'] = [[ \titre{#1~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau} ]]
 \end{lstlisting}
+
+\begin{itemize}
+  \item \texttt{espacement} : saut de ligne après le titre de début de page (à faire correspondre avec \texttt{PAGE.headerheadsep})
+  \item \texttt{titre} : définit le style global à tous les titres, comme expliqué précedemment
+\end{itemize}
+
+Pour définir des styles particuliers de titre, les commandes \texttt{\textbackslash contenuniveau}, \texttt{\textbackslash contenuchapitre} (donnant le contenu des options \texttt{Niveau} et \texttt{Chapitre}) sont accessibles.
+
+il est possible de créer d'autres styles de particuliers de titre dans le \texttt{lua} sur le même modèle, au besoin.
 
 \subsection{if FORMAT == "fiche"}
 
@@ -604,6 +722,8 @@ STYLESTITRES.interro = STYLESTITRES['trois']
 STYLESTITRES.TD = STYLESTITRES['deux']
 \end{lstlisting}
 
+Il est possible de changer le style du titre selon que l'on est en format \texttt{fiche} ou en format \texttt{diapo}.
+
 \section{TitresUtilisateur()}
 
 \subsection{Formatage des titres}
@@ -630,6 +750,8 @@ TITRES.format = [[ Interrogation n°\stepcounter{compteurinterro}\thecompteurint
 TITRES.format = [[ TD ]]
 \end{lstlisting}
 
+\texttt{format} : permet de placer le mot clé dans l'emplacement du \#1 des \texttt{STYLETITRES['X']}
+
 \subsection{Formatage de la TOC}
 
 \begin{lstlisting}
@@ -644,6 +766,8 @@ TITRES.tocflash = 'Flash'
 TITRES.tocinterro = 'Interrogation'
 TITRES.tocTD = 'TD'
 \end{lstlisting}
+
+Mot-clés apparaissant selon le \texttt{Type} de document choisi dans les signets du document.
 
 \section{EnvironnementsUtilisateur()}
 
