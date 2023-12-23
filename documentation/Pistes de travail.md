@@ -1,13 +1,13 @@
 # Pistes de travail
 
-## Commandes à créer
 
-## Remarques
+## Adjustbox
 
-Deux adjustbox successifs font planter la compilation (ajouter un \vspace{0pt} entre les deux permet de résoudre le problème, sûrement un problème de passage vertical/horinzontal mode)
+Deux adjustbox successifs font planter la compilation (ajouter un \vspace{0pt} entre les deux permet de résoudre le problème, sûrement un problème de passage vertical/horizontal mode)
 
-Adjustbox est très inconsistant : le fix de \vspace{0pt} avant et après semble suffisant.
+Adjustbox est très inconsistant : le fix de \vspace{0pt} avant et après semble suffisant (cela a l'air de se produire vis à vis de l'emplacement dans la page : à voir, sinon il va falloir se débarasser d'adjustbox :/).
 
+Cela ne se prduisait pas dans l'ancienne version de la classe, avant le changement de fonctionnement des hooks LaTeX.
 
 ## Numérotation
 

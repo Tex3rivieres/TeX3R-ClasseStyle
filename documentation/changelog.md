@@ -3,7 +3,9 @@
 ## 23/12/23
 
 - Options de classe supprimées, ajout d'un parametrage supplémentaire dans le préambule regroupant Format, Chapitre Numéro et  Niveau. Ajout du paramétrage Compteur dans le corps du document.
-- Documentation modifiée en conséquence. 
+- Documentation de classe-tex3R modifiée en conséquence. 
+- Documentation style-tex3R continuée
+- Documentation basique corrigée.
 
 ## 22/12/23
 

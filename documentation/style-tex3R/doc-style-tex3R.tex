@@ -1,6 +1,9 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 \usepackage{dirtree}
+\parametrage
+
+
 
 \colorlet{colorBasic}{SlateGrey}
 \colorlet{colorBracket}{DarkViolet}
@@ -13,7 +16,8 @@
 \colorlet{colorVariable}{LightSkyBlue}
 \colorlet{colorVariableDeux}{Teal}
 \colorlet{colorBoolean}{Indigo}
-\colorlet{colorFunction}{DarkBlue}
+\colorlet{colorFunction}{DarkGoldenrod}
+\colorlet{colorIdentifier}{MediumOrchid}
 
 \newcommand{\nocontentsline}[3]{}
 \newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
@@ -28,8 +32,6 @@
   breaklines=true,
   %Keywords
   emph={[1]
-    begin,
-    end,
     documentclass,
     usepackage,
     definirchapitre,
@@ -41,7 +43,6 @@
     source,
     theme,
     montitre,
-    important,
     tailletexte,
     partie,
     souspartie,
@@ -87,17 +88,6 @@
     luacode,
     fiche,
     document,
-    application,
-    convention,
-    definition,
-    exemple,
-    methode,
-    propriete,
-    preuve,
-    remarque,
-    enonce,
-    correction,
-    visible
   }, 
   emphstyle={[2]\color{colorEnvironment}},
   %Variable lua
@@ -114,24 +104,35 @@
   Bareme,
   Difficulte,
   Source,
-  Theme
+  Theme,
+  arg,
+  str,
   },
   emphstyle={[3]\color{colorVariable}},
   %Booléens lua
   emph={[4]
   true,
   false,
-  nil
+  nil,
+  local
   },
   emphstyle={[4]\color{colorBoolean}},
   %Fonctions lua
   emph={[5]
-  mesParametres
+  mesParametres,
+  NiveauUtilisateur,
+  NiveauDocument,
   },
-  emphstyle={[4]\color{colorFunction}},
+  emphstyle={[5]\color{colorFunction}},
   %Variables lua
   emph={[6]
   PAGE,
+  POLICE,
+  COULEURS,
+  LOGOS,
+  STYLESTITRES,
+  TITRES,
+  ENVIRONNEMENTS,
   },
   emphstyle={[6]\color{colorVariable}},
   %Variables deux lua
@@ -140,8 +141,110 @@
   enumii,
   itemi,
   itemii,
+  sectionname,
+  subsectionname,
+  subsubsectionname,
+  sectionnumber,
+  subsectionnumber,
+  subsubsectionnumber,
+  sectionsformat,
+  chapitrenormalformat,
+  chapitreetoileformat,
+  partformat,
+  width,
+  height,
+  parindent,
+  parskip,
+  headertop,
+  headerbottom,
+  headerright,
+  headerleft,
+  headermarginparsep,
+  headermarginparwidth,
+  headerheadheight,
+  headerheadsep,
+  headerfootskip,
+  top,
+  bottom,
+  right,
+  left,
+  marginparsep,
+  marginparwidth,
+  headheight,
+  headsep,
+  footskip,
+  application,
+  convention,
+  definition,
+  exemple,
+  methode,
+  propriete,
+  preuve,
+  remarque,
+  enonce,
+  correction,
+  visible,
+  taillefiche,
+  taillediapo,
+  texte,
+  math,
+  mathcal,
+  important,
+  ligne,
+  interligne,
+  section,
+  subsection,
+  subsubsection,
+  carreau,
+  surlignelignea,
+  surligneligneb,
+  boitecours,
+  background,
+  exercice,
+  surligne,
+  surlignevisible,
+  rouge,
+  vert,
+  bleu,
+  activite,
+  basique,
+  bilan,
+  corrige,
+  cours,
+  DM,
+  DS,
+  flash,
+  interro,
+  TD,
+  tocexercice,
+  tocenonce,
+  toccorrection,
+  formatcours,
+  tocactivite,
+  tocbasique,
+  tocbilan,
+  toccorrige,
+  toccours,
+  tocDM,
+  tocDS,
+  tocflash,
+  tocinterro,
+  tocTD,
+  format,
+  espacement,
+  titre,
   },
   emphstyle={[7]\color{colorVariableDeux}},
+  %Variables lua
+  emph={[8]
+  begin,
+  end,
+  if,
+  elseif,
+  function,
+  then,
+  },
+  emphstyle={[8]\color{colorIdentifier}},
   %Literate
   literate={
     % {\{}{{\textcolor{colorBracket}{\{}}}1
@@ -162,6 +265,7 @@
   moredelim=[s][\color{colorMath}]{\$}{\$},
   moredelim=[is][\color{colorString}]{||}{||},
   moredelim=[s][\color{colorString}]{[[}{]]},
+  moredelim=[s][\color{colorString}]{'}{'},
   moredelim=[is][\color{colorBasic}]{//}{//},
   moredelim=[is][\color{colorComment}]{/*}{/*},
   }
@@ -234,8 +338,9 @@ Une fois le fichier \texttt{monstyle.sty} créé il est nécessaire d'ouvrir MiK
 Ensuite, pour appeler \texttt{monstyle} dans un nouveau document, il suffit de changer le préambule comme suit :
 
 \begin{lstlisting}
-\documentclass[fiche]{classe-tex3R}
+\documentclass{classe-tex3R}
 \usepackage{monstyle}
+\parametrage
 
 \begin{document}
 
@@ -252,19 +357,436 @@ Cette expérience simplifiée évite d'avoir à aller voir dans de nombreuses do
 
 Par la suite, nous détaillerons chacune des fonctions \texttt{lua}, et à quoi correspondent les différentes parties modifiables.
 
-\section{FormatUtilisateur}
+\section{FormatUtilisateur()}
 
-\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+\subsection{Listes et énumérations}
+
 \begin{lstlisting}
 PAGE.enumi = ||[[ \textbf{\arabic*.~} ]]||
 PAGE.enumii = [[ \textbf{\alph*.~} ]]
 PAGE.itemi = [[ \textbullet ]]
 PAGE.itemii = [[ $\circ$ ]]
 \end{lstlisting}
-\end{minipage}}\hfill%
-\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
-  
-\end{minipage}}%
 
+\subsection{Chapitre, partie et sous-partie}
+
+\begin{lstlisting}
+PAGE.sectionname = [[ \LARGE\bfseries\textcolor{couleursection} ]]
+PAGE.subsectionname = [[ \Large\bfseries\textcolor{couleursubsection} ]]
+PAGE.subsubsectionname = [[ \normalfont\large\bfseries\textcolor{couleursubsubsection} ]]
+
+PAGE.sectionnumber = [[ \stylesections{couleursection}{\LARGE}{~\Roman{section}~}\, ]]
+PAGE.subsectionnumber = [[ \stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\, ]]
+PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\, ]]
+
+PAGE.sectionsformat = [[ #3 \underLine{#4}\par\vspace{0.5em} ]]
+PAGE.chapitrenormalformat = [[ \huge\bfseries Chapitre \thepart ]]
+PAGE.chapitreetoileformat = [[]]
+PAGE.partformat = [[
+  \newpage
+  \hfill
+  \vfill
+  \begin{tcolorbox}[
+    colframe = black, 
+    colback=white,
+    coltitle=white,
+    sharp corners,
+    valign=center,
+    top=2cm,
+    bottom=2cm,
+    left=0.5cm,
+    enhanced,
+    before skip=0cm,
+  ]
+  \formatchapitre
+  \tcblower
+  {\huge\bfseries #3}
+  \end{tcolorbox}
+  \hfill
+  \vfill
+]]
+\end{lstlisting}
+
+\subsection{if FORMAT == "fiche"}
+
+\begin{lstlisting}
+PAGE.width = '21cm'
+PAGE.height = '29.7cm'
+PAGE.parindent = '0pt'
+PAGE.parskip = '0pt'
+
+
+PAGE.headertop = '1cm'
+PAGE.headerbottom = '0.3cm'
+PAGE.headerright = '1cm'
+PAGE.headerleft = '1cm'
+PAGE.headermarginparsep = '0cm'
+PAGE.headermarginparwidth = '0cm'
+PAGE.headerheadheight = '1cm'
+PAGE.headerheadsep = '0.5cm'
+PAGE.headerfootskip = '0.7cm'
+
+PAGE.top = '1cm'
+PAGE.bottom = '0.3cm'
+PAGE.right = '1cm'
+PAGE.left = '1cm'
+PAGE.marginparsep = '0cm'
+PAGE.marginparwidth = '0cm'
+PAGE.headheight = '0cm'
+PAGE.headsep = '0cm'
+PAGE.footskip = '0.7cm'
+\end{lstlisting}
+
+\subsection{if FORMAT == "diapo"}
+
+\begin{lstlisting}
+PAGE.width = '28.8cm'
+PAGE.height = '18cm'
+PAGE.parindent = '0pt'
+PAGE.parskip = '0pt'
+
+
+PAGE.headertop = '0.5cm'
+PAGE.headerbottom = '2cm'
+PAGE.headerright = '1cm'
+PAGE.headerleft = '1cm'
+PAGE.headermarginparsep = '0cm'
+PAGE.headermarginparwidth = '0cm'
+PAGE.headerheadheight = '1.5cm'
+PAGE.headerheadsep = '0.5cm'
+PAGE.headerfootskip = '1cm'
+
+PAGE.top = '0.5cm'
+PAGE.bottom = '2cm'
+PAGE.right = '1cm'
+PAGE.left = '1cm'
+PAGE.marginparsep = '0cm'
+PAGE.marginparwidth = '0cm'
+PAGE.headheight = '0cm'
+PAGE.headsep = '0cm'
+PAGE.footskip = '1cm'
+\end{lstlisting}
+
+\section{PoliceUtilisateur()}
+
+\begin{lstlisting}
+POLICE.taillefiche = '12pt'
+POLICE.taillediapo = '20pt'
+POLICE.texte = 'Calibri'
+POLICE.math = 'STIX Two Math'
+POLICE.mathcal = 'Libertinus Math Regular'
+POLICE.important = [[ \hl{#1} ]]
+\end{lstlisting}
+
+\section{CouleursUtilisateur()}
+
+\subsection{if PRINT}
+
+\begin{lstlisting}
+COULEURS.ligne = 'black'
+COULEURS.interligne = 'black!30'
+COULEURS.section = 'black'
+COULEURS.subsection = 'black!70'
+COULEURS.subsubsection = 'black!40'
+COULEURS.carreau = 'black!30'
+COULEURS.surlignelignea = 'black!20'
+COULEURS.surligneligneb = 'white'
+COULEURS.boitecours = 'white'
+COULEURS.background = 'white'
+
+COULEURS.application = 'black'
+COULEURS.definition = 'black'
+COULEURS.convention = 'black'
+COULEURS.exercice = 'black'
+COULEURS.exemple = 'black'
+COULEURS.methode = 'black'
+COULEURS.preuve = 'black'
+COULEURS.propriete = 'black'
+COULEURS.remarque = 'black'
+COULEURS.enonce = 'black'
+COULEURS.correction = 'black'
+COULEURS.surligne = 'black!5'
+COULEURS.surlignevisible = 'black!10'
+
+COULEURS.rouge = 'black'
+COULEURS.bleu = 'black'
+COULEURS.vert = 'black'
+\end{lstlisting}
+
+\subsection{else}
+
+\begin{lstlisting}
+COULEURS.ligne = 'SlateBlue'
+COULEURS.interligne = 'LightSteelBlue'
+COULEURS.section = 'black'
+COULEURS.subsection = 'Red'
+COULEURS.subsubsection = 'Green'
+COULEURS.carreau = 'blue!25'
+COULEURS.surlignelignea = 'blue!20'
+COULEURS.surligneligneb = 'yellow!20'
+COULEURS.boitecours = 'black!5'
+COULEURS.background = 'white'
+
+COULEURS.application = 'black'
+COULEURS.definition = 'Green'
+COULEURS.convention = 'black'
+COULEURS.exercice = 'Blue'
+COULEURS.exemple = 'Blue'
+COULEURS.methode = 'black'
+COULEURS.preuve = 'black'
+COULEURS.propriete = 'Red'
+COULEURS.remarque = 'black'
+COULEURS.enonce = 'black'
+COULEURS.correction = 'black'
+COULEURS.surligne = 'yellow'
+COULEURS.surlignevisible = 'black!10'
+
+COULEURS.rouge = 'Red'
+COULEURS.bleu = 'Blue'
+COULEURS.vert = 'Green'
+\end{lstlisting}
+
+\section{LogosUtilisateur()}
+
+\begin{lstlisting}
+LOGOS.activite = [[ \reflectbox{\faPencil*} ]]
+LOGOS.basique = ''
+LOGOS.bilan = [[ \faEdit[regular] ]]
+LOGOS.corrige = [[ \faEdit[regular] ]]
+LOGOS.cours = [[ \faBook ]]
+LOGOS.DM = [[ \faHome ]]
+LOGOS.DS = [[ \faFile*[regular] ]]
+LOGOS.flash = [[ \faUserSecret ]]
+LOGOS.interro = [[ \faFile*[regular] ]]
+LOGOS.TD = [[ \faEdit[regular] ]]
+\end{lstlisting}
+
+\section{StylesTitresUtilisateur()}
+
+\subsection{Définition des styles}
+
+\begin{lstlisting}
+STYLESTITRES.espacement = '0.5cm'
+STYLESTITRES.titre = [[ {\bfseries\LARGE\logoactif~\underLine{#1}\par} ]]
+STYLESTITRES['sans'] = [[  ]]
+STYLESTITRES['un'] = [[ \titre{#1\hfill\mdseries\large\contenuniveau} ]]
+STYLESTITRES['deux'] = [[ \titre{#1~\mdseries|~\contenuchapitre\hfill\large\contenuniveau} ]]
+STYLESTITRES['trois'] = [[ \titre{#1~\mdseries|~{\large\mdseries NOM :} \hfill {\large\mdseries Prénom :} \hfill \mdseries\large\contenuniveau} ]]
+\end{lstlisting}
+
+\subsection{if FORMAT == "fiche"}
+
+\begin{lstlisting}
+STYLESTITRES.activite = STYLESTITRES['un']
+STYLESTITRES.basique = STYLESTITRES['sans']
+STYLESTITRES.bilan = STYLESTITRES['un']
+STYLESTITRES.corrige = STYLESTITRES['deux']
+STYLESTITRES.cours = STYLESTITRES['deux']
+STYLESTITRES.DM = STYLESTITRES['trois']
+STYLESTITRES.DS = STYLESTITRES['trois']
+STYLESTITRES.flash = STYLESTITRES['un']
+STYLESTITRES.interro = STYLESTITRES['trois']
+STYLESTITRES.TD = STYLESTITRES['deux']
+\end{lstlisting}
+
+\subsection{if FORMAT == "diapo"}
+
+\begin{lstlisting}
+STYLESTITRES.activite = STYLESTITRES['un']
+STYLESTITRES.basique = STYLESTITRES['sans']
+STYLESTITRES.bilan = STYLESTITRES['un']
+STYLESTITRES.corrige = STYLESTITRES['deux']
+STYLESTITRES.cours = STYLESTITRES['deux']
+STYLESTITRES.DM = STYLESTITRES['trois']
+STYLESTITRES.DS = STYLESTITRES['trois']
+STYLESTITRES.flash = STYLESTITRES['un']
+STYLESTITRES.interro = STYLESTITRES['trois']
+STYLESTITRES.TD = STYLESTITRES['deux']
+\end{lstlisting}
+
+\section{TitresUtilisateur()}
+
+\subsection{Formatage des titres}
+
+\begin{lstlisting}
+TITRES.format = [[ Activité ]]
+
+TITRES.format = [[ ]]
+
+TITRES.format = [[ Bilan ]]
+
+TITRES.format = [[ Corrigé ]]
+
+TITRES.format = [[ Chapitre~\thepart ]]
+
+TITRES.format = [[ DM n°\stepcounter{compteurDM}\thecompteurDM ]]
+
+TITRES.format = [[ DS n°\stepcounter{compteurDS}\thecompteurDS ]]
+
+TITRES.format = [[ Questions Flash n°\stepcounter{compteurflash}\thecompteurflash ]]
+
+TITRES.format = [[ Interrogation n°\stepcounter{compteurinterro}\thecompteurinterro ]]
+
+TITRES.format = [[ TD ]]
+\end{lstlisting}
+
+\subsection{Formatage de la TOC}
+
+\begin{lstlisting}
+TITRES.tocactivite = 'Activité'
+TITRES.tocbasique = 'Sans titre'
+TITRES.tocbilan = 'Bilan'
+TITRES.toccorrige = 'Corrigé'
+TITRES.toccours = 'Cours'
+TITRES.tocDM = 'DM'
+TITRES.tocDS = 'DS'
+TITRES.tocflash = 'Flash'
+TITRES.tocinterro = 'Interrogation'
+TITRES.tocTD = 'TD'
+\end{lstlisting}
+
+\section{EnvironnementsUtilisateur()}
+
+\subsection{Environnements de cours}
+
+\begin{lstlisting}
+ENVIRONNEMENTS.formatcours = [[
+  \begin{tcolorbox}[
+    colback=couleurboitecours, 
+    colframe=couleurbackground, 
+    boxrule=0pt, 
+    left=0.5em, 
+    top=0pt, 
+    bottom=0pt, 
+    right=0pt, 
+    enhanced, 
+    shield externalize=true, 
+    borderline west={4pt}{0pt}{#2}
+    ]
+    \textcolor{#2}{\large\underLine{#1} :}\par
+    \medskip 
+    \BODY 
+  \end{tcolorbox}
+  ]]
+\end{lstlisting}
+
+\subsection{Environnement enonce}
+
+\begin{lstlisting}
+ENVIRONNEMENTS.enonce = [[
+  \iftheme
+    \hfill{\itshape\footnotesize\contenutheme}\par\vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par
+  \fi
+  \colorbox{couleurenonce}{\textcolor{white}{
+    {
+    \Large\textbf{\thecompteurexercice}}
+    \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
+    }
+  }
+  \ifcompetence\hspace{0.3em}\textcolor{couleurenonce}{\underLine{\large\raisebox{0.1em}{\contenucompetence}}}\fi\ifbareme\hfill {\bfseries/\contenubareme~points}\fi\par
+    \medskip
+    \BODY
+    \ifsource\par
+      \vspace{0.2em}{\color{couleurenonce}\hrule height 2pt}\par\vspace{0.2em}\hfill{\itshape\footnotesize\contenusource}
+    \fi
+]]
+\end{lstlisting}
+
+\subsection{Environnement correction}
+
+\begin{lstlisting}
+ENVIRONNEMENTS.correction = [[
+  \colorbox{couleurcorrection}{\textcolor{white}{
+    \normalfont\Large\textbf{\thecompteurexercice} | Correction}
+  }\par
+  \medskip
+  \BODY
+]]
+\end{lstlisting}
+
+\subsection{Formatage de la TOC}
+
+\begin{lstlisting}
+ENVIRONNEMENTS.tocexercice = 'Exercice'
+ENVIRONNEMENTS.tocenonce = 'Énoncé'
+ENVIRONNEMENTS.toccorrection = 'Correction'
+\end{lstlisting}
+
+\section{mesParametres(str)}
+
+\begin{lstlisting}
+function mesParametres(str)
+
+  if str == 'activite' or str == 'Activite' then
+    Type = 'activite'
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+  elseif str == 'basique' or str == 'Basique' then
+
+  elseif str == 'bilan' or str == 'Bilan' then
+    Type = 'bilan'
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+  elseif str == 'corrige' or str == 'Corrige' then
+
+  elseif str == 'cours' or str == 'Cours' then
+    Type = 'cours'
+    Enonce = true
+    Correction = true
+    Stretch = false
+  elseif str == 'DM' then
+    Type = 'DM'
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+  elseif str == 'DS' then
+    Type = 'DS'
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+    Bareme = true
+  elseif str == 'flash' or str == 'Flash' then
+
+  elseif str == 'interro' or str == 'Interro' then
+    Type = 'interro'
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+    Bareme = true
+  elseif str == 'TD' then
+    Type = 'TD'
+    Header = true
+    Impression = true
+    Competence = true
+    Enonce = true
+    Stretch = true
+  end
+end
+\end{lstlisting}
+
+\section{NiveauUtilisateur(arg)}
+
+\begin{lstlisting}
+function NiveauUtilisateur(arg)
+  local str = nil
+  if arg == '6' then
+    str = '6$^\\text{ème}$'
+  elseif arg == '5' then
+    str = '5$^\\text{ème}$'
+  elseif arg == '4' then
+    str = '4$^\\text{ème}$'
+  elseif arg == '3' then
+    str = '3$^\\text{ème}$'
+  end
+  NiveauDocument(str) 
+end
+\end{lstlisting}
 
 \end{document}

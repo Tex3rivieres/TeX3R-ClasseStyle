@@ -21,8 +21,8 @@
 % \ClassError{Lualatex only}{Ce document doit êtres compilé en LuaLaTeX}{}\stop
 % \fi
 
-\RequirePackage{shellesc}
-\RequirePackage{etoolbox}
+% \RequirePackage{shellesc}
+% \RequirePackage{etoolbox}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% OPTIONS DE CLASSE PERMETTANT DE FAIRE UNE COMPILATION SIMPLE A PARTIR D'UNE GRAINE %%%%
@@ -538,50 +538,50 @@
 
 %Réglage de la persistance ou non du titre
 
-\newcommand{\motcletitretoc}{}%Mot clé du titre pour la TOC
-\newcommand{\renewmotcletitretoc}{%Renomme 
-  \ifactivite
-      \renewcommand{\motcletitretoc}{Activité} 
-  \else
-    \ifcorrige
-      \renewcommand{\motcletitretoc}{Correction} 
-    \else
-      \ifcours
-        \renewcommand{\motcletitretoc}{Cours} 
-      \else
-        \ifTD
-          \renewcommand{\motcletitretoc}{Exercices} 
-        \else
-          \ifflash
-            \renewcommand{\motcletitretoc}{Exercices} 
-          \else
-            \ifDM
-              \renewcommand{\motcletitretoc}{DM} 
-            \else
-              \ifDS
-                \renewcommand{\motcletitretoc}{DS} 
-              \else
-                \ifinterro
-                  \renewcommand{\motcletitretoc}{Interrogation} 
-                \else
-                  \ifbrevet
-                  \renewcommand{\motcletitretoc}{Brevet} 
-                  \fi
-                \fi
-              \fi
-            \fi
-          \fi
-        \fi
-      \fi
-    \fi
-  \fi
-}
+% \newcommand{\motcletitretoc}{}%Mot clé du titre pour la TOC
+% \newcommand{\renewmotcletitretoc}{%Renomme 
+%   \ifactivite
+%       \renewcommand{\motcletitretoc}{Activité} 
+%   \else
+%     \ifcorrige
+%       \renewcommand{\motcletitretoc}{Correction} 
+%     \else
+%       \ifcours
+%         \renewcommand{\motcletitretoc}{Cours} 
+%       \else
+%         \ifTD
+%           \renewcommand{\motcletitretoc}{Exercices} 
+%         \else
+%           \ifflash
+%             \renewcommand{\motcletitretoc}{Exercices} 
+%           \else
+%             \ifDM
+%               \renewcommand{\motcletitretoc}{DM} 
+%             \else
+%               \ifDS
+%                 \renewcommand{\motcletitretoc}{DS} 
+%               \else
+%                 \ifinterro
+%                   \renewcommand{\motcletitretoc}{Interrogation} 
+%                 \else
+%                   \ifbrevet
+%                   \renewcommand{\motcletitretoc}{Brevet} 
+%                   \fi
+%                 \fi
+%               \fi
+%             \fi
+%           \fi
+%         \fi
+%       \fi
+%     \fi
+%   \fi
+% }
 
-\newcommand{\titretoc}{%Choisit le mot clé du titre et ajoute à la toc si c'est la première feuille d'une série ou la première page
-\renewmotcletitretoc
-    \phantomsection
-    \addcontentsline{toc}{section}{\motcletitretoc}
-}
+% \newcommand{\titretoc}{%Choisit le mot clé du titre et ajoute à la toc si c'est la première feuille d'une série ou la première page
+% \renewmotcletitretoc
+%     \phantomsection
+%     \addcontentsline{toc}{section}{\motcletitretoc}
+% }
 
 % \newcommand{\selectiontitre}{%Imprime le titre
 %   \ifactivite
@@ -625,18 +625,18 @@
 %%%% DÉFINITION DES ENVIRONNEMENTS LIGNES/LIGNES* %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{lineno}
+% \RequirePackage{lineno}
 
 %Booléen \ifFirstCompile permettant de savoir si on est à la première ou deuxième compilation
 
-\newif\ifFirstCompile
-\FirstCompiletrue
+% \newif\ifFirstCompile
+% \FirstCompiletrue
 
-\makeatletter
-\ifFirstCompile
-\write\@auxout{\noexpand\global\noexpand\FirstCompilefalse}
-\fi
-\makeatother
+% \makeatletter
+% \ifFirstCompile
+% \write\@auxout{\noexpand\global\noexpand\FirstCompilefalse}
+% \fi
+% \makeatother
 
 % Définition des compteurs
 
