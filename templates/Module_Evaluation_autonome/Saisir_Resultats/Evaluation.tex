@@ -217,7 +217,7 @@
             question = "Exercice " .. exercice .. " : $\\mathbf{\\np{" .. points .. "}/\\np{" .. pointsmax .. "}}$"
             table.insert(liste_score,question)
     
-            pourcentage = math.floor(total/totalmax*100)
+            pourcentage = math.floor(total/totalmax*100 + 0.5)
         else
             pourcentage = "a"
         end
