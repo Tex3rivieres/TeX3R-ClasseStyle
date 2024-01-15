@@ -718,6 +718,7 @@ end
 
     if PREMIER then
       tex.sprint('\\renewcommand{\\important}[1]{'..  FormatageString(POLICE.important) ..'}')
+      tex.sprint('\\renewcommand{\\arraystretch}{'..  FormatageString(POLICE.tableau) ..'}')
     end
 
   tex.sprint('\\IfFontExistsTF{' ..  FormatageString(POLICE.texte) ..'}{\\setmainfont{' ..  FormatageString(POLICE.texte) .. '}}\\par' ..

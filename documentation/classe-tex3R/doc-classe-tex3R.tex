@@ -912,7 +912,25 @@ Ceci est un texte qui s'étend sur plusieurs lignes et qui sera plus facilement 
 \adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
   \begin{lstlisting}
 \newcounter{compteurexercice}
+  \end{lstlisting}
+\end{minipage}}\hfill%
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
 
+  \vspace{\baselineskip}
+
+Ce compteur permet de modifier la numérotation pour les environnements d'exercices.  Voici des commandes basiques de modification des compteurs en \LaTeX~:
+
+\begin{lstlisting}
+\setcounter{compteurexercice}{3}
+\stepcounter{compteurexercice}
+\thecompteurexercice
+  \end{lstlisting}
+\end{minipage}}%
+
+\vspace{0pt}
+
+\adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
+  \begin{lstlisting}
 \newcounter{compteurinterro}
 \newcounter{compteurflash}
 \newcounter{compteurDM}
@@ -924,14 +942,7 @@ Ceci est un texte qui s'étend sur plusieurs lignes et qui sera plus facilement 
 
   \vspace{\baselineskip}
 
-  Ces compteurs sont utilisés dans les environnements de la \texttt{classe-tex3R}. Voici un rappel des commandes de compteurs :
-
-\begin{lstlisting}
-\setcounter{compteurexercice}{3}
-\stepcounter{compteurexercice}
-\thecompteurexercice
-\end{lstlisting}
-
+  Ces compteurs sont utilisés dans les environnements de la \texttt{classe-tex3R} pour la numérotation des titres en haut de page. Il ne peuvent être modifiés de manière classique via  les commandes naturelles de \LaTeX, mais doivent être modifiés par la variable \texttt{Compteur} dans le  paramétrage du  document (par exemple \texttt{Compteur = '3'})
 \end{minipage}}%
 
 
