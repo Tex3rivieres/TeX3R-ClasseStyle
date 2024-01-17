@@ -1,6 +1,10 @@
 # Changelog
 
-##
+## 15/01/24
+
+- Ajout de l'option POLICE.tableau dans le style, afin de modifier l'espacement naturel des tableaux.
+- Documentation mise à jour vis à vis des compteurs
+- Suppression du dossier old
 
 ## 23/12/23
 
