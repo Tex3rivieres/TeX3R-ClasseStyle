@@ -1,5 +1,9 @@
 # Changelog
 
+## 17/01/24
+
+- Ajout de np dans ```contenubareme``` pour formater les nombres décimaux
+
 ## 15/01/24
 
 - Ajout de l'option POLICE.tableau dans le style, afin de modifier l'espacement naturel des tableaux.
