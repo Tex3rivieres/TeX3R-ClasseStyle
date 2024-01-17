@@ -3,6 +3,7 @@
 ## 17/01/24
 
 - Ajout de np dans ```contenubareme``` pour formater les nombres décimaux
+- Ajout de la commande ```\exercice``` (commande vide permettant de s'afficher dans la structure)
 
 ## 15/01/24
 
