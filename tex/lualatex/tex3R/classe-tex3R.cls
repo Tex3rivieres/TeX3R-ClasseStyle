@@ -504,7 +504,7 @@ end
   
   function BaremeLua(arg)
     if arg then
-      tex.sprint('\\renewcommand{\\contenubareme}{' .. arg .. '}')      
+      tex.sprint('\\renewcommand{\\contenubareme}{\\np{' .. arg .. '}}')      
     else
       tex.sprint('\\renewcommand{\\contenubareme}{?}')
     end
