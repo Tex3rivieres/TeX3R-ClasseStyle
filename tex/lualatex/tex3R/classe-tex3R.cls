@@ -966,7 +966,7 @@ end
 \newcommand{\parametres}[1]{}
 \newcommand{\sautdeligne}{\sautligne}
 \newcommand{\niveau}{\definirniveau}
-\NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
+% \NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
 
 %%%
 
