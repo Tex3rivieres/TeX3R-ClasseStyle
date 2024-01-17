@@ -4,6 +4,7 @@
 
 - Ajout de np dans ```contenubareme``` pour formater les nombres décimaux
 - Ajout de la commande ```\exercice``` (commande vide permettant de s'afficher dans la structure)
+- Ajout des commandes \Com, \Cal, \Rai, \Che,\Mod, \Rep
 
 ## 15/01/24
 

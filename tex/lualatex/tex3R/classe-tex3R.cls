@@ -477,6 +477,13 @@ end
 \newcommand{\contenusource}{}
 \newcommand{\contenutheme}{}
 
+\newcommand{\Com}{Communiquer}
+\newcommand{\Cal}{Calculer}
+\newcommand{\Rep}{Représenter}
+\newcommand{\Mod}{Modéliser}
+\newcommand{\Rai}{Raisonner}
+\newcommand{\Che}{Chercher}
+
 %
 \begin{luacode}
   function DifficulteLua(nombre)
