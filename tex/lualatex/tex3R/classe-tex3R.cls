@@ -464,7 +464,7 @@ end
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 \newcommand{\saut}[1]{\directlua{SautLua("#1")}}
 
-\newcommand{\exercice}{}
+\newcommand{\exercice}[1]{}
 
 %Commandes des environnements
 %
