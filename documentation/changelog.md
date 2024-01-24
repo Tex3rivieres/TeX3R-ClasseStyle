@@ -3,6 +3,7 @@
 ## 24/01/24
 
 - Commande ```\exercice``` renommée ```\structure``` pour pouvoir l'appliquer à d'autre endroits des documents.
+- Réinitialisation des commandes d'exercice (bareme, competence, etc) à la fin de l'énoncé dans la classe pour ne pas impacter le suivant.
 
 ## 17/01/24
 
