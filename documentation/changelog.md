@@ -1,5 +1,9 @@
 # Changelog
 
+## 24/01/24
+
+- Commande ```\exercice``` renommée ```\structure``` pour pouvoir l'appliquer à d'autre endroits des documents.
+
 ## 17/01/24
 
 - Ajout de np dans ```contenubareme``` pour formater les nombres décimaux
