@@ -464,7 +464,14 @@ end
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 \newcommand{\saut}[1]{\directlua{SautLua("#1")}}
 
-\newcommand{\structure}[1]{}
+% \newcommand{\structure}[1]{}
+
+\newcommand{\structureetoile}[1]{}
+\newcommand{\structurenormal}[1]{}
+
+\makeatletter
+\def\structure{\@ifstar\structureetoile\structurenormal}
+\makeatother
 
 %Commandes des environnements
 %

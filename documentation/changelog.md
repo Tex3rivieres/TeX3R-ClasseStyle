@@ -1,5 +1,9 @@
 # Changelog
 
+## 25/01/24
+
+- Fix de ```\structure*```, mal défini dans la classe
+
 ## 24/01/24
 
 - Commande ```\exercice``` renommée ```\structure``` pour pouvoir l'appliquer à d'autre endroits des documents.
