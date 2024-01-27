@@ -1,0 +1,159 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+\parametrage
+
+\newcommand{\flashcardCadre}[1]{
+  \begin{tcolorbox}[
+    before=0pt,
+    before skip=0pt,
+    after=0pt,
+    after skip=0pt,
+    left skip=0pt,
+    right skip=0pt,
+    grow to left by=0pt,
+    grow to right by=0pt,
+    valign=center,
+    halign=center,
+    top=0.2cm,
+    bottom=0.2cm,
+    left=0.2cm,
+    right=0.2cm,
+    boxsep=0pt,
+    width=\linewidth, 
+    height=5.425cm
+    ]
+    #1
+  \end{tcolorbox}%
+}
+
+\newcommand{\flashcardDuo}[2]{
+  \adjustbox{valign=t}{\begin{minipage}{8.5cm}%
+    \tcbset{title=\Large\contenutheme,colback=black!0}
+    \flashcardCadre{#1}
+  \end{minipage}}\hfill%
+  \adjustbox{valign=t}{\begin{minipage}{8.5cm}%
+    \tcbset{title=\Large\contenutheme\hfill Correction,,colback=black!25}
+    \flashcardCadre{#2}
+  \end{minipage}}%
+}
+
+\newcommand{\flashcardPage}[8]{%
+  \flashcardDuo{#1}{#2}\par\vfill\par\flashcardDuo{#3}{#4}\par\vfill\par\flashcardDuo{#5}{#6}\par\vfill\par\flashcardDuo{#7}{#8}
+}
+
+\RenewEnviron{enonce}{
+  \directlua{
+    local enonce = "\luaescapestring{\BODY}"
+    table.insert(ENONCE,enonce) 
+  }
+}
+
+\RenewEnviron{correction}{
+  \directlua{
+    local correction = "\luaescapestring{\BODY}"
+    table.insert(CORRECTION,correction) 
+  }
+}
+
+\begin{luacode*}
+ENONCE = {}
+CORRECTION = {}
+
+function genereFlashcard()
+
+  while #ENONCE % 8 ~= 0 do
+    table.insert(ENONCE,'')
+    table.insert(CORRECTION,'')
+  end
+
+  for i=1,#ENONCE,8 do
+    tex.sprint('\\flashcardPage{' .. ENONCE[i] ..' }{' .. ENONCE[i+1] .. '}{' .. ENONCE[i+2] .. '}{' .. ENONCE[i+3] .. '}{' .. ENONCE[i+4] .. '}{' .. ENONCE[i+5] .. '}{' .. ENONCE[i+6] .. '}{' .. ENONCE[i+7] .. '}')
+    tex.sprint('\\newpage')
+    tex.sprint('\\flashcardPage{' .. CORRECTION[i+1] ..' }{' .. CORRECTION[i] .. '}{' .. CORRECTION[i+3] .. '}{' .. CORRECTION[i+2] .. '}{' .. CORRECTION[i+5] .. '}{' .. CORRECTION[i+4] .. '}{' .. CORRECTION[i+7] .. '}{' .. CORRECTION[i+6] .. '}')
+    tex.sprint('\\newpage')
+  end
+
+end
+\end{luacode*}
+
+\AtEndDocument{\directlua{genereFlashcard()}}
+
+\begin{document}
+
+\theme{Mon thème}
+
+\begin{enonce}
+  enonce1
+\end{enonce}
+
+\begin{correction}
+  correction1
+\end{correction}
+
+\begin{enonce}
+  enonce2
+\end{enonce}
+
+\begin{correction}
+  correction2
+\end{correction}
+
+\begin{enonce}
+  enonce3
+\end{enonce}
+
+\begin{correction}
+  correction3
+\end{correction}
+
+\begin{enonce}
+  enonce4
+\end{enonce}
+
+\begin{correction}
+  correction4
+\end{correction}
+
+\begin{enonce}
+  enonce5
+\end{enonce}
+
+\begin{correction}
+  correction5
+\end{correction}
+
+\begin{enonce}
+  enonce6
+\end{enonce}
+
+\begin{correction}
+  correction6
+\end{correction}
+
+\begin{enonce}
+  enonce7
+\end{enonce}
+
+\begin{correction}
+  correction7
+\end{correction}
+
+\begin{enonce}
+  enonce8
+\end{enonce}
+
+\begin{correction}
+  correction8
+\end{correction}
+
+\begin{enonce}
+  enonce9
+\end{enonce}
+
+\begin{correction}
+  correction9
+\end{correction}
+
+
+
+\end{document}

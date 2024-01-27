@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R}[19/11/2023 - Version 2.0 de la classe-tex3R]
+\ProvidesClass{classe-tex3R}[27/01/2024 - Version 3.2.5 de la classe-tex3R]
 
 \LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
