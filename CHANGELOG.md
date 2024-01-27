@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.2.5] - 27/01/24
+## [3.2.6] - 27/01/24
 
 - Changement de format du changelog + déplacement du fichier à la racine
 - Ajout du template Flashcards
