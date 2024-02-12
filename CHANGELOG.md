@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.2.7] - 31/01/24
+
+- Ajustements de la hauteur des numérotations des sous-parties dans le style
+- Modification de enonce dans le style : possibilité de changer optionnellement le nom d'un exercice
+
 ## [3.2.6] - 27/01/24
 
 - Changement de format du changelog + déplacement du fichier à la racine

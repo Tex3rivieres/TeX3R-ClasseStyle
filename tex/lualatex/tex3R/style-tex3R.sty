@@ -27,9 +27,9 @@
 
       PAGE.stylesections = [[ \colorbox{#1}{\textcolor{white}{\normalfont#2\textbf{{#3}}}} ]]
 
-      PAGE.sectionnumber = [[ \stylesections{couleursection}{\LARGE}{~\Roman{section}~}\, ]]
+      PAGE.sectionnumber = [[ \stylesections{couleursection}{\huge}{~\Roman{section}~}\, ]]
       PAGE.subsectionnumber = [[ \stylesections{couleursubsection}{\LARGE}{\Alph{subsection}}\, ]]
-      PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\LARGE}{\arabic{subsubsection}}\, ]]
+      PAGE.subsubsectionnumber = [[ \stylesections{couleursubsubsection}{\Large}{\arabic{subsubsection}}\, ]]
 
       PAGE.sectionsformat = [[ #3 \underLine{#4}\par\vspace{0.5em} ]]
       PAGE.chapitrenormalformat = [[ \huge\bfseries Chapitre \thepart ]]
@@ -382,7 +382,7 @@ function EnvironnementsUtilisateur()
       \fi
       \colorbox{couleurenonce}{\textcolor{white}{
         {
-        \Large\textbf{\thecompteurexercice}}
+        \Large\textbf{#1}}
         \ifdifficulte{~\raisebox{0.2em}{\scriptsize\contenudifficulte}}\fi
         }
       }

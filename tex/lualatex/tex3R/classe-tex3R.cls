@@ -959,7 +959,7 @@ end
 
       else
 
-        tex.sprint('\\RenewEnviron{enonce}[1][]{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi\\bareme{}\\competence{}\\difficulte{}\\source{}\\theme{}}')
+        tex.sprint('\\RenewEnviron{enonce}[1][\\thecompteurexercice]{\\stepcounter{compteurexercice}\\phantomsection\\addcontentsline{toc}{subsection}{'..  FormatageString(ENVIRONNEMENTS.tocexercice) ..'~\\thecompteurexercice}\\ifenonce\\phantomsection\\addcontentsline{toc}{subsubsection}{'..  FormatageString(ENVIRONNEMENTS.tocenonce) ..'}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.enonce) .. '\\fi\\bareme{}\\competence{}\\difficulte{}\\source{}\\theme{}}')
 
         tex.sprint('\\RenewEnviron{correction}[1][]{\\ifcorrection\\phantomsection\\addcontentsline{toc}{subsubsection}{' ..  FormatageString(ENVIRONNEMENTS.toccorrection) .. '}\\ifstretch\\vfill\\fi' ..  FormatageString(ENVIRONNEMENTS.correction) .. '\\fi}')
 
