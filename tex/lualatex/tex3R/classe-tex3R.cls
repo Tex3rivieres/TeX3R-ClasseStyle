@@ -107,7 +107,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \WarningsOff[scrlayer-scrpage]
 
-
 %%%%%%%%%%%%%%%%%%%%%%
 % BOOLÉENS DU FORMAT %
 %%%%%%%%%%%%%%%%%%%%%%
@@ -471,7 +470,7 @@ end
 \makeatother
 
 %Commandes des environnements
-%
+
 \newcommand{\contenuchapitre}{}
 \newcommand{\contenuniveau}{}
 
@@ -488,7 +487,6 @@ end
 \newcommand{\Rai}{Raisonner}
 \newcommand{\Che}{Chercher}
 
-%
 \begin{luacode}
   function DifficulteLua(nombre)
     if nombre then
@@ -532,7 +530,7 @@ end
 
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}%Column P centrée verticalement
 
-%%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMMANDES POUR LE CHAPITRE AVEC/SANS ETOILE%%%
 
 \newcommand{\formatchapitreetoile}{}
 \newcommand{\formatchapitrenormal}{}
@@ -625,9 +623,6 @@ end
     }%
 \end{tikzpicture}%
 }%
-
-
-
 
 %Nouveau soulignement pour le titre, utilisant lua-ul
 \newunderlinetype\beginUnderLine{\cleaders\hbox{%
@@ -820,7 +815,6 @@ end
 
 \newcommand{\motcletitretoc}{}
 \newif\iftitretoc
-
 
 \begin{luacode}
   function TitresDocument()
