@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R}[27/01/2024 - Version 3.2.6 de la classe-tex3R]
+\ProvidesClass{classe-tex3R}[12/02/2024 - Version 3.2.8 de la classe-tex3R]
 
 \LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
@@ -48,7 +48,6 @@
 \RequirePackage{fontawesome5}
 \RequirePackage[minimal]{lua-ul}
 \RequirePackage{soul}
-% \RequirePackage{tcolorbox}
 
 \RequirePackage{environ}
 \RequirePackage[autoenlargeheadfoot=false]{scrlayer-scrpage}
@@ -464,8 +463,6 @@ end
 \newcommand{\sautfiche}{\iffiche \newpage \fi}
 \newcommand{\saut}[1]{\directlua{SautLua("#1")}}
 
-% \newcommand{\structure}[1]{}
-
 \newcommand{\structureetoile}[1]{}
 \newcommand{\structurenormal}[1]{}
 
@@ -738,7 +735,6 @@ end
 \end{luacode}
 
 \newfontfamily\myfontScratch{FreeSans}%Pour les blocs Scratch de ProfCollege
-%\AtBeginEnvironment{scratch}{\KOMAoption{fontsize}{12pt}}%Scaling plutôt que taille de police
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% CRÉATION DES LOGOS %%%
@@ -962,23 +958,6 @@ end
   end
 \end{luacode*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% COMMANDES DE COMPATIBILITÉ AVEC LA VERSION 1.0 %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \NewEnviron{lignes}{\BODY}
-% \NewEnviron{lignes*}{\BODY}
-\newcommand{\rivcorrection}[2]{\ifvisible~#1 \else #2 \fi}
-\newcommand{\rivimportant}[1]{\important{#1}}
-\newcommand{\ajoutlignes}[1]{}
-\providecommand{\adjustbox}[2]{#2}
-\newcommand{\parametres}[1]{}
-\newcommand{\sautdeligne}{\sautligne}
-\newcommand{\niveau}{\definirniveau}
-% \NewEnviron{exercice}[1]{\begin{enonce}[#1] \BODY\end{enonce}}
-
-%%%
-
 \begin{luacode*}
 
   function TitreLua()
@@ -1166,4 +1145,4 @@ end
 
 \newcommand{\parametrage}{\ifsubfile\else\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}\fi\ifpremier\premierfalse\mygeometry\fi}
 
-\AtEndPreamble{\ifpremier \parametrage \fi}
+\AtEndPreamble{\ifpremier\parametrage\fi}

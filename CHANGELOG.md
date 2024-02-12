@@ -4,6 +4,7 @@
 
 - ```\parametres``` est désormais automatiquement exécuté s'il manque dans le préambule.
 - Mise à jour des templates pour fonctionner avec les modifications de la classe.
+- Nettoyage de code dans la classe (et suppression des anciennes commandes de compatibilité)
 
 ## [3.2.7] - 31/01/24
 
