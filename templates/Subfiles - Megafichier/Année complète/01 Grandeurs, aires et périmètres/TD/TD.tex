@@ -1,16 +1,22 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 
-\begin{document}
-
-\definirchapitre{1}{Grandeurs, aires et périmètres}
-\definirniveau{5}
-
 \begin{luacode}
-  mesParametres('TD')
-  
+	Format = 'fiche' --diapo/fiche
+	Chapitre = "Grandeurs, aires et périmètres" --nom du chapitre
+	Numero = '1' --numéro du chapitre
+	Niveau = '5' --niveau de classe
 \end{luacode}
 \parametrage
+%FIN PARAMÉTRAGE PRÉAMBULE
+
+\begin{document}
+
+\begin{luacode}
+	mesParametres('TD') --activite/bilan/corrige/cours/DM/DS/flash/interro/TD
+\end{luacode}
+\parametrage
+%FIN PARAMÉTRAGE DOCUMENT
 
 %%%%%%%%%%%%%%%%
 %%%% ÉNONCÉ %%%%

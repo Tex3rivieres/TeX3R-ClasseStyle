@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.2.8] - 12/02/24
+
+- ```\parametres``` est désormais automatiquement exécuté s'il manque dans le préambule.
+- Mise à jour des templates pour fonctionner avec les modifications de la classe.
+
 ## [3.2.7] - 31/01/24
 
 - Ajustements de la hauteur des numérotations des sous-parties dans le style

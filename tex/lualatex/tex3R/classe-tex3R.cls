@@ -525,12 +525,7 @@ end
   end
 \end{luacode}
 
-
-% \newcommand{\definirchapitre}[2]{\directlua{ChapitreLua(#1)}\renewcommand{\contenuchapitre}{#2}}
-
 \newif\ifniveaucustom
-
-% \newcommand{\definirniveau}[1]{\directlua{NiveauUtilisateur([[#1]])}\ifniveaucustom \renewcommand{\contenuniveau}{#1}\fi}
 
 \newcommand{\bareme}[1]{\directlua{BaremeLua(#1)}}
 \newcommand{\competence}[1]{\renewcommand{\contenucompetence}{#1}}
@@ -1170,3 +1165,5 @@ end
 \end{luacode*}
 
 \newcommand{\parametrage}{\ifsubfile\else\directlua{ParametrageDocument()}\setcounter{compteurexercice}{0}\fi\ifpremier\premierfalse\mygeometry\fi}
+
+\AtEndPreamble{\ifpremier \parametrage \fi}

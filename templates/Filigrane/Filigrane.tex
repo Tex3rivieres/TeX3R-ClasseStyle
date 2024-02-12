@@ -1,13 +1,13 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass{classe-tex3R}
-\usepackage{style-tex3R}\parametrage
+\usepackage{style-tex3R}
+%Ce template ne fonctionne étrangement pas avec une compilation double
 
 \newcommand{\cheminimage}{example-image}
-\newcommand{\opacite}{0.1}
+\newcommand{\opacite}{0.3}
 
 \AddToHook{shipout/background}{%
 \noindent\begin{tikzpicture}[remember picture, overlay]
-  \node[opacity=0\opacite, anchor=north west,shift={(-0.13,0.13)}] at (current page.south west) {\includegraphics[width=\paperwidth, height=\paperheight]{\cheminimage}};
+  \node[opacity=\opacite, anchor=north west,shift={(-0.13,0.13)}] at (current page.south west) {\includegraphics[width=\paperwidth, height=\paperheight]{\cheminimage}};
 \end{tikzpicture}
 }
 

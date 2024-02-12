@@ -1,18 +1,25 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 
-\begin{document}
-
-\definirchapitre{1}{Grandeurs, aires et périmètre}
-\definirniveau{5}
-
 \begin{luacode}
-  mesParametres('Cours')
-  
+  Format = 'fiche' --diapo/fiche
+  Chapitre = "Grandeurs, aires et périmètre" --nom du chapitre
+  Numero = '1' --numéro du chapitre
+  Niveau = '5' --niveau de classe
 \end{luacode}
 \parametrage
+%FIN PARAMÉTRAGE PRÉAMBULE
 
-\subsection{Grandeurs et unités}
+\begin{document}
+
+\begin{luacode}
+  mesParametres('cours') --activite/bilan/corrige/cours/DM/DS/flash/interro/TD
+\end{luacode}
+\parametrage
+%FIN PARAMÉTRAGE DOCUMENT
+
+
+\partie{Grandeurs et unités}
 
 %%%%%%%%%%%%%%%%%%%%
 %%%% DÉFINITION %%%%
@@ -37,11 +44,11 @@
     \end{itemize}
 \end{exemple}
 
-\sautdiapo
+\saut{diapo} %#1=fiche/diapo
 
 
 
-\subsection{Périmètre d'une figure}
+\partie{Périmètre d'une figure}
 
 %%%%%%%%%%%%%%%%%%%%
 %%%% DÉFINITION %%%%
@@ -51,13 +58,13 @@
   Le \important{périmètre} d'une figure est la longueur de son contour. Il se mesure avec les multiples et sous-multiples du mètre (m, cm, km par exemple).
 \end{definition}
 
-\sautdiapo
+\saut{diapo} %#1=fiche/diapo
 
 %%%%%%%%%%%%%%%%%%%
 %%%% PROPRIÉTÉ %%%%
 %%%%%%%%%%%%%%%%%%%
 
-\begin{propriete}[s (constatées)]
+\begin{propriete}[Propriétés (constatées)]
   Les formules de périmètre des figures usuelles sont :
 
 \adjustbox{valign=t}{\begin{minipage}{0.32\linewidth}%
@@ -155,11 +162,11 @@
 \begin{methode}
   Pour convertir une longueur dans une autre unité, on peut utiliser le tableau suivant :
 
-\sautdeligne
+\saut{ligne} %#1=fiche/diapo
 
   \Tableau[Metre,NbLignes=1,Fleches]{}
 
-\sautdeligne
+\saut{ligne} %#1=fiche/diapo
 
 \end{methode}
 
@@ -167,7 +174,7 @@
 %%%% EXEMPLE %%%%
 %%%%%%%%%%%%%%%%%
 
-\sautdiapo
+\saut{diapo} %#1=fiche/diapo
 
 \begin{exemple}
 Pour placer $\np[dm]{412.5}$ dans le tableau, on repère son chiffre des unités (2) et on le place dans la colonne de son unité (dm) puis on place les autres chiffres, un par colonne.
@@ -178,10 +185,10 @@ Pour placer $\np[dm]{412.5}$ dans le tableau, on repère son chiffre des unités
 
 \end{exemple}
 
-\sautfiche
+\saut{fiche} %#1=fiche/diapo
 
 
-\subsection{Aire d'une figure}
+\partie{Aire d'une figure}
 
 %%%%%%%%%%%%%%%%%%%%
 %%%% DÉFINITION %%%%
@@ -196,7 +203,7 @@ Pour placer $\np[dm]{412.5}$ dans le tableau, on repère son chiffre des unités
 %%%% PROPRIÉTÉ %%%%
 %%%%%%%%%%%%%%%%%%%
 
-\begin{propriete}[s (constatées)]
+\begin{propriete}[Propriétés (constatées)]
   Les formules d'aire des figures usuelles sont :
 
 \adjustbox{valign=t}{\begin{minipage}{0.32\linewidth}%
@@ -229,17 +236,17 @@ Pour placer $\np[dm]{412.5}$ dans le tableau, on repère son chiffre des unités
 \begin{methode}
   Pour convertir une aire dans une autre unité, on peut utiliser le tableau suivant :
 
-\sautdeligne
+\saut{ligne} %#1=fiche/diapo
 
 
     \Tableau[Carre,Colonnes,NbLignes=1,Fleches]{}
 
 
-\sautdeligne
+\saut{ligne} %#1=fiche/diapo
 
 \end{methode}
 
-\sautdiapo
+\saut{diapo} %#1=fiche/diapo
 
 %%%%%%%%%%%%%%%%%
 %%%% EXEMPLE %%%%
