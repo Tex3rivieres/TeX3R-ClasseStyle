@@ -1,6 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2022-11-01]
 
-\ProvidesClass{classe-tex3R}[12/02/2024 - Version 3.2.8 de la classe-tex3R]
+\ProvidesClass{classe-tex3R}[12/02/2024 - Version 3.3.0 de la classe-tex3R]
 
 \LoadClass{scrartcl}%Classe KOMA-SCRIPT
 \PassOptionsToPackage{table,svgnames}{xcolor}
@@ -775,7 +775,7 @@ end
 \newcommand{\styleactif}[1]{}
 \newcommand{\stylesections}[3]{}
 
-\newcommand{\montitre}[2][\hspace{-0.25em}]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\titre{#2}}\else\titre{#2}\fi}
+\newcommand{\montitre}[2][\hspace{-0.25em}]{\renewcommand{\logoactif}{#1}\ifheader\ihead{\vspace*{-1em}\titre{#2}}\else\titre{#2}\fi}
 
 \begin{luacode}
   function StylesTitresDocument()

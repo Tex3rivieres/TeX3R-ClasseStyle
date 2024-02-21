@@ -1,7 +1,3 @@
 # Fichier .gitignore 
-/old/
-/issues/
 *.synctex
 *.synctex.gz
-/templates/Test
-old

@@ -1,159 +1,138 @@
 \documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 \parametrage
-
-\newcommand{\flashcardCadre}[1]{
-  \begin{tcolorbox}[
-    before=0pt,
-    before skip=0pt,
-    after=0pt,
-    after skip=0pt,
-    left skip=0pt,
-    right skip=0pt,
-    grow to left by=0pt,
-    grow to right by=0pt,
-    valign=center,
-    halign=center,
-    top=0.2cm,
-    bottom=0.2cm,
-    left=0.2cm,
-    right=0.2cm,
-    boxsep=0pt,
-    width=\linewidth, 
-    height=5.425cm
-    ]
-    #1
-  \end{tcolorbox}%
-}
-
-\newcommand{\flashcardDuo}[2]{
-  \adjustbox{valign=t}{\begin{minipage}{8.5cm}%
-    \tcbset{title=\Large\contenutheme,colback=black!0}
-    \flashcardCadre{#1}
-  \end{minipage}}\hfill%
-  \adjustbox{valign=t}{\begin{minipage}{8.5cm}%
-    \tcbset{title=\Large\contenutheme\hfill Correction,,colback=black!25}
-    \flashcardCadre{#2}
-  \end{minipage}}%
-}
-
-\newcommand{\flashcardPage}[8]{%
-  \flashcardDuo{#1}{#2}\par\vfill\par\flashcardDuo{#3}{#4}\par\vfill\par\flashcardDuo{#5}{#6}\par\vfill\par\flashcardDuo{#7}{#8}
-}
-
-\RenewEnviron{enonce}{
-  \directlua{
-    local enonce = "\luaescapestring{\BODY}"
-    table.insert(ENONCE,enonce) 
-  }
-}
-
-\RenewEnviron{correction}{
-  \directlua{
-    local correction = "\luaescapestring{\BODY}"
-    table.insert(CORRECTION,correction) 
-  }
-}
-
-\begin{luacode*}
-ENONCE = {}
-CORRECTION = {}
-
-function genereFlashcard()
-
-  while #ENONCE % 8 ~= 0 do
-    table.insert(ENONCE,'')
-    table.insert(CORRECTION,'')
-  end
-
-  for i=1,#ENONCE,8 do
-    tex.sprint('\\flashcardPage{' .. ENONCE[i] ..' }{' .. ENONCE[i+1] .. '}{' .. ENONCE[i+2] .. '}{' .. ENONCE[i+3] .. '}{' .. ENONCE[i+4] .. '}{' .. ENONCE[i+5] .. '}{' .. ENONCE[i+6] .. '}{' .. ENONCE[i+7] .. '}')
-    tex.sprint('\\newpage')
-    tex.sprint('\\flashcardPage{' .. CORRECTION[i+1] ..' }{' .. CORRECTION[i] .. '}{' .. CORRECTION[i+3] .. '}{' .. CORRECTION[i+2] .. '}{' .. CORRECTION[i+5] .. '}{' .. CORRECTION[i+4] .. '}{' .. CORRECTION[i+7] .. '}{' .. CORRECTION[i+6] .. '}')
-    tex.sprint('\\newpage')
-  end
-
-end
-\end{luacode*}
-
-\AtEndDocument{\directlua{genereFlashcard()}}
+\usepackage{flashcards-tex3R}
 
 \begin{document}
 
-\theme{Mon thème}
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{-1} %#1=nombre
 
 \begin{enonce}
-  enonce1
+  \begin{center}
+    \includegraphics[width=0.5\linewidth]{example-image-a} 
+  \end{center} 
+
+  \medskip
+
+  \textbf{Page de garde}
 \end{enonce}
 
 \begin{correction}
-  correction1
+  \begin{enumerate}
+    \item Ceci
+    \item est
+    \item la
+    \item consigne
+  \end{enumerate}
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{1} %#1=nombre
 
 \begin{enonce}
-  enonce2
+
+\begin{tikzpicture}[scale=1,rotate=0]
+  \tkzDefPoints{0/0/A, 4/0/B}
+  \tkzDrawSegments(A,B)
+\end{tikzpicture}
+
+
 \end{enonce}
 
 \begin{correction}
-  correction2
+  Une droite
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{1} %#1=nombre
 
 \begin{enonce}
-  enonce3
+  \LARGE $4\times 8$
 \end{enonce}
 
 \begin{correction}
-  correction3
+  \LARGE $32$
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+  \begin{luacode*}
+    math.randomseed(1) 
+    local a = math.random(1,10)
+    local b = math.random(1,10)
+    local c = a*b
+    enonce = "\\LARGE$" .. a .. "\\times" .. b .. "$"
+    correction = "\\LARGE$" .. c .. "$"
+    table.insert(ENONCE,enonce)
+    table.insert(CORRECTION, correction)
+    table.insert(DIFFICULTE,"1")
+  \end{luacode*}
+%%% DÉBUT EXERCICE %%%
+
+\difficulte{2} %#1=nombre
 
 \begin{enonce}
-  enonce4
+  énoncé 5
 \end{enonce}
 
 \begin{correction}
-  correction4
+  correction 5
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{2} %#1=nombre
 
 \begin{enonce}
-  enonce5
+  énoncé 6
 \end{enonce}
 
 \begin{correction}
-  correction5
+  correction 6
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{3} %#1=nombre
 
 \begin{enonce}
-  enonce6
+  énoncé 7
 \end{enonce}
 
 \begin{correction}
-  correction6
+  correction 7
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{4} %#1=nombre
 
 \begin{enonce}
-  enonce7
+  énoncé 8 
 \end{enonce}
 
 \begin{correction}
-  correction7
+% \difficultefalse 
+  correction 8
 \end{correction}
+%%% FIN EXERCICE %%%
+
+%%% DÉBUT EXERCICE %%%
+\difficulte{-1} %#1=nombre
 
 \begin{enonce}
-  enonce8
+  Ceci est la page de remerciements
 \end{enonce}
 
 \begin{correction}
-  correction8
+% \difficultefalse 
+  Ceci est l'arrière du livret.
 \end{correction}
-
-\begin{enonce}
-  enonce9
-\end{enonce}
-
-\begin{correction}
-  correction9
-\end{correction}
-
+%%% FIN EXERCICE %%%
 
 
 \end{document}
