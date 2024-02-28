@@ -123,6 +123,7 @@
     scalebox,
     newline,
     geometry,
+    pagestyle,
   }, 
   emphstyle={[1]\color{colorKeyword}},
   %Environnements
@@ -294,6 +295,22 @@ Les packages \href{https://ctan.mines-albi.fr/macros/latex/contrib/profcollege/d
   marginparsep=0cm,
   marginparwidth=0cm
 }
+\end{lstlisting}
+
+\saut{ligne} %#1=fiche/diapo
+
+\begin{lstlisting}
+%Package pour visualiser les marges
+%A placer dans le préambule
+\usepackage{showframe}
+\end{lstlisting}
+
+\saut{ligne} %#1=fiche/diapo
+
+\begin{lstlisting}
+%Suppression de la numérotation en bas de page
+%A placer dans le préambule
+\pagestyle{empty}
 \end{lstlisting}
 
   \section{Police et taille}
