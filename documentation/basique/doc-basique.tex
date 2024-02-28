@@ -1,4 +1,4 @@
-\documentclass[fiche]{classe-tex3R} %#1=diapo (optionnel)
+\documentclass{classe-tex3R}
 \usepackage{style-tex3R}
 \usepackage{dirtree}
 \parametrage
@@ -122,6 +122,7 @@
     reflectbox,
     scalebox,
     newline,
+    geometry,
   }, 
   emphstyle={[1]\color{colorKeyword}},
   %Environnements
@@ -267,6 +268,33 @@ Les packages \href{https://ctan.mines-albi.fr/macros/latex/contrib/profcollege/d
   \end{lstlisting}
   
   \textbf{Note :} la classe par défaut en \LaTeX~ est la classe article. La classe TeX3R se base sur la classe KOMA-Script \texttt{scrartcl}. La classe TeX3R se veut complète et ne devrait pas nécessiter de chargement de packages supplémentaires la plupart du temps.
+
+\section{Marges du document}
+
+\begin{lstlisting}
+%Package geometry
+%A placer dans le préambule
+\geometry{
+  %Paramétrage général de la page
+  paperwidth=21cm,
+  paperheight=29.7cm,
+  includehead,
+  includefoot,
+  %Marge en haut, sans place pour l'entête
+  top=1cm,
+  headheight=0cm,
+  headsep=0cm,
+  %Marges gauche et droite
+  right=1cm,
+  left=1cm,
+  %Marge en bas avec place pour le pied de page
+  bottom=0.5cm,
+  footskip=0.5cm,
+  %Encart à droite, pour les notes, réduit à zéro
+  marginparsep=0cm,
+  marginparwidth=0cm
+}
+\end{lstlisting}
 
   \section{Police et taille}
 
@@ -970,7 +998,7 @@ $..dfrac{35}{21}=..dfrac{..cancel{7}..times 5}{..cancel{7}..times 3}=..dfrac{5}{
 
 $$f(x)=7..left(..dfrac{1}{5} + 2x..right)$$
 
-$..mathcal{A}_..text{triangle}=..dfrac{\text{base}..times..text{hauteur}}{2}$
+$..mathcal{A}_..text{triangle}=..dfrac{..text{base}..times..text{hauteur}}{2}$
 \end{lstlisting}
 \end{minipage}}\hfill%
 \adjustbox{valign=t}{\begin{minipage}{0.48\linewidth}%
