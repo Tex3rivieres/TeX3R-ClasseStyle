@@ -1,0 +1,569 @@
+\documentclass{classe-tex3R}
+\usepackage{style-tex3R}
+
+\AtBeginDocument{\npproductsign{\times}\npthousandsep{\,}\npthousandthpartsep{\,}}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\setlength\parindent{0pt}
+
+\begin{luacode}
+  Format = 'fiche' --diapo/fiche
+  Chapitre = '' --nom du chapitre
+  Numero = '' --numéro du chapitre
+  Niveau = '' --niveau de classe
+\end{luacode}
+\parametrage
+%FIN PARAMÉTRAGE PRÉAMBULE
+
+\begin{document}
+
+\begin{luacode}
+  Type = 'fiche' --activite/bilan/corrige/cours/DM/DS/flash/interro/TD
+  Visible = false
+\end{luacode}
+\parametrage
+%FIN PARAMÉTRAGE DOCUMENT
+
+
+%%%  Fonction luacode pour traitement csv et publipostage
+\begin{luacode*}
+----------------------------   Variables  Configuration -------------------------------
+afficheFichePosition=true
+afficheFicheRemediation  = false
+EnteteLigneBareme = 'Point Max'
+NomFichierCSV = 'TableauNotes.csv' -- UTF8, ";"
+Niveau = '3ème'
+TitreSommaire = 'DS4'
+TitreFichePositionnement = 'DS4 - Positionnement'
+TitreFicheRemediation = 'DS4 - Remédiation'
+PalierCompNiv2=0.3
+PalierCompNiv3=0.6
+PalierCompNiv4=0.9
+NoteEnPourcentage=true
+
+LettreAbs='A'
+----------------------------   Variables  Configuration -------------------------------
+
+
+
+ -- Fonction affichage tableau pour debug
+function AfficheTab(csvtable)
+  for i = 1, #csvtable do
+    for j = 1, #csvtable[1] do 
+      if csvtable[i][j] ~= nil then  -- Vérification de nil
+        tex.sprint(csvtable[i][j] .. " ; ")  -- Ajout d'espace après ;
+      end
+    end
+    tex.sprint("\\\\ ")  -- Ajout d'espace après \\
+  end
+end
+
+
+-- IMPORT fichier CSV dans csvtable
+function csvtotable(filename)
+    local fichier = io.open(filename, "r")
+    if not fichier then
+        error("Impossible d'ouvrir le fichier : " .. filename)
+    end
+
+    local csvtable = {}
+    local numeroLigne = 0
+
+    for ligne in fichier:lines() do
+        numeroLigne = numeroLigne + 1
+        local lignecsvtable = {}
+
+        if numeroLigne == 1 then
+            -- Traitement pour la première ligne
+            for value in ligne:gmatch("[^;]+") do
+                value = value:gsub(",", ".")  -- Remplacer les virgules par des points
+                table.insert(lignecsvtable, value)
+            end
+        else
+            -- Traitement pour les autres lignes
+            for value in ligne:gmatch("([^;]*);?") do
+                value = value:gsub(",", ".")  -- Remplacer les virgules par des points
+                table.insert(lignecsvtable, value)
+            end
+        end
+
+        table.insert(csvtable, lignecsvtable)
+    end
+
+    fichier:close()
+    return csvtable
+end
+
+
+
+
+  function chercheligne(csvtable,string)
+    local numligne = 1
+
+    while numligne <= #csvtable and csvtable[numligne][1] ~= string do
+      numligne = numligne + 1
+    end
+
+    if numligne <= #csvtable then
+      return numligne
+    else
+      return nil  -- Renvoie nil si la chaîne n'est pas trouvée
+    end
+  end
+
+
+  function ExtractComp(csvtable)
+    local RefPtMax=chercheligne(csvtable,EnteteLigneBareme)
+    local TabComp={}
+    local LigneTabComp={}
+    local ContentNewFile=''
+    
+
+    --- Entête du tableau avec nom prénom;compétences évaluées et création des exercices de remédiation associés
+    table.insert(LigneTabComp,"Nom Prénom")
+    for i=4,RefPtMax-1 do
+    local ScoreComp=0
+        for j=2,#csvtable[1] do
+          if tonumber(csvtable[i][j]) ~= nil then
+              ScoreComp = ScoreComp + csvtable[i][j]
+          end
+        end
+        if ScoreComp ~= 0 then
+            table.insert(LigneTabComp,csvtable[i][1])
+            -- creation exercices remediations en fonction des competences evaluées
+            nomFichier1 = "./Remediation/" .. csvtable[i][1] .. "-niv1.tex"
+            nomFichier2 = "./Remediation/" .. csvtable[i][1] .. "-niv2.tex"
+
+            fichier = io.open(nomFichier1, "r")
+            if fichier then
+                fichier:close()
+            else
+                fichier = io.open(nomFichier1, "w")
+                ContentNewFile = "\\documentclass[../FichesPositionnement.tex]{subfiles}\n"
+                .."\\begin{document}\n"
+                .."\\begin{tcolorbox}[breakable=false, boxrule=0pt, colback=white, colframe=white]\n"
+                .."\\textbf{Exercices de remediation " ..  csvtable[i][1] .. " niveau 1}\n"
+                .."\n"
+                .."% Enoncé ici %\n"
+                .."\n"
+                .."\\end{tcolorbox}\n"
+                .."\n"
+                .."\n"
+                .."%%%%  CORRECTION  %%%%%%%\n"
+                .."\\begin{visible}[true]\n"
+                .."\\begin{tcolorbox}[breakable=false, boxrule=0pt, colback=white, colframe=white]\n"
+                .."\\textbf{Correction}\n"
+                .."\n"
+                .." % Correction ici %\n"
+                .."\n"
+                .."\\end{tcolorbox}\n"
+                .."\\end{visible}\n"
+                .."\\end{document}"
+                fichier:write(ContentNewFile)
+            end
+
+            fichier = io.open(nomFichier2, "r")
+            if fichier then
+                fichier:close()
+            else
+                fichier = io.open(nomFichier2, "w")
+                ContentNewFile = "\\documentclass[../FichesPositionnement.tex]{subfiles}\n"
+                .. "\\begin{document}\n"
+                .."\\begin{tcolorbox}[breakable=false, boxrule=0pt, colback=white, colframe=white]\n"
+                .."\\textbf{Exercices de remediation " ..  csvtable[i][1] .. " niveau 2}\n"
+                .."\n"
+                .."% Enoncé ici %\n"
+                .."\n"
+                .."\\end{tcolorbox}\n"
+                .."\n"
+                .."\n"
+                .."%%%%  CORRECTION  %%%%%%%\n"
+                .." \\begin{visible}[true]\n"
+                .." \\begin{tcolorbox}[breakable=false, boxrule=0pt, colback=white, colframe=white]\n"
+                .. "\\textbf{Correction}\n"
+                .."\n"
+                .."% Correction ici %\n"
+                .."\n"
+                .." \\end{tcolorbox}\n"
+                .." \\end{visible}\n"
+                .. "\\end{document}"
+                fichier:write(ContentNewFile)
+            end
+
+        end
+    end
+    table.insert(TabComp,LigneTabComp)
+
+    --- Ajout lignes élèves avec ratios obtenu par compétence
+    for E=RefPtMax+1,#csvtable do
+        LigneTabComp={csvtable[E][1]}
+    
+        for C=4,RefPtMax-1 do
+            local ScoreCompMax=0
+            local ScoreEleveComp=0
+            local RatioComp=0
+            local NiveauComp=0
+          
+
+            for j=2,#csvtable[1] do
+              if tonumber(csvtable[C][j]) ~= nil and tonumber(csvtable[RefPtMax][j])~=nil then
+                -- if type(csvtable[C][j]) == "number" and type(csvtable[RefPtMax][j])== "number" then
+                    ScoreCompMax = ScoreCompMax + (csvtable[C][j]*csvtable[RefPtMax][j])
+                -- end
+              end
+              if tonumber(csvtable[C][j]) ~= nil then
+                if tonumber(csvtable[E][j])~=nil then
+                  ScoreEleveComp = ScoreEleveComp + (csvtable[C][j]*csvtable[E][j])
+                else ScoreEleveComp = -1
+                end
+              end
+            end
+                  
+          
+          if ScoreCompMax ~= 0  then
+            if tonumber(ScoreEleveComp) ~= nil then
+            -- if type(ScoreEleveComp) == "number" then
+                RatioComp = math.floor(ScoreEleveComp/ScoreCompMax *100 +0.5)/100
+                if RatioComp > PalierCompNiv4 then
+                  NiveauComp = 4
+                elseif RatioComp > PalierCompNiv3 then
+                  NiveauComp = 3
+                elseif RatioComp > PalierCompNiv2 then
+                  NiveauComp = 2
+                elseif  RatioComp >= 0 then
+                NiveauComp = 1
+                else
+                NiveauComp = LettreAbs
+                end
+            else 
+            NiveauComp = LettreAbs
+            end
+                table.insert(LigneTabComp,NiveauComp)
+            -- end
+           end
+        end
+        table.insert(TabComp,LigneTabComp)
+    end
+   
+    return TabComp
+  end
+
+
+  function ExtractNotesExercices(csvtable)
+    local RefPtMax=chercheligne(csvtable,EnteteLigneBareme)
+    local TabNotesExercices={}
+    local LigneTabNotesExercices={}
+    local NumEx=1
+    local PtsEleveEx=0
+    local PtsMaxEx=0
+    local TotPts=0
+
+
+    -- Entête
+    table.insert(LigneTabNotesExercices,"Nom Pénom")
+
+    for j=2,#csvtable[1] do
+
+      if csvtable[1][j] ~= tostring(NumEx) then
+          table.insert(LigneTabNotesExercices,NumEx)
+          NumEx = NumEx + 1
+      end
+    end
+    table.insert(LigneTabNotesExercices,NumEx)
+    table.insert(LigneTabNotesExercices,"Total")
+    table.insert(TabNotesExercices,LigneTabNotesExercices)
+
+
+    -- Bareme
+    LigneTabNotesExercices={}
+    PtsMaxEx=0
+    NumEx=1
+    TotPts=0
+    table.insert(LigneTabNotesExercices,EnteteLigneBareme)
+    for j=2,#csvtable[1] do
+        if csvtable[1][j] ~= tostring(NumEx) then
+          table.insert(LigneTabNotesExercices,PtsMaxEx)--           
+          NumEx = NumEx + 1
+          PtsMaxEx=0
+        end
+        
+        PtsMaxEx = PtsMaxEx + csvtable[RefPtMax][j]
+      end
+      if PtsMaxEx%1==0 then PtsMaxEx=math.floor(PtsMaxEx) end
+
+
+      table.insert(LigneTabNotesExercices,PtsMaxEx)
+      for i=2,#LigneTabNotesExercices do
+          TotPts = TotPts + LigneTabNotesExercices[i]
+        end
+        if TotPts%1==0 then TotPts=math.floor(TotPts) end
+      table.insert(LigneTabNotesExercices,TotPts)
+      table.insert(TabNotesExercices,LigneTabNotesExercices)
+
+    --- Ajout lignes élèves avec total points par exercices
+
+    for i=RefPtMax+1,#csvtable do
+    TotPts=0
+    NumEx=1
+    PtsEleveEx=0
+    
+    LigneTabNotesExercices={}
+    table.insert(LigneTabNotesExercices,csvtable[i][1])
+      
+      for j=2,#csvtable[1] do
+        if csvtable[1][j] ~= tostring(NumEx) then
+          table.insert(LigneTabNotesExercices,PtsEleveEx)--           
+          NumEx = NumEx + 1
+          PtsEleveEx=0
+        end
+        if tonumber(csvtable[i][j])~=nil then
+          PtsEleveEx = PtsEleveEx + csvtable[i][j]
+        else PtsEleveEx= LettreAbs
+        end 
+      end
+      table.insert(LigneTabNotesExercices,PtsEleveEx)
+        for i=2,#LigneTabNotesExercices do
+          if tonumber(LigneTabNotesExercices[i])~=nil and tonumber(TotPts)~=nil then        
+            TotPts = TotPts + LigneTabNotesExercices[i]
+                else TotPts = LettreAbs
+          end
+        end
+        if tonumber(TotPts)~=nil then
+        if TotPts%1==0 then TotPts=math.floor(TotPts) end
+
+                end
+
+
+
+      table.insert(LigneTabNotesExercices,TotPts)
+      table.insert(TabNotesExercices,LigneTabNotesExercices)
+
+    end
+    return TabNotesExercices
+  end
+
+
+---------------------------------------------------------
+-----   CREATION FICHE SYNTHESE ET REMEDIATION ----------
+---------------------------------------------------------
+
+function CreateFichesSynthese(csvtable,TabComp,TabNotesExercices)
+  local RefPtMax=chercheligne(csvtable,EnteteLigneBareme)
+  local FicheEleveTex=''
+  local NomCompetence=''
+  local NivComp=0
+  local NoteAffiche=0
+  local FicheRemediation=''
+  
+  -- Entête
+  for i=RefPtMax+1,#csvtable do
+    FicheEleveTex = "\\phantomsection\\addcontentsline{toc}{subsection}{" .. csvtable[i][1] .. "}"
+    .. "\\phantomsection\\addcontentsline{toc}{subsubsection}{Synthèse}"
+    .. "{\\LARGE\\faUser~| " .. csvtable[i][1]
+    .. "\\hfill  ".. TitreFichePositionnement .." \\hfill "..Niveau.."}"  
+    .. "\\\\"
+    .. "\\vspace{0.5 em}\\\\"
+
+
+    FicheRemediation = "\\phantomsection\\addcontentsline{toc}{subsubsection}{Remédiation}"
+    .. "{\\LARGE\\faUser~| " .. csvtable[i][1]
+    .. "\\hfill  ".. TitreFicheRemediation .."  \\hfill "..Niveau.."}"
+    .. "\\\\"
+    .. "\\vspace{0.5 em}\\\\"
+
+    -- Notation
+    FicheEleveTex = FicheEleveTex
+    .. "{\\Large Notation"
+    local Note = TabNotesExercices[i-RefPtMax+2][#TabNotesExercices[1]]
+    local PtsMax= TabNotesExercices[2][#TabNotesExercices[1]]
+    if PtsMax%1==0 then PtsMax=math.floor(TabNotesExercices[2][#TabNotesExercices[1]]) end
+    if  tonumber(Note) ~= nil then
+                  if NoteEnPourcentage == true then
+                    NoteAffiche=math.floor(TabNotesExercices[i-RefPtMax+2][#TabNotesExercices[1]]/TabNotesExercices[2][#TabNotesExercices[1]]*100+0.5)
+                else
+                  NoteAffiche=TabNotesExercices[i-RefPtMax+2][#TabNotesExercices[1]]
+                end
+    else
+      NoteAffiche=LettreAbs
+    end
+        
+    -- NoteAffiche=TabNotesExercices[i-RefPtMax+2][#TabNotesExercices[1]]
+    if tonumber(NoteAffiche)~=nil then 
+              if NoteEnPourcentage==true then
+      FicheEleveTex = FicheEleveTex .. "\\hrulefill ~ \\circled{\\np{".. NoteAffiche .."}\\%}}" 
+                else FicheEleveTex = FicheEleveTex .. "\\hrulefill ~ \\circled{\\np{".. NoteAffiche .."}/\\np{".. PtsMax.."}}}" end
+    else
+      FicheEleveTex = FicheEleveTex .. "\\hrulefill ~ \\circled{".. NoteAffiche .."}}" 
+    end
+
+    FicheEleveTex = FicheEleveTex.. "\\begin{tasks}[label=$\\empty$,item-indent=15pt](4)"
+    for ColTabNotesExercices=2,#TabNotesExercices[1]-1 do
+        local Note = TabNotesExercices[i-RefPtMax+2][ColTabNotesExercices]
+        if tonumber(Note)~=nil then
+            if Note % 1 == 0 then
+              Note = tostring(Note):gsub("%.0", "")
+            end
+            Note = "\\np{"..Note.."}"
+            PtsMax = TabNotesExercices[2][ColTabNotesExercices]
+            if PtsMax % 1 == 0 then
+              PtsMax = tostring(PtsMax):gsub("%.0", "")
+            end
+            PtsMax = "\\np{"..PtsMax.."}"
+            FicheEleveTex = FicheEleveTex .. "\\task Exercice" .. TabNotesExercices[1][ColTabNotesExercices] .. ": " 
+            .. Note
+            .. "/"
+            .. PtsMax
+        end
+
+    end
+
+    FicheEleveTex = FicheEleveTex .. "\\end{tasks}" 
+
+    -- Compétences
+    FicheEleveTex = FicheEleveTex .. "{\\Large Compétences}\\\\"
+    for j=2,#TabComp[1] do
+      NomCompetence = TabComp[1][j]
+      NivComp = TabComp[i-RefPtMax+1][j]
+
+      -- if type(NivComp)~="number" then NivComp=LettreAbs end
+
+      FicheEleveTex = FicheEleveTex 
+ 
+      .. "{\\large " .. NomCompetence .. "} \\hrulefill ~{\\Large \\circled{" .. NivComp .. " }}\\\\" 
+      .. "\\vspace{-2em}"
+      .. "\\begin{tasks}[label=$\\empty$,item-indent=15pt](2)"
+        for LigneComp=4,RefPtMax-1 do
+          for ColComp=2,#csvtable[1] do 
+            if NomCompetence==csvtable[LigneComp][1] then
+
+    if  tonumber(csvtable[LigneComp][ColComp])~=nil then
+                  if math.floor(csvtable[LigneComp][ColComp])==1 then
+                    if csvtable[2][ColComp] ~= '' then
+                      FicheEleveTex = FicheEleveTex .. "\\task Ex" .. csvtable[1][ColComp] .. "." .. csvtable[2][ColComp] .. "\\quad "
+                    else
+                        FicheEleveTex = FicheEleveTex .. "\\task Ex" .. csvtable[1][ColComp] .. "\\quad "
+                    end
+
+                    FicheEleveTex = FicheEleveTex ..  csvtable[3][ColComp] .. "\\dotfill "
+                    Note = csvtable[i][ColComp]
+                    if tonumber(Note)~=nil then
+                      Note = "\\np{"..Note.."}"
+                    else
+                      Note = LettreAbs
+                    end
+                    PtsMax = csvtable[RefPtMax][ColComp]
+                    PtsMax = "\\np{"..PtsMax.."}"
+                    FicheEleveTex = FicheEleveTex .. Note .. "/" .. PtsMax
+                  end
+      end
+
+
+            end
+          end
+        
+      end
+      
+      FicheEleveTex = FicheEleveTex 
+      .. "\\end{tasks}"
+
+ 
+  if tonumber(NivComp)~=nil  then
+    if NivComp==1 or NivComp==2 then
+      FicheRemediation = FicheRemediation .. "\\subfile{./Remediation/" .. NomCompetence .. "-niv1.tex}\\par"
+    else
+      FicheRemediation = FicheRemediation .. "\\subfile{./Remediation/" .. NomCompetence .. "-niv2.tex}\\par"
+    end
+  else
+  FicheRemediation = FicheRemediation .. "\\subfile{./Remediation/" .. NomCompetence .. "-niv1.tex}\\par"
+  end
+
+  end
+
+    FicheRemediation=FicheRemediation.. "\\newpage"
+    FicheEleveTex = FicheEleveTex .. "\\newpage"
+    
+    if afficheFichePosition then
+      tex.sprint(FicheEleveTex)
+    end
+    tex.sprint()
+    if afficheFicheRemediation then
+      tex.sprint(FicheRemediation)
+    end
+  end
+end
+
+
+  function ExportPronote(TabComp,TabNotesExercices)
+  local Export = {}
+  for i=2,#TabNotesExercices do
+        -- Créer une nouvelle ligne pour Export
+        local newRow = {}
+
+        -- Ajouter la première et la dernière colonne de TabNotesExercices
+        -- if tonumber(TabNotesExercices[i][#TabNotesExercices[i]])~=nil then
+
+        -- if NoteEnPourcentage==true then
+        -- local NoteAffiche = math.floor(TabNotesExercices[i][#TabNotesExercices[i]]/TabNotesExercices[2][#TabNotesExercices[2]]*100+0.5)
+      -- else NoteAffiche = TabNotesExercices[i][#TabNotesExercices[i]] end
+      local NotePronote = TabNotesExercices[i][#TabNotesExercices[i]]
+      -- else
+      -- local NoteAffiche = LettreAbs
+      -- end
+        table.insert(newRow, TabNotesExercices[i][1]) -- Première colonne
+        table.insert(newRow,NotePronote) -- Dernière colonne
+
+        -- Ajouter les colonnes de TabComp (de la 2ème à l'avant-dernière)
+        for j = 2, #TabComp[1] - 1 do
+            table.insert(newRow, TabComp[i-1][j])
+        end
+
+        -- Ajouter la nouvelle ligne au tableau Export
+        table.insert(Export, newRow)
+      end
+
+      local cheminFichier = "ExportPronote.csv"
+
+        -- Ouvrir le fichier en mode écriture
+        local fichier = io.open(cheminFichier, "w")
+        for i, ligne in ipairs(Export) do
+            local valeurs = {}
+
+            for j, valeur in ipairs(ligne) do
+                if type(valeur) == "number" then
+                    -- Remplacer le point par une virgule pour les nombres
+                    valeur = tostring(valeur):gsub("%.", ",")
+                end
+                table.insert(valeurs, valeur)
+            end
+            -- Concaténer les valeurs avec des point-virgules
+            local ligneCSV = table.concat(valeurs, ";")
+            -- Écrire la ligne dans le fichier
+            fichier:write(ligneCSV .. "\n")
+        end
+        -- Fermer le fichier
+        fichier:close()
+        return Export
+  end
+------------------------------------------------------------------------------------------------
+  ---- Corps du programme
+  csvtable = csvtotable(NomFichierCSV)
+  -- AfficheTab(csvtable)
+  TabComp=ExtractComp(csvtable)
+  --  AfficheTab(TabComp)
+  TabNotesExercices=ExtractNotesExercices(csvtable)
+-- AfficheTab(TabNotesExercices)
+
+ExportPronote=ExportPronote(TabComp,TabNotesExercices)
+--  AfficheTab(ExportPronote)
+ CreateFichesSynthese(csvtable,TabComp,TabNotesExercices)
+
+
+\end{luacode*}
+
+
+%Le texte du document
+
+
+
+
+\end{document}

@@ -1,0 +1,14 @@
+Exercice;1;2;2;2;3;4;;
+Question;;a;b;c;;;;
+Déscription;Description1;Description2;Description3;Description4;Description5;Description6;;
+Compétence1;1;;1;1;;1;;
+Compétence2;;;;;;;;
+Compétence3;0;1;1;;;;;
+Compétence4;1;;;1;;1;;
+Compétence5;;;1;;1;;;
+Point Max;7;3,5;4;2;1,5;2,5; /20;%
+NOM Prénom 1;2;2;3;1;1;1,5;10,5;52,50 %
+NOM Prénom 2;a;a;a;a;a;a;0;0,00 %
+NOM Prénom 3;7;3;4;2;1,5;2,5;20;100,00 %
+NOM Prénom 4;1;1;1;1;0,5;2;6,5;32,50 %
+NOM Prénom 5;5;2;1;1;0,5;2;11,5;57,50 %
